@@ -1,0 +1,7 @@
+node_modules/
+.expo/
+dist/
+.history/
+*.log
+.env
+.env.local

@@ -1,0 +1,20 @@
+:root{
+--font-display:'Archivo Black',sans-serif;
+--font-body:'Manrope',sans-serif;
+
+--fs-display:34px; --lh-display:40px; --ls-display:-0.02em; --fw-display:400; /* @kind other */
+--fs-h1:28px; --lh-h1:34px; --ls-h1:-0.02em; --fw-h1:400; /* @kind other */
+--fs-h2:22px; --lh-h2:28px; --ls-h2:-0.01em; --fw-h2:800; /* @kind other */
+--fs-h3:18px; --lh-h3:24px; --ls-h3:0em; --fw-h3:700; /* @kind other */
+--fs-title-lg:20px; --lh-title-lg:26px; --ls-title-lg:0em; --fw-title-lg:700; /* @kind other */
+--fs-title:17px; --lh-title:22px; --ls-title:0em; --fw-title:700; /* @kind other */
+--fs-title-sm:15px; --lh-title-sm:20px; --ls-title-sm:0em; --fw-title-sm:600; /* @kind other */
+--fs-body-lg:16px; --lh-body-lg:24px; --ls-body-lg:0em; --fw-body-lg:400; /* @kind other */
+--fs-body:14px; --lh-body:20px; --ls-body:0em; --fw-body:400; /* @kind other */
+--fs-body-sm:13px; --lh-body-sm:18px; --ls-body-sm:0em; --fw-body-sm:400; /* @kind other */
+--fs-label-lg:14px; --lh-label-lg:18px; --ls-label-lg:0.04em; --fw-label-lg:600; /* @kind other */
+--fs-label:12px; --lh-label:16px; --ls-label:0.06em; --fw-label:600; /* @kind other */
+--fs-label-sm:11px; --lh-label-sm:14px; --ls-label-sm:0.06em; --fw-label-sm:600; /* @kind other */
+--fs-caption:11px; --lh-caption:14px; --ls-caption:0em; --fw-caption:500; /* @kind other */
+}
+body{font-family:var(--font-body);background:var(--bg-primary);color:var(--text-primary);}

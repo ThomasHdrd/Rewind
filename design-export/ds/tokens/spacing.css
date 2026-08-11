@@ -1,0 +1,5 @@
+:root{
+--space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px;
+--space-5:24px; --space-6:32px; --space-7:48px; --space-8:64px;
+--screen-margin:20px; --section-gap:32px; --card-padding:16px; --grid-gap:12px;
+}

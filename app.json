@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Rewind",
+    "slug": "rewind",
+    "scheme": "rewind",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#080D16"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "plugins": ["expo-router", "expo-secure-store", "@react-native-google-signin/google-signin"],
+    "android": {
+      "package": "com.rewind.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#080D16"
+      }
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rewind.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      }
+    }
+  }
+}

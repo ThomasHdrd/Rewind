@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/rewind-designsystem-a2c15592-7e82-4d7c-b19c-40f7aa792491/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/rewind-designsystem-a2c15592-7e82-4d7c-b19c-40f7aa792491/tokens/colors.css">
+<link rel="stylesheet" href="_ds/rewind-designsystem-a2c15592-7e82-4d7c-b19c-40f7aa792491/tokens/typography.css">
+<link rel="stylesheet" href="_ds/rewind-designsystem-a2c15592-7e82-4d7c-b19c-40f7aa792491/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/rewind-designsystem-a2c15592-7e82-4d7c-b19c-40f7aa792491/tokens/radius.css">
+<link rel="stylesheet" href="_ds/rewind-designsystem-a2c15592-7e82-4d7c-b19c-40f7aa792491/tokens/elevation.css">
+<link rel="stylesheet" href="_ds/rewind-designsystem-a2c15592-7e82-4d7c-b19c-40f7aa792491/styles.css">
+<script src="_ds/rewind-designsystem-a2c15592-7e82-4d7c-b19c-40f7aa792491/_ds_bundle.js"></script>
+<style>
+body{margin:0;background:#050810}
+a{color:var(--brand-primary)}
+a:hover{color:var(--coral-600)}
+.section-hd{max-width:1400px;margin:0 auto 24px;padding:0 20px}
+.section-row{max-width:1400px;margin:0 auto;padding:0 20px 64px;display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.phone{width:320px;flex:none;background:var(--bg-primary);border-radius:28px;border:1px solid #1a212c;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.notch{height:28px;display:flex;align-items:center;justify-content:center;background:var(--bg-primary)}
+.notch div{width:80px;height:18px;background:#000;border-radius:10px}
+.scrn-label{font-family:var(--font-body);font-size:11px;color:var(--text-tertiary);margin-bottom:8px;letter-spacing:.02em}
+.ph-content{min-height:200px}
+.placeholder{background:repeating-linear-gradient(135deg,#1c2532,#1c2532 8px,#222c3a 8px,#222c3a 16px)}
+.bn{display:flex;justify-content:space-around;align-items:center;padding:10px 0 14px;background:var(--bg-primary);border-top:1px solid var(--border-subtle)}
+.bn-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--font-body);font-size:10px;color:var(--text-tertiary)}
+.bn-icon{width:22px;height:22px;border-radius:6px}
+</style>
+</helmet>
+
+<div style="max-width:1400px;margin:0 auto;padding:40px 20px 8px;font-family:var(--font-body)">
+<h1 style="font-family:var(--font-display);color:var(--text-primary);font-size:28px;margin:0 0 8px">High Fidelity — Full Screen Set</h1>
+<p style="color:var(--text-secondary);font-size:14px;line-height:1.6;max-width:760px;margin:0 0 12px">Every Low Fidelity screen brought to the Rewind Design System's visual language. Home and Series Detail (grayed labels below) are the approved reference implementations, unchanged. Sections follow the brief's 01–08 grouping.</p>
+<p style="color:var(--text-tertiary);font-size:12px;line-height:1.6;max-width:760px;margin:0">Proposed Design System additions, flagged where introduced: Rating-trend sparkline, Statistics bar chart, Genre distribution bars, Rewards/Challenge components, Calendar day-strip, Search type-tabs, Comment input row, Offline/error state icon.</p>
+</div>
+
+<div class="section-hd"><h2 style="font-family:var(--font-display);color:var(--brand-primary);font-size:15px;letter-spacing:.04em;margin:0 0 4px">01 — ENTRY</h2><p style="color:var(--text-secondary);font-size:13px;margin:0">Onboarding · Preferences</p></div>
+<div class="section-row">
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:0 0 24px">
+<div class="placeholder" style="height:360px"></div>
+<div style="padding:24px 20px 0">
+<h3 style="font-family:var(--font-display);color:var(--text-primary);font-size:24px;line-height:1.25;margin:0 0 10px">Everything you watch, in one place.</h3>
+<p style="color:var(--text-secondary);font-size:14px;line-height:1.5;margin:0 0 18px">Movies, series, anime, docs — tracked across every platform. Rewind isn't where you stream. It's where you keep score.</p>
+<div style="display:flex;gap:6px;justify-content:center;margin-bottom:20px"><div style="width:16px;height:4px;border-radius:2px;background:var(--brand-primary)"></div><div style="width:4px;height:4px;border-radius:2px;background:var(--ink-600)"></div><div style="width:4px;height:4px;border-radius:2px;background:var(--ink-600)"></div></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="height:48px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center">Continue with Google</div>
+<div style="height:48px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center">Continue with Apple</div>
+<div style="height:48px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center">Continue with email</div>
+<div style="text-align:center;color:var(--text-tertiary);font-size:12px;padding-top:4px">Continue without an account</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<h3 style="color:var(--text-primary);font-size:20px;font-weight:700;margin:0 0 4px">Your favorite genres</h3>
+<p style="color:var(--text-tertiary);font-size:12px;margin:0 0 16px">Pick at least 3 · step 2 of 3</p>
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
+<div style="padding:9px 16px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:13px;font-weight:600">Action</div>
+<div style="padding:9px 16px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:13px;font-weight:600">Sci-Fi</div>
+<div style="padding:9px 16px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:13px">Drama</div>
+<div style="padding:9px 16px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:13px">Thriller</div>
+<div style="padding:9px 16px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:13px;font-weight:600">Comedy</div>
+<div style="padding:9px 16px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:13px">Animation</div>
+<div style="padding:9px 16px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:13px">Documentary</div>
+<div style="padding:9px 16px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:13px">Horror</div>
+</div>
+<h3 style="color:var(--text-primary);font-size:20px;font-weight:700;margin:0 0 4px">Your platforms</h3>
+<p style="color:var(--text-tertiary);font-size:12px;margin:0 0 16px">To sharpen your recommendations</p>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:28px">
+<div class="placeholder" style="height:52px;border-radius:12px"></div><div class="placeholder" style="height:52px;border-radius:12px"></div><div class="placeholder" style="height:52px;border-radius:12px"></div><div class="placeholder" style="height:52px;border-radius:12px"></div>
+</div>
+<div style="height:48px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center">Continue</div>
+</div>
+</div>
+
+</div>
+<div class="section-hd"><h2 style="font-family:var(--font-display);color:var(--brand-primary);font-size:15px;letter-spacing:.04em;margin:0 0 4px">02 — CORE</h2><p style="color:var(--text-secondary);font-size:13px;margin:0">Home (approved reference) · Discover · Search · Upcoming</p></div>
+<div class="section-row">
+
+<div style="flex:none;width:320px"><div class="scrn-label">Home — approved, unchanged</div><div class="phone"><img src="uploads/HF1.png" style="width:100%;display:block"></div></div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:16px 20px 0">
+<div style="display:flex;align-items:center;gap:10px;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:999px;padding:10px 14px;margin-bottom:14px"><span style="color:var(--text-tertiary);font-size:14px">⌕</span><span style="color:var(--text-tertiary);font-size:13px">Series, movie, genre...</span></div>
+<div style="display:flex;gap:8px;overflow-x:auto;margin-bottom:12px">
+<div style="padding:8px 14px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:12px;white-space:nowrap">☰ Filters</div>
+<div style="padding:8px 14px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:12px;font-weight:700;white-space:nowrap">Popularity</div>
+<div style="padding:8px 14px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:12px;white-space:nowrap">New</div>
+<div style="padding:8px 14px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:12px;white-space:nowrap">Coming soon</div>
+</div>
+<div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:20px">
+<div style="padding:6px 12px;border-radius:999px;background:var(--surface-interactive);color:var(--text-primary);font-size:11px;white-space:nowrap">All</div>
+<div style="padding:6px 12px;border-radius:999px;color:var(--text-tertiary);font-size:11px;white-space:nowrap">Series</div>
+<div style="padding:6px 12px;border-radius:999px;color:var(--text-tertiary);font-size:11px;white-space:nowrap">Movies</div>
+<div style="padding:6px 12px;border-radius:999px;color:var(--text-tertiary);font-size:11px;white-space:nowrap">Sci-Fi</div>
+<div style="padding:6px 12px;border-radius:999px;color:var(--text-tertiary);font-size:11px;white-space:nowrap">Thriller</div>
+</div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">TRENDING</div>
+<div style="display:flex;gap:10px;overflow-x:auto;margin-bottom:22px">
+<div class="placeholder" style="width:110px;height:160px;border-radius:10px;flex:none"></div>
+<div class="placeholder" style="width:110px;height:160px;border-radius:10px;flex:none"></div>
+<div class="placeholder" style="width:110px;height:160px;border-radius:10px;flex:none"></div>
+</div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">BECAUSE YOU WATCHED FAULT LINES</div>
+<div style="display:flex;gap:12px;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:12px;padding:12px;margin-bottom:16px"><div class="placeholder" style="width:52px;height:76px;border-radius:8px;flex:none"></div><div><div style="color:var(--text-primary);font-size:14px;font-weight:700">Black Light</div><div style="color:var(--text-tertiary);font-size:12px">Same tone, slower burn</div></div></div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">TOP RATED</div>
+<div style="margin-bottom:22px">
+<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--text-tertiary);font-size:13px;width:14px">1</span><span style="color:var(--text-primary);font-size:13px;flex:1">The Last Shore</span><span style="color:var(--brand-primary);font-size:12px">★ 4.7</span></div>
+<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--text-tertiary);font-size:13px;width:14px">2</span><span style="color:var(--text-primary);font-size:13px;flex:1">Fault Lines</span><span style="color:var(--brand-primary);font-size:12px">★ 4.5</span></div>
+</div>
+</div>
+<div class="bn"><div class="bn-item" style="color:var(--brand-primary)"><div class="bn-icon" style="background:var(--brand-primary)"></div>Home</div><div class="bn-item"><div class="bn-icon" style="border:1.5px solid var(--text-tertiary)"></div>Discover</div><div class="bn-item"><div class="bn-icon" style="border:1.5px solid var(--text-tertiary)"></div>Upcoming</div><div class="bn-item"><div class="bn-icon" style="border:1.5px solid var(--text-tertiary)"></div>Friends</div><div class="bn-item"><div class="bn-icon" style="border:1.5px solid var(--text-tertiary)"></div>Profile</div></div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:16px 20px 24px">
+<div style="display:flex;align-items:center;gap:10px;background:var(--surface-primary);border:1px solid var(--brand-primary);border-radius:999px;padding:10px 14px;margin-bottom:14px"><span style="color:var(--text-tertiary);font-size:14px">⌕</span><span style="color:var(--text-primary);font-size:13px">Faul|</span></div>
+<div style="color:var(--text-tertiary);font-size:11px;margin-bottom:12px">4 results</div>
+<div style="display:flex;gap:8px;margin-bottom:20px">
+<div style="padding:6px 14px;border-radius:999px;background:var(--surface-interactive);color:var(--text-primary);font-size:11px">All</div>
+<div style="padding:6px 14px;border-radius:999px;color:var(--text-tertiary);font-size:11px">Movies</div>
+<div style="padding:6px 14px;border-radius:999px;color:var(--text-tertiary);font-size:11px">Series</div>
+<div style="padding:6px 14px;border-radius:999px;color:var(--text-tertiary);font-size:11px">Anime</div>
+<div style="padding:6px 14px;border-radius:999px;color:var(--text-tertiary);font-size:11px">TV</div>
+</div>
+<div style="color:var(--text-tertiary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:8px">SERIES</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--divider)"><div class="placeholder" style="width:44px;height:64px;border-radius:8px;flex:none"></div><div style="flex:1"><div style="color:var(--text-primary);font-size:14px;font-weight:600">Fault Lines</div><div style="color:var(--text-tertiary);font-size:12px">2024 · Series</div></div><div style="width:30px;height:30px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;font-size:15px">+</div></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--divider);margin-bottom:16px"><div class="placeholder" style="width:44px;height:64px;border-radius:8px;flex:none"></div><div style="flex:1"><div style="color:var(--text-primary);font-size:14px;font-weight:600">The Watchers</div><div style="color:var(--text-tertiary);font-size:12px">2023 · Series</div></div><div style="width:30px;height:30px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;font-size:15px">+</div></div>
+<div style="color:var(--text-tertiary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:8px">MOVIES</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--divider)"><div class="placeholder" style="width:44px;height:64px;border-radius:8px;flex:none"></div><div style="flex:1"><div style="color:var(--text-primary);font-size:14px;font-weight:600">White Zone</div><div style="color:var(--text-tertiary);font-size:12px">2026 · Movie</div></div><div style="width:30px;height:30px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;font-size:15px">✓</div></div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:60px 20px;text-align:center"><div style="width:64px;height:64px;border-radius:999px;border:2px dashed var(--border-default);margin:0 auto 18px"></div><div style="color:var(--text-primary);font-size:16px;font-weight:700;margin-bottom:6px">No results for "Zryx"</div><div style="color:var(--text-tertiary);font-size:13px;line-height:1.5">Check the spelling, or explore trending titles instead.</div></div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<h3 style="color:var(--text-primary);font-size:20px;font-weight:800;margin:0 0 2px">Upcoming</h3>
+<div style="color:var(--text-tertiary);font-size:12px;margin-bottom:16px">2 episodes in the next 7 days</div>
+<div style="display:flex;gap:6px;margin-bottom:16px"><div style="padding:6px 14px;border-radius:999px;background:var(--surface-interactive);color:var(--text-primary);font-size:12px;font-weight:600">List</div><div style="padding:6px 14px;border-radius:999px;color:var(--text-tertiary);font-size:12px">Month</div></div>
+<div style="display:flex;gap:8px;overflow-x:auto;margin-bottom:20px">
+<div style="width:44px;flex:none;text-align:center;padding:8px 0;border-radius:12px;background:var(--brand-primary);color:var(--text-inverse)"><div style="font-size:10px">SUN</div><div style="font-size:15px;font-weight:700">9</div></div>
+<div style="width:44px;flex:none;text-align:center;padding:8px 0;border-radius:12px;color:var(--text-secondary)"><div style="font-size:10px">MON</div><div style="font-size:15px;font-weight:700">10</div></div>
+<div style="width:44px;flex:none;text-align:center;padding:8px 0;border-radius:12px;color:var(--text-secondary)"><div style="font-size:10px">TUE</div><div style="font-size:15px;font-weight:700">11</div></div>
+<div style="width:44px;flex:none;text-align:center;padding:8px 0;border-radius:12px;color:var(--text-secondary)"><div style="font-size:10px">WED</div><div style="font-size:15px;font-weight:700">12</div></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:12px;padding:12px;margin-bottom:10px"><div class="placeholder" style="width:48px;height:68px;border-radius:8px;flex:none"></div><div><div style="color:var(--text-primary);font-size:14px;font-weight:700">Fault Lines</div><div style="color:var(--text-tertiary);font-size:12px">S02 E05 · Tue 11</div></div></div>
+<div style="display:flex;align-items:center;gap:12px;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:12px;padding:12px"><div class="placeholder" style="width:48px;height:68px;border-radius:8px;flex:none"></div><div><div style="color:var(--text-primary);font-size:14px;font-weight:700">Nocturne</div><div style="color:var(--text-tertiary);font-size:12px">S03 E03 · Thu 13</div></div></div>
+</div>
+</div>
+
+</div>
+<div class="section-hd"><h2 style="font-family:var(--font-display);color:var(--brand-primary);font-size:15px;letter-spacing:.04em;margin:0 0 4px">03 — CONTENT</h2><p style="color:var(--text-secondary);font-size:13px;margin:0">Series Detail (approved reference) · Movie Detail · Episode Detail</p></div>
+<div class="section-row">
+
+<div style="flex:none;width:320px"><div class="scrn-label">Series Detail — approved, unchanged</div><div class="phone"><img src="uploads/HF2.png" style="width:100%;display:block"></div></div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:0 0 24px">
+<div style="position:relative"><div class="placeholder" style="height:200px;display:flex;align-items:center;justify-content:center;color:var(--text-tertiary);font-size:11px;letter-spacing:.04em">BACKDROP 16:9</div>
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 35%,var(--bg-primary) 100%)"></div>
+<div style="position:absolute;top:12px;right:12px;background:#000c;border-radius:999px;padding:7px 14px;color:var(--text-primary);font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px">▶ Trailer</div></div>
+<div style="padding:0 20px">
+<div style="display:flex;gap:12px;margin-top:-46px;margin-bottom:16px"><div class="placeholder" style="width:100px;height:148px;border-radius:10px;flex:none;border:2px solid var(--bg-primary)"></div>
+<div style="padding-top:56px"><div style="color:var(--text-primary);font-size:20px;font-weight:800">White Zone</div><div style="color:var(--text-tertiary);font-size:12px">2026 · 1h 58m · Thriller</div></div></div>
+<div style="display:flex;gap:8px;margin-bottom:20px"><div style="flex:1;height:44px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-primary);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center">+ Watchlist</div><div style="flex:1;height:44px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center">✓ Watched</div><div style="width:44px;height:44px;border-radius:999px;border:1px solid var(--border-default);display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">♥</div></div>
+<p style="color:var(--text-secondary);font-size:13px;line-height:1.6;margin:0 0 20px">A lone investigator tracks the truth behind the disappearance of an entire village, at the edge of reality.</p>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">WHERE TO WATCH</div>
+<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
+<div style="display:flex;justify-content:space-between;align-items:center;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:10px;padding:12px 14px"><span style="color:var(--text-primary);font-size:13px;font-weight:600">CGR Cinémas</span><span style="color:var(--brand-primary);font-size:12px;font-weight:700">Book tickets ↗</span></div>
+</div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">CAST</div>
+<div style="display:flex;gap:14px;margin-bottom:20px">
+<div style="text-align:center"><div class="placeholder" style="width:48px;height:48px;border-radius:999px;margin-bottom:6px"></div><div style="color:var(--text-tertiary);font-size:10px">A. Novak</div></div>
+<div style="text-align:center"><div class="placeholder" style="width:48px;height:48px;border-radius:999px;margin-bottom:6px"></div><div style="color:var(--text-tertiary);font-size:10px">M. Reyes</div></div>
+</div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">RATING</div>
+<div style="display:flex;gap:10px;margin-bottom:20px">
+<div style="flex:1;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:10px;padding:12px"><div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.04em;margin-bottom:6px">COMMUNITY</div><div style="color:var(--text-primary);font-size:15px;font-weight:700">4.2/5 · 1.2k ratings</div></div>
+<div style="flex:1;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:10px;padding:12px"><div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.04em;margin-bottom:6px">YOUR RATING</div><div style="color:var(--brand-primary);font-size:13px;font-weight:700">Tap to rate</div></div>
+</div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">SIMILAR CONTENT</div>
+<div style="display:flex;gap:10px;overflow-x:auto"><div class="placeholder" style="width:72px;height:104px;border-radius:8px;flex:none"></div><div class="placeholder" style="width:72px;height:104px;border-radius:8px;flex:none"></div><div class="placeholder" style="width:72px;height:104px;border-radius:8px;flex:none"></div></div>
+</div>
+</div>
+</div>
+
+<div class="phone" style="padding:0">
+<div style="position:relative;height:260px" class="placeholder">
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15) 0%,rgba(0,0,0,0) 30%,rgba(5,8,16,.55) 75%,var(--bg-primary) 100%)"></div>
+<div style="position:absolute;top:14px;left:14px;width:32px;height:32px;border-radius:999px;background:#0007;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-size:15px">‹</div>
+<div style="position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:999px;background:#0007;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-size:14px">✓</div>
+<div style="position:absolute;bottom:14px;left:20px;right:20px">
+<div style="color:var(--text-primary);font-size:19px;font-weight:800;margin-bottom:2px">Fault Lines</div>
+<div style="color:var(--text-secondary);font-size:12px">S03 E01 · The Signal</div>
+</div>
+</div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">RATING</div>
+<div style="display:flex;gap:10px;margin-bottom:20px">
+<div style="flex:1;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:10px;padding:12px"><div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.04em;margin-bottom:6px">COMMUNITY</div><div style="color:var(--text-primary);font-size:15px;font-weight:700">4.5/5 · 2 ratings</div></div>
+<div style="flex:1;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:10px;padding:12px"><div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.04em;margin-bottom:6px">YOUR RATING</div><div style="color:var(--brand-primary);font-size:13px;font-weight:700">Tap to rate</div></div>
+</div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">SYNOPSIS</div>
+<p style="color:var(--text-secondary);font-size:13px;line-height:1.6;margin:0 0 20px">A signal from an abandoned station reopens the case that started it all, pulling the team back to where everything went wrong.</p>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">COMMENTS</div>
+<div style="border:1px solid var(--border-default);border-radius:999px;padding:12px 16px;color:var(--text-tertiary);font-size:13px;margin-bottom:16px">Add a comment...</div>
+<div style="display:flex;gap:10px;margin-bottom:14px"><div class="placeholder" style="width:32px;height:32px;border-radius:999px;flex:none"></div><div><div style="color:var(--text-primary);font-size:13px;font-weight:700">M. Reyes</div><div style="color:var(--text-secondary);font-size:13px">Loved the tension in the finale.</div></div></div>
+</div>
+</div>
+
+</div>
+<div class="section-hd"><h2 style="font-family:var(--font-display);color:var(--brand-primary);font-size:15px;letter-spacing:.04em;margin:0 0 4px">04 — TRACKING</h2><p style="color:var(--text-secondary);font-size:13px;margin:0">Quick Log · Post-Watch Rating · Completion States · Watching History</p></div>
+<div class="section-row">
+
+<div class="phone" style="position:relative"><div class="notch"><div></div></div>
+<div style="height:260px"></div>
+<div style="position:absolute;bottom:0;left:0;right:0;background:var(--surface-elevated);border-top:1px solid var(--border-default);border-radius:20px 20px 0 0;padding:10px 20px 24px">
+<div style="width:36px;height:4px;border-radius:2px;background:var(--ink-600);margin:0 auto 16px"></div>
+<h3 style="color:var(--text-primary);font-size:17px;font-weight:700;margin:0 0 14px">What did you watch?</h3>
+<div style="display:flex;align-items:center;gap:8px;border:1px solid var(--border-default);border-radius:999px;padding:11px 16px;margin-bottom:16px"><span style="color:var(--text-tertiary)">⌕</span><span style="color:var(--text-tertiary);font-size:13px">Search a title...</span></div>
+<div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.06em;font-weight:700;margin-bottom:10px">RECENT</div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--divider)"><div><div style="color:var(--text-primary);font-size:14px;font-weight:600">Fault Lines</div><div style="color:var(--text-tertiary);font-size:12px">S02 E05</div></div><div style="width:28px;height:28px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);display:flex;align-items:center;justify-content:center;font-size:13px">✓</div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0"><div><div style="color:var(--text-primary);font-size:14px;font-weight:600">Nocturne</div><div style="color:var(--text-tertiary);font-size:12px">S03 E03</div></div><div style="width:28px;height:28px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);display:flex;align-items:center;justify-content:center;font-size:13px">✓</div></div>
+</div>
+</div>
+
+<div class="phone" style="position:relative"><div class="notch"><div></div></div>
+<div style="height:100px"></div>
+<div style="position:absolute;bottom:0;left:0;right:0;background:var(--surface-elevated);border-top:1px solid var(--border-default);border-radius:20px 20px 0 0;padding:10px 20px 24px">
+<div style="width:36px;height:4px;border-radius:2px;background:var(--ink-600);margin:0 auto 16px"></div>
+<div style="display:flex;gap:12px;margin-bottom:20px"><div class="placeholder" style="width:56px;height:80px;border-radius:8px;flex:none"></div><div><div style="color:var(--text-primary);font-size:16px;font-weight:700">White Zone</div><div style="color:var(--brand-primary);font-size:12px;font-weight:600">Marked as watched</div></div></div>
+<div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.06em;font-weight:700;margin-bottom:10px">YOUR RATING</div>
+<div style="display:flex;gap:8px;margin-bottom:22px">
+<div style="width:34px;height:34px;border:1.5px solid var(--rating)"></div><div style="width:34px;height:34px;border:1.5px solid var(--rating)"></div><div style="width:34px;height:34px;border:1.5px solid var(--rating)"></div><div style="width:34px;height:34px;border:1.5px solid var(--border-default)"></div><div style="width:34px;height:34px;border:1.5px solid var(--border-default)"></div>
+</div>
+<div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.06em;font-weight:700;margin-bottom:10px">QUICK REACTION</div>
+<div style="display:flex;gap:8px;margin-bottom:22px"><div style="padding:8px 14px;border-radius:999px;background:var(--coral-300);color:var(--brand-primary);font-size:12px;font-weight:700">Loved it</div><div style="padding:8px 14px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:12px">It was fine</div><div style="padding:8px 14px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:12px">Disappointed</div></div>
+<div style="border:1px solid var(--border-default);border-radius:999px;padding:11px 16px;color:var(--text-tertiary);font-size:13px;margin-bottom:18px">Add a personal note...</div>
+<div style="height:48px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center">Save</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:24px 20px 24px;text-align:center">
+<div style="width:60px;height:60px;border-radius:999px;background:var(--coral-300);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">✓</div>
+<div style="color:var(--text-tertiary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:8px">SEASON COMPLETED</div>
+<div style="color:var(--text-primary);font-size:18px;font-weight:800;margin-bottom:4px">Fault Lines — Season 3</div>
+<div style="color:var(--text-secondary);font-size:13px;margin-bottom:24px">10/10 episodes · rate this season</div>
+<div style="height:48px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center">Start Season 4</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:24px 20px 24px;text-align:center">
+<div style="width:60px;height:60px;border-radius:999px;background:var(--coral-300);color:var(--brand-primary);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:22px">✓</div>
+<div style="color:var(--text-tertiary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:8px">MOVIE COMPLETED</div>
+<div style="color:var(--text-primary);font-size:18px;font-weight:800;margin-bottom:24px">White Zone</div>
+<div style="height:48px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center">Rate this movie</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<h3 style="color:var(--text-primary);font-size:20px;font-weight:800;margin:0 0 18px">Watching History</h3>
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--text-primary);font-size:14px">Fault Lines — S02E04</span><span style="color:var(--text-tertiary);font-size:12px">Today, 21:40</span></div>
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--text-primary);font-size:14px">The Watchers — S01E07</span><span style="color:var(--text-tertiary);font-size:12px">Yesterday, 20:15</span></div>
+<div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--text-primary);font-size:14px">White Zone (Movie)</span><span style="color:var(--text-tertiary);font-size:12px">Aug 6</span></div>
+<div style="display:flex;justify-content:space-between;padding:12px 0"><span style="color:var(--text-primary);font-size:14px">Nocturne — S03E02</span><span style="color:var(--text-tertiary);font-size:12px">Aug 4</span></div>
+</div>
+</div>
+
+</div>
+<div class="section-hd"><h2 style="font-family:var(--font-display);color:var(--brand-primary);font-size:15px;letter-spacing:.04em;margin:0 0 4px">05 — SOCIAL</h2><p style="color:var(--text-secondary);font-size:13px;margin:0">Friends</p></div>
+<div class="section-row">
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 14px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><h3 style="color:var(--text-primary);font-size:20px;font-weight:800;margin:0">Friends</h3><div style="width:32px;height:32px;border-radius:999px;border:1px solid var(--border-default);display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">+</div></div>
+<div style="display:flex;gap:14px;overflow-x:auto;margin-bottom:20px">
+<div style="text-align:center"><div class="placeholder" style="width:48px;height:48px;border-radius:999px;margin-bottom:6px"></div><div style="color:var(--text-tertiary);font-size:10px">Lea</div></div>
+<div style="text-align:center"><div class="placeholder" style="width:48px;height:48px;border-radius:999px;margin-bottom:6px"></div><div style="color:var(--text-tertiary);font-size:10px">Marc</div></div>
+<div style="text-align:center"><div class="placeholder" style="width:48px;height:48px;border-radius:999px;margin-bottom:6px"></div><div style="color:var(--text-tertiary);font-size:10px">Nina</div></div>
+<div style="text-align:center"><div class="placeholder" style="width:48px;height:48px;border-radius:999px;margin-bottom:6px"></div><div style="color:var(--text-tertiary);font-size:10px">Theo</div></div>
+</div>
+<div style="background:var(--surface-primary);border:1px solid var(--border-default);border-radius:12px;padding:14px;margin-bottom:12px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="placeholder" style="width:32px;height:32px;border-radius:999px;flex:none"></div><div style="flex:1"><div style="color:var(--text-primary);font-size:13px"><b>Lea</b> watched the finale of <b>Fault Lines</b></div><div style="color:var(--text-tertiary);font-size:11px">2d ago</div></div></div>
+<div style="display:flex;gap:12px;align-items:center;margin-bottom:12px"><div class="placeholder" style="width:44px;height:64px;border-radius:8px;flex:none"></div><div><div style="color:var(--text-primary);font-size:14px;font-weight:700">Fault Lines</div><div style="color:var(--brand-primary);font-size:12px">★★★★★</div></div></div>
+<div style="display:flex;gap:16px;color:var(--text-tertiary);font-size:12px"><span>♡ 6</span><span>💬 Comment</span></div>
+</div>
+<div style="background:var(--surface-primary);border:1px solid var(--border-default);border-radius:12px;padding:14px">
+<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><div class="placeholder" style="width:32px;height:32px;border-radius:999px;flex:none"></div><div style="flex:1"><div style="color:var(--text-primary);font-size:13px"><b>Theo</b> started <b>Nocturne</b></div><div style="color:var(--text-tertiary);font-size:11px">5d ago</div></div></div>
+<div style="display:flex;gap:12px;align-items:center;margin-bottom:12px"><div class="placeholder" style="width:44px;height:64px;border-radius:8px;flex:none"></div><div style="color:var(--text-primary);font-size:14px;font-weight:700">Nocturne</div></div>
+<div style="display:flex;gap:16px;color:var(--text-tertiary);font-size:12px"><span>♡ 2</span><span>💬 Comment</span></div>
+</div>
+</div>
+<div class="bn"><div class="bn-item"><div class="bn-icon" style="border:1.5px solid var(--text-tertiary)"></div>Home</div><div class="bn-item"><div class="bn-icon" style="border:1.5px solid var(--text-tertiary)"></div>Discover</div><div class="bn-item"><div class="bn-icon" style="border:1.5px solid var(--text-tertiary)"></div>Upcoming</div><div class="bn-item" style="color:var(--brand-primary)"><div class="bn-icon" style="background:var(--brand-primary)"></div>Friends</div><div class="bn-item"><div class="bn-icon" style="border:1.5px solid var(--text-tertiary)"></div>Profile</div></div>
+</div>
+
+</div>
+
+<div class="section-hd"><h2 style="font-family:var(--font-display);color:var(--brand-primary);font-size:15px;letter-spacing:.04em;margin:0 0 4px">06 — PERSONAL</h2><p style="color:var(--text-secondary);font-size:13px;margin:0">Profile · Statistics · My Lists · List Detail · Rewards</p></div>
+<div class="section-row">
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:0 0 24px">
+<div class="placeholder" style="height:90px;position:relative"><div style="position:absolute;top:10px;right:12px;width:26px;height:26px;border-radius:999px;background:#000a;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-size:13px">🏆</div><div style="position:absolute;top:10px;right:44px;width:26px;height:26px;border-radius:999px;background:#000a;color:var(--text-primary);display:flex;align-items:center;justify-content:center;font-size:13px">⚙</div></div>
+<div style="padding:0 20px">
+<div style="display:flex;align-items:center;gap:12px;margin-top:-24px;margin-bottom:14px"><div class="placeholder" style="width:56px;height:56px;border-radius:999px;border:2px solid var(--bg-primary)"></div><div style="padding-top:26px;color:var(--text-primary);font-size:17px;font-weight:700">Alex</div></div>
+<div style="background:var(--surface-primary);border:1px solid var(--border-default);border-radius:12px;padding:14px;margin-bottom:16px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="color:var(--text-tertiary);font-size:10px;letter-spacing:.06em;font-weight:700">LEVEL 1 · CURIOUS</span><div style="width:22px;height:22px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);display:flex;align-items:center;justify-content:center;font-size:13px">+</div></div>
+<div style="height:6px;border-radius:3px;background:var(--ink-600);overflow:hidden;margin-bottom:6px"><div style="width:35%;height:100%;background:var(--brand-primary)"></div></div>
+<div style="color:var(--text-tertiary);font-size:11px">35 XP · 65 XP to Amateur</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px">
+<div style="text-align:center"><div style="color:var(--text-primary);font-size:16px;font-weight:800">126</div><div style="color:var(--text-tertiary);font-size:10px">Movies</div></div>
+<div style="text-align:center"><div style="color:var(--text-primary);font-size:16px;font-weight:800">42</div><div style="color:var(--text-tertiary);font-size:10px">Series</div></div>
+<div style="text-align:center"><div style="color:var(--text-primary);font-size:16px;font-weight:800">842</div><div style="color:var(--text-tertiary);font-size:10px">Episodes</div></div>
+<div style="text-align:center"><div style="color:var(--text-primary);font-size:16px;font-weight:800">624h</div><div style="color:var(--text-tertiary);font-size:10px">Hours</div></div>
+</div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:8px">FAVORITE SERIES</div>
+<div style="display:flex;gap:8px;margin-bottom:16px"><div class="placeholder" style="width:64px;height:92px;border-radius:8px"></div><div class="placeholder" style="width:64px;height:92px;border-radius:8px"></div></div><div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:8px">FAVORITE MOVIES</div>
+<div style="display:flex;gap:8px;margin-bottom:16px"><div class="placeholder" style="width:64px;height:92px;border-radius:8px"></div><div class="placeholder" style="width:64px;height:92px;border-radius:8px"></div></div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--divider);color:var(--text-primary);font-size:14px">Watching History <span style="color:var(--text-tertiary)">›</span></div>
+<div style="display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--divider);color:var(--text-primary);font-size:14px">Statistics <span style="color:var(--text-tertiary)">›</span></div>
+<div style="display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--divider);color:var(--text-primary);font-size:14px">Ratings <span style="color:var(--text-tertiary)">›</span></div>
+<div style="display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--divider);color:var(--text-primary);font-size:14px">My Lists <span style="color:var(--text-tertiary)">›</span></div>
+<div style="display:flex;justify-content:space-between;padding:13px 0;color:var(--text-primary);font-size:14px">Settings <span style="color:var(--text-tertiary)">›</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<h3 style="color:var(--text-primary);font-size:20px;font-weight:800;margin:0 0 2px">Statistics</h3>
+<div style="color:var(--text-tertiary);font-size:12px;margin-bottom:18px">126 movies · 842 episodes · 624h watched</div>
+<div style="display:flex;align-items:flex-end;gap:6px;height:80px;margin-bottom:20px">
+<div style="flex:1;background:var(--ink-700);height:55%;border-radius:3px 3px 0 0"></div><div style="flex:1;background:var(--ink-700);height:70%;border-radius:3px 3px 0 0"></div><div style="flex:1;background:var(--ink-700);height:40%;border-radius:3px 3px 0 0"></div><div style="flex:1;background:var(--brand-primary);height:85%;border-radius:3px 3px 0 0"></div><div style="flex:1;background:var(--ink-700);height:60%;border-radius:3px 3px 0 0"></div><div style="flex:1;background:var(--ink-700);height:75%;border-radius:3px 3px 0 0"></div><div style="flex:1;background:var(--ink-700);height:50%;border-radius:3px 3px 0 0"></div>
+</div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">FAVORITE GENRES</div>
+<div style="margin-bottom:20px">
+<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-bottom:4px"><span>Thriller</span><span>32%</span></div><div style="height:5px;border-radius:3px;background:var(--ink-600);margin-bottom:10px"><div style="width:32%;height:100%;background:var(--brand-primary);border-radius:3px"></div></div>
+<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-bottom:4px"><span>Drama</span><span>24%</span></div><div style="height:5px;border-radius:3px;background:var(--ink-600)"><div style="width:24%;height:100%;background:var(--brand-primary);border-radius:3px"></div></div>
+</div>
+<div style="display:flex;gap:10px"><div style="flex:1;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:10px;padding:12px;text-align:center"><div style="color:var(--text-primary);font-size:18px;font-weight:800">4.1</div><div style="color:var(--text-tertiary);font-size:11px">Avg. rating</div></div><div style="flex:1;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:10px;padding:12px;text-align:center"><div style="color:var(--text-primary);font-size:18px;font-weight:800">Fri</div><div style="color:var(--text-tertiary);font-size:11px">Top day</div></div></div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><h3 style="color:var(--text-primary);font-size:20px;font-weight:800;margin:0">My Lists</h3><div style="width:30px;height:30px;border-radius:999px;border:1px solid var(--border-default);display:flex;align-items:center;justify-content:center;color:var(--text-secondary)">+</div></div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--text-primary);font-size:14px;font-weight:600">Must-Watch Movies</span><span style="color:var(--text-tertiary);font-size:12px">12 titles</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--text-primary);font-size:14px;font-weight:600">Halloween</span><span style="color:var(--text-tertiary);font-size:12px">8 titles</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--text-primary);font-size:14px;font-weight:600">Sci-Fi</span><span style="color:var(--text-tertiary);font-size:12px">15 titles</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0"><span style="color:var(--text-primary);font-size:14px;font-weight:600">Best of 2026</span><span style="color:var(--text-tertiary);font-size:12px">9 titles</span></div>
+</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<div style="display:flex;align-items:center;gap:8px;margin-bottom:2px;color:var(--text-tertiary);font-size:12px">‹ My Lists</div>
+<h3 style="color:var(--text-primary);font-size:20px;font-weight:800;margin:0 0 2px">Halloween</h3>
+<div style="color:var(--text-tertiary);font-size:12px;margin-bottom:16px">8 titles</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--divider)"><div class="placeholder" style="width:44px;height:64px;border-radius:8px;flex:none"></div><div style="flex:1;color:var(--text-primary);font-size:14px;font-weight:600">White Zone</div><span style="color:var(--text-tertiary)">✕</span></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--divider)"><div class="placeholder" style="width:44px;height:64px;border-radius:8px;flex:none"></div><div style="flex:1;color:var(--text-primary);font-size:14px;font-weight:600">Nocturne</div><span style="color:var(--text-tertiary)">✕</span></div>
+<div style="height:44px;border-radius:999px;border:1px dashed var(--border-default);color:var(--text-secondary);font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:14px">+ Add content</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<h3 style="color:var(--text-primary);font-size:20px;font-weight:800;margin:0 0 14px">Rewards</h3>
+<div style="display:flex;gap:6px;margin-bottom:18px"><div style="padding:7px 14px;border-radius:999px;background:var(--surface-interactive);color:var(--text-primary);font-size:12px;font-weight:600">Rewards</div><div style="padding:7px 14px;border-radius:999px;color:var(--text-tertiary);font-size:12px">Ranking</div><div style="padding:7px 14px;border-radius:999px;color:var(--text-tertiary);font-size:12px">Friends</div></div>
+<div style="background:var(--surface-primary);border:1px solid var(--border-default);border-radius:12px;padding:14px;margin-bottom:16px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="color:var(--text-tertiary);font-size:10px;letter-spacing:.06em;font-weight:700">LEVEL 1 · CURIOUS</span></div>
+<div style="height:6px;border-radius:3px;background:var(--ink-600);overflow:hidden;margin-bottom:6px"><div style="width:35%;height:100%;background:var(--brand-primary)"></div></div>
+<div style="color:var(--text-tertiary);font-size:11px">35 XP · 65 XP to Amateur</div>
+</div>
+<div style="display:flex;gap:10px;margin-bottom:22px"><div style="flex:1;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:10px;padding:12px;text-align:center"><div style="color:var(--text-primary);font-size:17px;font-weight:800">1</div><div style="color:var(--text-tertiary);font-size:11px">Day streak</div></div><div style="flex:1;background:var(--surface-primary);border:1px solid var(--border-default);border-radius:10px;padding:12px;text-align:center"><div style="color:var(--text-primary);font-size:17px;font-weight:800">1</div><div style="color:var(--text-tertiary);font-size:11px">Best streak</div></div></div>
+<div style="color:var(--brand-primary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">WEEKLY CHALLENGES</div>
+<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;color:var(--text-primary);font-size:13px;margin-bottom:4px"><span>5 episodes this week</span><span style="color:var(--brand-primary)">+30 XP</span></div><div style="height:5px;border-radius:3px;background:var(--ink-600)"><div style="width:20%;height:100%;background:var(--brand-primary);border-radius:3px"></div></div></div>
+<div><div style="display:flex;justify-content:space-between;color:var(--text-primary);font-size:13px;margin-bottom:4px"><span>3 reviews this week</span><span style="color:var(--brand-primary)">+20 XP</span></div><div style="height:5px;border-radius:3px;background:var(--ink-600)"><div style="width:33%;height:100%;background:var(--brand-primary);border-radius:3px"></div></div></div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<h3 style="color:var(--text-primary);font-size:20px;font-weight:800;margin:0 0 14px">Rewards</h3>
+<div style="display:flex;gap:6px;margin-bottom:18px"><div style="padding:7px 14px;border-radius:999px;color:var(--text-tertiary);font-size:12px">Rewards</div><div style="padding:7px 14px;border-radius:999px;color:var(--text-tertiary);font-size:12px">Ranking</div><div style="padding:7px 14px;border-radius:999px;background:var(--surface-interactive);color:var(--text-primary);font-size:12px;font-weight:600">Friends</div></div>
+<div style="color:var(--text-tertiary);font-size:11px;font-weight:700;letter-spacing:.04em;margin-bottom:10px">XP LEADERBOARD — FRIENDS</div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--brand-primary);font-size:14px;font-weight:800;width:18px">1</span><div class="placeholder" style="width:36px;height:36px;border-radius:999px;flex:none"></div><span style="flex:1;color:var(--text-primary);font-size:14px;font-weight:600">Lea</span><span style="color:var(--text-secondary);font-size:13px">1,240 XP</span></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--divider)"><span style="color:var(--text-tertiary);font-size:14px;font-weight:800;width:18px">2</span><div class="placeholder" style="width:36px;height:36px;border-radius:999px;flex:none"></div><span style="flex:1;color:var(--text-primary);font-size:14px;font-weight:600">Theo</span><span style="color:var(--text-secondary);font-size:13px">980 XP</span></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--divider);background:var(--coral-300);border-radius:8px;padding-left:8px;padding-right:8px"><span style="color:var(--text-tertiary);font-size:14px;font-weight:800;width:18px">3</span><div class="placeholder" style="width:36px;height:36px;border-radius:999px;flex:none"></div><span style="flex:1;color:var(--text-primary);font-size:14px;font-weight:700">You — Alex</span><span style="color:var(--brand-primary);font-size:13px;font-weight:700">35 XP</span></div>
+<div style="display:flex;align-items:center;gap:12px;padding:10px 0"><span style="color:var(--text-tertiary);font-size:14px;font-weight:800;width:18px">4</span><div class="placeholder" style="width:36px;height:36px;border-radius:999px;flex:none"></div><span style="flex:1;color:var(--text-primary);font-size:14px;font-weight:600">Nina</span><span style="color:var(--text-secondary);font-size:13px">12 XP</span></div>
+</div>
+</div>
+
+</div>
+<div class="section-hd"><h2 style="font-family:var(--font-display);color:var(--brand-primary);font-size:15px;letter-spacing:.04em;margin:0 0 4px">07 — ACCOUNT</h2><p style="color:var(--text-secondary);font-size:13px;margin:0">Settings · Edit Profile</p></div>
+<div class="section-row">
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<h3 style="color:var(--text-primary);font-size:20px;font-weight:800;margin:0 0 18px">Settings</h3>
+<div style="display:flex;flex-direction:column;margin-bottom:24px">
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--divider);color:var(--text-primary);font-size:14px">Edit Profile <span style="color:var(--text-tertiary)">›</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--divider);color:var(--text-primary);font-size:14px">Notifications <span style="color:var(--text-tertiary)">›</span></div>
+<div style="display:flex;justify-content:space-between;padding:14px 0;color:var(--text-primary);font-size:14px">Privacy <span style="color:var(--text-tertiary)">›</span></div>
+</div>
+<div style="height:46px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-primary);font-size:14px;font-weight:600;display:flex;align-items:center;justify-content:center;margin-bottom:20px">Log Out</div>
+<div style="color:var(--state-error);font-size:13px;font-weight:600;text-align:center;margin-bottom:4px">Delete Account</div>
+<div style="color:var(--text-tertiary);font-size:11px;text-align:center;line-height:1.5">Permanently deletes your account and all your data.</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px 24px">
+<div style="color:var(--text-tertiary);font-size:16px;margin-bottom:14px">✕ Edit Profile</div>
+<div style="text-align:center;margin-bottom:18px"><div style="width:80px;height:80px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:28px;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto">A</div></div>
+<div style="display:flex;gap:8px;justify-content:center;margin-bottom:20px"><div style="padding:8px 16px;border-radius:999px;background:var(--surface-interactive);color:var(--text-primary);font-size:12px;font-weight:600">Initials</div><div style="padding:8px 16px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:12px">Icon</div></div>
+<div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.06em;font-weight:700;margin-bottom:8px">COLOR</div>
+<div style="display:flex;gap:8px;margin-bottom:20px">
+<div style="width:26px;height:26px;border-radius:999px;background:var(--coral-500)"></div><div style="width:26px;height:26px;border-radius:999px;background:var(--gold-500)"></div><div style="width:26px;height:26px;border-radius:999px;background:var(--green-500)"></div><div style="width:26px;height:26px;border-radius:999px;background:var(--blue-500);outline:2px solid var(--text-primary);outline-offset:2px"></div><div style="width:26px;height:26px;border-radius:999px;background:var(--purple-500)"></div>
+</div>
+<div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.06em;font-weight:700;margin-bottom:6px">FIRST NAME</div>
+<div style="border:1px solid var(--border-default);border-radius:10px;padding:11px 14px;color:var(--text-primary);font-size:14px;margin-bottom:14px">Alex</div>
+<div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.06em;font-weight:700;margin-bottom:6px">BIO</div>
+<div style="border:1px solid var(--border-default);border-radius:10px;padding:11px 14px;color:var(--text-tertiary);font-size:14px;margin-bottom:14px">A few words about you</div>
+<div style="color:var(--text-tertiary);font-size:10px;letter-spacing:.06em;font-weight:700;margin-bottom:6px">PROFILE BANNER</div>
+<div style="display:flex;gap:8px;margin-bottom:20px"><div style="padding:8px 16px;border-radius:999px;background:var(--surface-interactive);color:var(--text-primary);font-size:12px;font-weight:600">Favorite Series</div><div style="padding:8px 16px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-secondary);font-size:12px">Imported Image</div></div>
+<div style="height:48px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center">Save</div>
+</div>
+</div>
+
+</div>
+
+<div class="section-hd"><h2 style="font-family:var(--font-display);color:var(--brand-primary);font-size:15px;letter-spacing:.04em;margin:0 0 4px">08 — SYSTEM STATES</h2><p style="color:var(--text-secondary);font-size:13px;margin:0">Empty · Search Empty · Upcoming Empty · Loading · Offline · Toast</p></div>
+<div class="section-row">
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:80px 30px;text-align:center">
+<div style="width:64px;height:64px;border-radius:999px;border:2px dashed var(--border-default);margin:0 auto 18px"></div>
+<div style="color:var(--text-primary);font-size:16px;font-weight:700;margin-bottom:6px">Nothing here yet</div>
+<div style="color:var(--text-tertiary);font-size:13px;line-height:1.5;margin-bottom:20px">Content you track will show up here.</div>
+<div style="height:44px;border-radius:999px;background:var(--brand-primary);color:var(--text-inverse);font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 20px">Discover content</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:80px 30px;text-align:center">
+<div style="width:64px;height:64px;border-radius:999px;border:2px dashed var(--border-default);margin:0 auto 18px"></div>
+<div style="color:var(--text-primary);font-size:16px;font-weight:700;margin-bottom:6px">Nothing upcoming</div>
+<div style="color:var(--text-tertiary);font-size:13px;line-height:1.5">Everything you follow is up to date.</div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:20px 20px">
+<div style="height:14px;width:100px;border-radius:4px;background:var(--surface-secondary);margin-bottom:16px"></div>
+<div style="display:flex;gap:10px;margin-bottom:14px"><div class="placeholder" style="width:56px;height:56px;border-radius:8px;flex:none"></div><div style="flex:1"><div style="height:12px;border-radius:4px;background:var(--surface-secondary);margin-bottom:8px"></div><div style="height:10px;width:60%;border-radius:4px;background:var(--surface-secondary)"></div></div></div>
+<div style="display:flex;gap:10px;margin-bottom:20px"><div class="placeholder" style="width:56px;height:56px;border-radius:8px;flex:none"></div><div style="flex:1"><div style="height:12px;border-radius:4px;background:var(--surface-secondary);margin-bottom:8px"></div><div style="height:10px;width:60%;border-radius:4px;background:var(--surface-secondary)"></div></div></div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div class="placeholder" style="height:80px;border-radius:8px"></div><div class="placeholder" style="height:80px;border-radius:8px"></div><div class="placeholder" style="height:80px;border-radius:8px"></div></div>
+</div>
+</div>
+
+<div class="phone"><div class="notch"><div></div></div>
+<div class="ph-content" style="padding:100px 30px;text-align:center">
+<div style="width:56px;height:56px;border-radius:999px;border:2px solid var(--text-secondary);color:var(--text-secondary);font-size:22px;display:flex;align-items:center;justify-content:center;margin:0 auto 18px">!</div>
+<div style="color:var(--text-primary);font-size:16px;font-weight:700;margin-bottom:6px">Can't connect</div>
+<div style="color:var(--text-tertiary);font-size:13px;line-height:1.5;margin-bottom:20px">Check your connection and try again.</div>
+<div style="height:44px;border-radius:999px;border:1px solid var(--border-default);color:var(--text-primary);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;padding:0 24px">Retry</div>
+</div>
+</div>
+
+<div class="phone" style="position:relative"><div class="notch"><div></div></div>
+<div style="height:220px"></div>
+<div style="position:absolute;bottom:20px;left:14px;right:14px;background:var(--surface-elevated);border:1px solid var(--border-default);border-radius:10px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center"><span style="color:var(--text-primary);font-size:13px">Episode marked as watched</span><span style="color:var(--brand-primary);font-size:13px;font-weight:700;text-decoration:underline">Undo</span></div>
+</div>
+
+</div>
+</x-dc>
+</body>
+</html>
