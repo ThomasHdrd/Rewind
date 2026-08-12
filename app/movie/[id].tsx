@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
@@ -8,7 +8,7 @@ import { Avatar, Button, MediaArtwork, PosterCard, Rating, radius, theme } from 
 import { Screen } from "@/components/Screen";
 import { SectionLabel } from "@/components/SectionLabel";
 import { HScroll } from "@/components/HScroll";
-import { useFavorites, useMediaDetail, useRecommendations, useSetWatchStatus, useToggleFavorite } from "@/hooks/useMedia";
+import { useFavorites, useMediaDetail, useRecommendations, useSetUserRating, useSetWatchStatus, useToggleFavorite } from "@/hooks/useMedia";
 import { trackingRepository } from "@/data/repositories";
 import { useQueryClient } from "@tanstack/react-query";
 import { useToastStore } from "@/state/toastStore";
@@ -31,10 +31,11 @@ export default function MovieDetail() {
   const qc = useQueryClient();
   const setWatchStatus = useSetWatchStatus();
   const toggleFavorite = useToggleFavorite();
+  const setUserRating = useSetUserRating();
   const showToast = useToastStore((s) => s.show);
-  const [userRating, setUserRating] = useState(0);
 
   if (!media) return null;
+  const userRating = media.userRating ?? 0;
 
   const favorited = favorites.some((m) => m.id === media.id);
 
@@ -171,7 +172,15 @@ export default function MovieDetail() {
             <Rating mode="community" value={media.communityRating ?? 0} count={media.ratingCount} />
           </View>
           <View style={styles.ratingCard}>
-            <Rating mode="user" value={userRating} interactive onChange={setUserRating} />
+            <Rating
+              mode="user"
+              value={userRating}
+              interactive
+              onChange={(rating) => {
+                setUserRating.mutate({ mediaId: media.id, rating });
+                showToast("Rating saved");
+              }}
+            />
           </View>
         </View>
 

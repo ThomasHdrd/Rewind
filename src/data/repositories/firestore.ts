@@ -13,12 +13,14 @@ import { SocialRepository, TrackingRepository, UserRepository } from "./types";
 import {
   getUserDoc,
   patchUserDoc,
+  seriesIdFromEpisodeId,
   setEpisodesWatchedBulk,
   setMediaStatus,
   toggleEpisodeWatched as toggleEpisodeWatchedDoc,
   toggleFavorite as toggleFavoriteDoc,
   watchedSeriesIds,
 } from "./firestoreUser";
+import { submitRating } from "./mediaRatings";
 import { computeLevel, computeStreaks, computeWeeklyChallenges, computeXp } from "@/lib/rewards";
 // Imported lazily (dynamic import) inside getProfile() below to avoid a
 // circular import: ./index wires this file's classes together with
@@ -69,7 +71,18 @@ export const personalMediaStore = {
     await setMediaStatus(requireUid(), mediaId, { status, kind });
   },
   async setUserRating(mediaId: string, rating: number) {
-    await setMediaStatus(requireUid(), mediaId, { rating });
+    const uid = requireUid();
+    // Two writes: the user's own rating (private, same as before) and the
+    // shared per-title aggregate (sum/count) that makes "Community" actually
+    // move as real Rewind users rate things, instead of being a frozen
+    // TMDB-only number forever. submitRating does this as one atomic
+    // transaction so concurrent raters can't clobber each other's totals.
+    // Order matters: submitRating reads the user's CURRENT stored rating to
+    // compute the sum/count delta, so it must run before setMediaStatus
+    // overwrites that value — otherwise it reads back the new rating as if
+    // it were the old one, and the aggregate never moves on a first rating.
+    await submitRating(uid, mediaId, rating);
+    await setMediaStatus(uid, mediaId, { rating });
   },
   async toggleEpisodeWatched(episodeId: string) {
     return toggleEpisodeWatchedDoc(requireUid(), episodeId);
@@ -84,11 +97,27 @@ export class FirestoreTrackingRepository implements TrackingRepository {
     const uid = auth.currentUser?.uid;
     if (!uid) return [];
     const doc = await getUserDoc(uid);
+    const watchedEpisodeCountFor = (seriesId: string) =>
+      Object.entries(doc.episodesWatched).filter(
+        ([episodeId, watched]) => watched && seriesIdFromEpisodeId(episodeId) === seriesId
+      ).length;
     const trackedIds = (kindWanted: "series" | "movie") =>
       Object.entries(doc.mediaStatus)
         .filter(([id, v]) => {
           const kind = v.kind ?? (id.startsWith("tv:") ? "series" : "movie");
-          return kind === kindWanted && (v.status === "watchlist" || v.status === "watching");
+          if (kind !== kindWanted) return false;
+          if (v.status === "watchlist") return true;
+          // A raw "watching" flag with zero real episodes watched is stale,
+          // not a genuine in-progress show — e.g. checking an episode then
+          // hitting "Undo" reverts the episode but not this status flip (see
+          // series/[id].tsx's toggleEpisode undo handler), leaving orphaned
+          // series permanently stuck here even though nothing was ever
+          // actually watched. Continue Watching already self-corrects this
+          // via deriveEffectiveStatus; Up Next needs the same guard.
+          if (v.status === "watching") {
+            return kindWanted === "movie" || watchedEpisodeCountFor(id) > 0;
+          }
+          return false;
         })
         .map(([id]) => id);
     const followedSeriesIds = trackedIds("series");

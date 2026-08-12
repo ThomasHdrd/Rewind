@@ -119,6 +119,53 @@ export const useSetWatchStatus = () => {
   });
 };
 
+// CONFIRMED BUG this fixes: the "Your Rating" star pickers on the movie/
+// series/episode detail screens were only ever local useState — nothing
+// called mediaRepository.setUserRating(), so a submitted rating vanished on
+// navigating away (never persisted) and the shared community aggregate's
+// count never moved. This mutation actually persists it (and, via
+// setUserRating's own implementation, updates the Rewind community
+// aggregate too), with an optimistic update so the stars respond instantly.
+export const useSetUserRating = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ mediaId, rating }: { mediaId: string; rating: number }) =>
+      mediaRepository.setUserRating(mediaId, rating),
+    onMutate: async ({ mediaId, rating }) => {
+      await qc.cancelQueries({ queryKey: ["media", mediaId] });
+      const previous = qc.getQueryData<Media | undefined>(["media", mediaId]);
+      qc.setQueryData<Media | undefined>(["media", mediaId], (old) => {
+        if (!old) return old;
+        // Mirror submitRating()'s own sum/count math client-side so the
+        // "Community" number moves the instant you rate, instead of sitting
+        // frozen until the follow-up network refetch (a full TMDB re-fetch)
+        // resolves. Re-derives from oldRating/oldCount so re-rating adjusts
+        // the sum without double-counting.
+        const oldRating = old.userRating ?? 0;
+        const oldCount = old.ratingCount ?? 0;
+        const oldSum = (old.communityRating ?? 0) * oldCount;
+        const nextSum = oldRating > 0 ? oldSum - oldRating + rating : oldSum + rating;
+        const nextCount = oldRating > 0 ? oldCount : oldCount + 1;
+        return {
+          ...old,
+          userRating: rating,
+          communityRating: Math.round((nextSum / nextCount) * 10) / 10,
+          ratingCount: nextCount,
+        };
+      });
+      return { previous, mediaId };
+    },
+    onError: (_err, _vars, context) => {
+      if (context) qc.setQueryData(["media", context.mediaId], context.previous);
+    },
+    onSuccess: (_data, { mediaId }) => {
+      qc.invalidateQueries({ queryKey: ["media", mediaId] });
+      qc.invalidateQueries({ queryKey: ["episode", mediaId] });
+      qc.invalidateQueries({ queryKey: ["episodes"] });
+    },
+  });
+};
+
 export const useUpcoming = () =>
   useQuery<UpcomingEpisode[]>({ queryKey: ["upcoming"], queryFn: () => trackingRepository.getUpcoming() });
 

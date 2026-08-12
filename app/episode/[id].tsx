@@ -5,9 +5,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Comment, Input, MediaArtwork, Rating, radius, theme } from "@/design-system";
 import { Screen } from "@/components/Screen";
 import { SectionLabel } from "@/components/SectionLabel";
-import { useEpisodeDetail, useMediaDetail, useSeriesWatchedEpisodeCount } from "@/hooks/useMedia";
+import { useEpisodeDetail, useMediaDetail, useSeriesWatchedEpisodeCount, useSetUserRating } from "@/hooks/useMedia";
 import { mediaRepository, trackingRepository } from "@/data/repositories";
 import { useQueryClient } from "@tanstack/react-query";
+import { useToastStore } from "@/state/toastStore";
 
 export default function EpisodeDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -16,11 +17,13 @@ export default function EpisodeDetail() {
   const { data: episode } = useEpisodeDetail(id);
   const { data: series } = useMediaDetail(episode?.seriesId ?? "");
   const { data: seriesWatchedCount = 0 } = useSeriesWatchedEpisodeCount(episode?.seriesId ?? "");
-  const [userRating, setUserRating] = useState(0);
+  const setUserRating = useSetUserRating();
+  const showToast = useToastStore((s) => s.show);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState<{ id: string; name: string; text: string }[]>([]);
 
   if (!episode || !series) return null;
+  const userRating = episode.userRating ?? 0;
 
   const airDateObj = episode.airDate ? new Date(episode.airDate) : null;
   const formattedAirDate =
@@ -110,7 +113,15 @@ export default function EpisodeDetail() {
             <Rating mode="community" value={episode.rating ?? 0} count={episode.ratingCount} />
           </View>
           <View style={styles.ratingCard}>
-            <Rating mode="user" value={userRating} interactive onChange={setUserRating} />
+            <Rating
+              mode="user"
+              value={userRating}
+              interactive
+              onChange={(rating) => {
+                setUserRating.mutate({ mediaId: episode.id, rating });
+                showToast("Rating saved");
+              }}
+            />
           </View>
         </View>
 

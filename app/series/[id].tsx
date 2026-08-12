@@ -14,6 +14,7 @@ import {
   useMediaDetail,
   useRecommendations,
   useSeriesWatchedEpisodeCount,
+  useSetUserRating,
   useSetWatchStatus,
   useToggleFavorite,
 } from "@/hooks/useMedia";
@@ -35,8 +36,8 @@ export default function SeriesDetail() {
   const { data: favorites = [] } = useFavorites();
   const setWatchStatus = useSetWatchStatus();
   const toggleFavorite = useToggleFavorite();
+  const setUserRating = useSetUserRating();
   const showToast = useToastStore((s) => s.show);
-  const [userRating, setUserRating] = useState(0);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState<{ id: string; name: string; text: string }[]>([
     { id: "c1", name: "M. Reyes", text: "Loved the tension in the finale." },
@@ -50,6 +51,7 @@ export default function SeriesDetail() {
   };
 
   if (!media) return null;
+  const userRating = media.userRating ?? 0;
 
   const favorited = favorites.some((m) => m.id === media.id);
 
@@ -103,6 +105,14 @@ export default function SeriesDetail() {
     const episode = episodes.find((e) => e.id === episodeId);
     const wasWatched = episode?.watched;
     if (!wasWatched && episode && !isReleased(episode.airDate)) return;
+    // Captured before the writes below, so Undo can tell whether this
+    // specific tap was the one that flipped the series to "watching" (i.e.
+    // it was the series' first-ever watched episode) and revert exactly
+    // that flip — otherwise Undo only un-marks the episode while the series
+    // stays permanently stuck on "watching" with zero real progress, which
+    // then wrongly keeps showing up in Up Next forever.
+    const statusBeforeThisWatch = media?.status;
+    const wasFirstEverWatch = seriesWatchedCount === 0;
     await mediaRepository.toggleEpisodeWatched(episodeId);
     if (!wasWatched && episode) {
       await trackingRepository.logWatch(`${media?.title ?? ""} — E${episode.number} ${episode.title}`.trim());
@@ -120,6 +130,10 @@ export default function SeriesDetail() {
         actionLabel: "Undo",
         onAction: async () => {
           await mediaRepository.toggleEpisodeWatched(episodeId);
+          if (wasFirstEverWatch && media) {
+            await mediaRepository.setWatchStatus(media.id, statusBeforeThisWatch ?? null);
+            qc.invalidateQueries({ queryKey: ["media", media.id] });
+          }
           invalidateWatchedData();
         },
       });
@@ -399,7 +413,15 @@ export default function SeriesDetail() {
             <Rating mode="community" value={media.communityRating ?? 0} count={media.ratingCount} />
           </View>
           <View style={styles.ratingCard}>
-            <Rating mode="user" value={userRating} interactive onChange={setUserRating} />
+            <Rating
+              mode="user"
+              value={userRating}
+              interactive
+              onChange={(rating) => {
+                setUserRating.mutate({ mediaId: media.id, rating });
+                showToast("Rating saved");
+              }}
+            />
           </View>
         </View>
 

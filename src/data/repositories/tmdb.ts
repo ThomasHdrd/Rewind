@@ -6,6 +6,7 @@ import { TmdbListResponse, TmdbMovie, TmdbSeason, TmdbTv } from "@/data/tmdb/typ
 import { personalMediaStore } from "./firestore";
 import { auth } from "@/lib/firebase";
 import { getUserDoc, seriesIdFromEpisodeId, watchedSeriesIds } from "./firestoreUser";
+import { getRatingAggregate } from "./mediaRatings";
 import { deriveEffectiveStatus, isAwaitingUnreleasedEpisode } from "@/domain/watchStatus";
 
 // TMDB is a read-only catalog source: it never stores anything about the
@@ -117,17 +118,27 @@ export class TmdbMediaRepository implements MediaRepository {
   async getById(id: string): Promise<Media | undefined> {
     try {
       const { kind, tmdbId } = parseId(id);
+      let media: Media;
       if (kind === "movie") {
         const movie = await tmdbFetch<TmdbMovie>(`/movie/${tmdbId}`, {
           append_to_response: "videos,credits,watch/providers",
         });
-        const [media] = await hydratePersonal([mapTmdbMovie(movie)]);
-        return media;
+        [media] = await hydratePersonal([mapTmdbMovie(movie)]);
+      } else {
+        const tv = await tmdbFetch<TmdbTv>(`/tv/${tmdbId}`, {
+          append_to_response: "videos,credits,watch/providers",
+        });
+        [media] = await hydratePersonal([mapTmdbTv(tv)]);
       }
-      const tv = await tmdbFetch<TmdbTv>(`/tv/${tmdbId}`, {
-        append_to_response: "videos,credits,watch/providers",
-      });
-      const [media] = await hydratePersonal([mapTmdbTv(tv)]);
+      // Overlay Rewind's own community aggregate (real users rating inside
+      // this app) over TMDB's number once at least one Rewind user has
+      // rated this title — only done here (single-item fetch), not in bulk
+      // list hydration, so browsing a big list doesn't add N extra reads.
+      const rewindAggregate = await getRatingAggregate(id);
+      if (rewindAggregate) {
+        media.communityRating = rewindAggregate.average;
+        media.ratingCount = rewindAggregate.count;
+      }
       return media;
     } catch {
       return undefined;
@@ -154,7 +165,13 @@ export class TmdbMediaRepository implements MediaRepository {
     const seasonData = await tmdbFetch<TmdbSeason>(`/tv/${tmdbId}/season/${season}`);
     const episodes = (seasonData.episodes ?? []).map((e) => mapTmdbEpisode(seriesId, e));
     const withWatched = await Promise.all(
-      episodes.map(async (e) => ({ ...e, watched: await personalMediaStore.isEpisodeWatched(e.id) }))
+      episodes.map(async (e) => {
+        const [watched, { rating: userRating }] = await Promise.all([
+          personalMediaStore.isEpisodeWatched(e.id),
+          personalMediaStore.getStatusAndRating(e.id),
+        ]);
+        return { ...e, watched, userRating };
+      })
     );
     return withWatched;
   }

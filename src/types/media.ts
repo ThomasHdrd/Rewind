@@ -56,6 +56,8 @@ export interface Episode {
   airDate?: string;
   tmdbId?: number;
   stillPath?: string | null;
+  /** The signed-in user's own rating for this episode, if they've given one. */
+  userRating?: number;
 }
 
 export interface Person {
