@@ -33,7 +33,7 @@ export default function MissionDetail() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { data: game } = useGame(gameId);
-  const { items } = useMissionList(game);
+  const { items, achievements } = useMissionList(game);
   const { data: ratings = {} } = useMissionRatings(game);
   const { data: info } = useMissionInfo(game);
   const saveChecklist = useSaveChecklist();
@@ -46,7 +46,16 @@ export default function MissionDetail() {
   const index = siblings.findIndex((i) => i.id === item.id);
   const prev = siblings[index - 1];
   const next = siblings[index + 1];
-  const summary = info?.items[item.id];
+  const steam =
+    item.category === "achievement"
+      ? achievements.find((a) => a.name === item.title)
+      : undefined;
+  const summary = steam
+    ? {
+        text: `${steam.description || "Hidden achievement."} Unlocked by ${steam.percent}% of Steam players.`,
+        page: "",
+      }
+    : info?.items[item.id];
   const community = ratings[item.id];
   const myRating = game.missionRatings?.[item.id] ?? 0;
 
@@ -155,7 +164,10 @@ export default function MissionDetail() {
           <Text style={summary ? styles.synopsis : styles.noSynopsis}>
             {summary?.text ?? "No synopsis for this mission yet."}
           </Text>
-          {summary && info ? (
+          {steam ? (
+            <Text style={styles.source}>Source: Steam Community</Text>
+          ) : null}
+          {summary && info && !steam ? (
             <Pressable
               onPress={() =>
                 Linking.openURL(

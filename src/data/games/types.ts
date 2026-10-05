@@ -10,7 +10,7 @@ export type GameStatus = "backlog" | "playing" | "completed";
 
 // Older checklists used "story"/"challenge" — read as "main"/"side".
 export type ChecklistCategory =
-  "main" | "side" | "boss" | "collectible" | "easter-egg";
+  "main" | "side" | "boss" | "collectible" | "easter-egg" | "achievement";
 
 /** A user-defined step on a game: mission, boss, easter egg, collectible… */
 export interface ChecklistItem {

@@ -1,0 +1,35 @@
+{
+"ids": [
+71
+],
+"missions": [
+"Test Chamber 00",
+"Test Chamber 01",
+"Test Chamber 02",
+"Test Chamber 03",
+"Test Chamber 04",
+"Test Chamber 05",
+"Test Chamber 06",
+"Test Chamber 07",
+"Test Chamber 08",
+"Test Chamber 09",
+"Test Chamber 10",
+"Test Chamber 11",
+"Test Chamber 12",
+"Test Chamber 13",
+"Test Chamber 14",
+"Test Chamber 15",
+"Test Chamber 16",
+"Test Chamber 17",
+"Test Chamber 18",
+"Test Chamber 19",
+"Escape (GLaDOS's chamber)"
+],
+"boss": [
+"GLaDOS"
+],
+"easter-egg": [
+"Rat Man's dens",
+"Companion Cube"
+]
+}

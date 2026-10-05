@@ -7,6 +7,7 @@
 set -e
 cd "$(dirname "$0")/data"
 GAMES="gta5:gta.fandom.com gtasa:gta.fandom.com gta4:gta.fandom.com gtavc:gta.fandom.com rdr2:reddead.fandom.com rdr1:reddead.fandom.com
+portal:half-life.fandom.com portal2:half-life.fandom.com
 tlou:thelastofus.fandom.com tlou2:thelastofus.fandom.com gow:godofwar.fandom.com gowr:godofwar.fandom.com u4:uncharted.fandom.com
 sm1:marvelsspiderman.fandom.com sm2:marvelsspiderman.fandom.com cp2077:cyberpunk.fandom.com tw3:witcher.fandom.com hzd:horizon.fandom.com
 hfw:horizon.fandom.com mafia:mafiagame.fandom.com skyrim:elderscrolls.fandom.com fo4:fallout.fandom.com botw:zelda.fandom.com

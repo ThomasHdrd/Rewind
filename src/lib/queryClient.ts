@@ -40,6 +40,7 @@ const PERSISTED_ROOTS = new Set([
   "gameMissions",
   "gameMissionRatings",
   "missionInfo",
+  "steamAchievements",
   "library",
   "favorites",
   "history",

@@ -6,6 +6,7 @@ export const CHECKLIST_CATEGORIES: ChecklistCategory[] = [
   "boss",
   "collectible",
   "easter-egg",
+  "achievement",
 ];
 
 /** Provided lists for a game, per tab (Rewind's shipped data or a player's). */
@@ -68,6 +69,7 @@ const PREFIX: Record<ChecklistCategory, string> = {
   boss: "B",
   collectible: "C",
   "easter-egg": "E",
+  achievement: "A",
 };
 
 /** "M5", "S12"… — the games' "E5" in a list. */

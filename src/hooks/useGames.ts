@@ -6,7 +6,11 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { auth } from "@/lib/firebase";
-import { isGamesConfigured } from "@/lib/games";
+import {
+  getSteamAchievements,
+  isGamesConfigured,
+  SteamAchievement,
+} from "@/lib/games";
 import { getUserDoc } from "@/data/repositories/firestoreUser";
 import {
   browseGames,
@@ -311,11 +315,31 @@ export const useMissionSeed = (game: Game | undefined) => {
  */
 export const useMissionList = (game: Game | undefined) => {
   const { data: seed } = useMissionSeed(game);
+  const { data: achievements = [] } = useSteamAchievements(game);
   const mine =
     seed?.source === "community" && seed.authorUid === auth.currentUser?.uid;
-  const lists = seed && !mine ? seed.lists : undefined;
-  return { items: withMissionSeed(game?.checklist, lists), lists, seed, mine };
+  const seeded = seed && !mine ? seed.lists : undefined;
+  // Steam achievements are one more provided tab, for any game on Steam.
+  const lists: MissionLists | undefined = achievements.length
+    ? { ...seeded, achievement: achievements.map((a) => a.name) }
+    : seeded;
+  return {
+    items: withMissionSeed(game?.checklist, lists),
+    lists,
+    seed,
+    mine,
+    achievements,
+  };
 };
+
+/** A game's Steam achievements (empty when it isn't on Steam). */
+export const useSteamAchievements = (game: Game | undefined) =>
+  useQuery<SteamAchievement[]>({
+    queryKey: ["steamAchievements", game?.igdbId],
+    queryFn: () => getSteamAchievements(game!.igdbId).catch(() => []),
+    staleTime: 24 * 60 * 60 * 1000,
+    enabled: isGamesConfigured && !!game,
+  });
 
 export const usePublishMissions = () => {
   const qc = useQueryClient();

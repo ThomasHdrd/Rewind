@@ -54,10 +54,16 @@ const CATEGORIES: {
     one: "easter egg",
     many: "easter eggs",
   },
+  {
+    value: "achievement",
+    label: "Achievements",
+    icon: "🏆",
+    one: "achievement",
+    many: "achievements",
+  },
 ];
 
 const COLLAPSED = 10;
-const BOSS_GENRES = /Role-playing|Hack and slash|Platform/;
 
 /** Items the player typed (ids "c-…") can be deleted; provided ones can't. */
 const isOwn = (item: ChecklistItem) => item.id.startsWith("c-");
@@ -67,9 +73,19 @@ export function GameChecklist({ game }: { game: Game }) {
   const saveChecklist = useSaveChecklist();
   const showToast = useToastStore((s) => s.show);
   const { data: ratings = {} } = useMissionRatings(game);
-  const { items, lists, seed, mine } = useMissionList(game);
+  const { items, lists, seed, mine, achievements } = useMissionList(game);
+  const unlocked = Object.fromEntries(
+    achievements.map((a) => [a.name, a.percent]),
+  );
   const publish = usePublishMissions();
-  const [tab, setTab] = useState<ChecklistCategory>("main");
+  const [picked, setTab] = useState<ChecklistCategory>("main");
+  // Only the tabs this game actually has (GTA: no bosses; a game off
+  // Steam: no achievements). Main missions always shows, so missions can
+  // be added to a game nobody has listed yet.
+  const tabs = CATEGORIES.filter(
+    (c) => c.value === "main" || items.some((i) => i.category === c.value),
+  );
+  const tab = tabs.some((c) => c.value === picked) ? picked : "main";
   const [draft, setDraft] = useState("");
   const [expanded, setExpanded] = useState(false);
   const visible = items.filter((i) => i.category === tab);
@@ -78,12 +94,6 @@ export function GameChecklist({ game }: { game: Game }) {
   const current = CATEGORIES.find((c) => c.value === tab)!;
   // No Bosses tab for games without bosses (GTA, Detroit…): listed games
   // say so through their data, others through their genre.
-  const hasBosses =
-    items.some((i) => i.category === "boss") ||
-    (lists
-      ? !!lists.boss?.length
-      : game.genres.some((g) => BOSS_GENRES.test(g)));
-  const tabs = CATEGORIES.filter((c) => c.value !== "boss" || hasBosses);
   // This tab is already listed (by Rewind or a player): tick only, no typing.
   const provided = !!lists?.[tab]?.length;
   // Collapsed: the next few unticked items (plus the last ticked one, to
@@ -152,11 +162,13 @@ export function GameChecklist({ game }: { game: Game }) {
         <>
           <View style={styles.header}>
             <Text style={styles.hint}>
-              {provided
-                ? seed?.source === "rewind"
-                  ? "Listed by Rewind"
-                  : "Shared by a Rewind player"
-                : `Your ${current.many}`}
+              {tab === "achievement"
+                ? "From Steam · most unlocked first"
+                : provided
+                  ? seed?.source === "rewind"
+                    ? "Listed by Rewind"
+                    : "Shared by a Rewind player"
+                  : `Your ${current.many}`}
             </Text>
             {done > 0 ? (
               <Pressable
@@ -225,6 +237,10 @@ export function GameChecklist({ game }: { game: Game }) {
                 ) : null}
               </Text>
               <Text style={styles.itemMeta}>
+                {item.category === "achievement" &&
+                unlocked[item.title] !== undefined
+                  ? `${unlocked[item.title]}% of players · `
+                  : ""}
                 {rating
                   ? `★ ${rating.average}/5 (${rating.count})`
                   : "Be the first to rate"}

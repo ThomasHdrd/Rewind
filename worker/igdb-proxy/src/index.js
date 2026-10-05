@@ -8,10 +8,10 @@
 //
 // Deploy: see ../README.md. Secrets: IGDB_CLIENT_ID, IGDB_CLIENT_SECRET.
 
-const ALLOWED_ENDPOINTS = new Set(["games", "game_time_to_beats", "genres", "platforms"]);
+const ALLOWED_ENDPOINTS = new Set(["games", "game_time_to_beats", "genres", "platforms", "external_games"]);
 const CORS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Max-Age": "86400",
 };
@@ -32,9 +32,47 @@ async function getToken(env) {
   return cachedToken.value;
 }
 
+// Steam achievements of a game (GET /steam/achievements/<appid>): name,
+// description and the share of players who unlocked each, read from the
+// public Steam Community stats page (no Steam key needed). They give every
+// Steam game a checklist — story beats, collectibles, secrets — with a real
+// "how many players did this" figure. Cached at the edge for a day.
+async function steamAchievements(appid, ctx) {
+  const cache = caches.default;
+  const cacheKey = new Request(`https://steam-cache/achievements/${appid}`);
+  const hit = await cache.match(cacheKey);
+  if (hit) return new Response(hit.body, { headers: { ...CORS, "Content-Type": "application/json", "X-Cache": "HIT" } });
+  const res = await fetch(`https://steamcommunity.com/stats/${appid}/achievements/?l=english`, {
+    headers: { "User-Agent": "Mozilla/5.0 (Rewind)", "Accept-Language": "en" },
+  });
+  const html = res.ok ? await res.text() : "";
+  const decode = (s) =>
+    s
+      .replace(/<[^>]+>/g, "")
+      .replace(/&amp;/g, "&")
+      .replace(/&quot;/g, '"')
+      .replace(/&#0?39;|&apos;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .trim();
+  const items = [];
+  const re = /<div class="achieveRow[\s\S]*?<img src="([^"]+)"[\s\S]*?achievePercent">([\d.]+)%<\/div>[\s\S]*?<h3>([\s\S]*?)<\/h3>\s*<h5>([\s\S]*?)<\/h5>/g;
+  let m;
+  while ((m = re.exec(html)) && items.length < 500) {
+    items.push({ name: decode(m[3]), description: decode(m[4]), percent: Number(m[2]), icon: m[1] });
+  }
+  const response = new Response(JSON.stringify(items), {
+    headers: { ...CORS, "Content-Type": "application/json", "Cache-Control": "public, max-age=86400" },
+  });
+  if (res.ok) ctx.waitUntil(cache.put(cacheKey, response.clone()));
+  return response;
+}
+
 export default {
   async fetch(request, env, ctx) {
     if (request.method === "OPTIONS") return new Response(null, { headers: CORS });
+    const steam = new URL(request.url).pathname.match(/^\/steam\/achievements\/(\d{1,9})\/?$/);
+    if (steam && request.method === "GET") return steamAchievements(steam[1], ctx);
     if (request.method !== "POST") return new Response("Method not allowed", { status: 405, headers: CORS });
 
     const endpoint = new URL(request.url).pathname.replace(/^\/+|\/+$/g, "");
