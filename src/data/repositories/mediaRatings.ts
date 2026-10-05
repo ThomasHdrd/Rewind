@@ -36,18 +36,28 @@ export async function getRatingAggregate(mediaId: string): Promise<{ average: nu
  * a naive read-then-write would (the same class of race condition fixed
  * earlier for bulk episode-watched writes).
  */
-export async function submitRating(uid: string, mediaId: string, rating: number): Promise<void> {
+export async function submitRating(
+  uid: string,
+  mediaId: string,
+  rating: number,
+  /** Pass for items not stored in mediaStatus (games keep theirs in `games`). */
+  knownPreviousRating?: number
+): Promise<void> {
   const aggregateRef = ratingRef(mediaId);
-  const userDoc = await getUserDoc(uid); // read outside the transaction: user doc isn't part of the aggregate's consistency need
-  const previousRating = userDoc.mediaStatus[mediaId]?.rating;
+  const userDoc = knownPreviousRating === undefined ? await getUserDoc(uid) : null; // read outside the transaction
+  const previousRating = knownPreviousRating ?? userDoc?.mediaStatus[mediaId]?.rating;
 
   await runTransaction(db, async (tx) => {
     const snap = await tx.get(aggregateRef);
     const current: RatingAggregate = snap.exists() ? (snap.data() as RatingAggregate) : { sum: 0, count: 0 };
+    const hadRating = previousRating !== undefined && previousRating > 0;
+    if (rating === 0 && !hadRating) return; // removing a rating that never counted
     const next: RatingAggregate =
-      previousRating !== undefined && previousRating > 0
-        ? { sum: current.sum - previousRating + rating, count: current.count } // re-rating: adjust sum only
-        : { sum: current.sum + rating, count: current.count + 1 }; // first rating from this user
+      rating === 0
+        ? { sum: current.sum - previousRating!, count: Math.max(0, current.count - 1) } // rating removed
+        : hadRating
+          ? { sum: current.sum - previousRating! + rating, count: current.count } // re-rating: adjust sum only
+          : { sum: current.sum + rating, count: current.count + 1 }; // first rating from this user
     tx.set(aggregateRef, next);
   });
 }

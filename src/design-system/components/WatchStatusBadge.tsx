@@ -3,7 +3,14 @@ import { StyleSheet, Text, View } from "react-native";
 import { radius, theme } from "../tokens";
 import { WatchStatus } from "@/types/media";
 
-const map: Record<WatchStatus, { color: string; label: string }> = {
+type BadgeStatus = WatchStatus | "wishlist" | "backlog" | "playing" | "completed";
+
+// Game statuses reuse the same colors as their movie/series counterparts.
+const map: Record<BadgeStatus, { color: string; label: string }> = {
+  wishlist: { color: theme.mediaWatchlist, label: "WISHLIST" },
+  backlog: { color: theme.mediaPaused, label: "TO PLAY" },
+  playing: { color: theme.mediaWatching, label: "PLAYING" },
+  completed: { color: theme.mediaWatched, label: "COMPLETED" },
   watching: { color: theme.mediaWatching, label: "WATCHING" },
   watchlist: { color: theme.mediaWatchlist, label: "WATCHLIST" },
   watched: { color: theme.mediaWatched, label: "WATCHED" },
@@ -11,7 +18,7 @@ const map: Record<WatchStatus, { color: string; label: string }> = {
   dropped: { color: theme.mediaDropped, label: "DROPPED" },
 };
 
-export function WatchStatusBadge({ status = "watching" }: { status?: WatchStatus }) {
+export function WatchStatusBadge({ status = "watching" }: { status?: BadgeStatus }) {
   const s = map[status] ?? map.watching;
   return (
     <View style={styles.badge}>

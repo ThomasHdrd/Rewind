@@ -68,6 +68,11 @@ export interface TmdbMovie {
   videos?: TmdbVideosResponse;
   credits?: TmdbCredits;
   "watch/providers"?: TmdbWatchProvidersResponse;
+  /** append_to_response=release_dates: per-country release list. type 2 =
+   * limited theatrical, 3 = theatrical, 4 = digital, 5 = physical, 6 = TV. */
+  release_dates?: {
+    results: { iso_3166_1: string; release_dates: { release_date: string; type: number }[] }[];
+  };
 }
 
 export interface TmdbTv {
@@ -83,6 +88,8 @@ export interface TmdbTv {
   vote_count?: number;
   number_of_seasons?: number;
   number_of_episodes?: number;
+  /** Per-season summary (season 0 = specials). */
+  seasons?: { season_number: number; episode_count: number; name?: string; overview?: string; air_date?: string | null }[];
   videos?: TmdbVideosResponse;
   credits?: TmdbCredits;
   "watch/providers"?: TmdbWatchProvidersResponse;

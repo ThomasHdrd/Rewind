@@ -36,7 +36,11 @@ export default function Complete() {
       {isSeason ? (
         <Button
           onPress={() =>
-            hasNextSeason ? router.replace(`/series/${media.id}?season=${seasonNumber + 1}`) : router.replace(`/series/${media.id}`)
+            // Back to the series page we came from (it already moved on to
+            // the next season). Replacing with a NEW series page stacked a
+            // duplicate, so the back arrow just showed the same series again
+            // and users felt stuck.
+            router.canGoBack() ? router.back() : router.replace(`/series/${media.id}`)
           }
           style={{ marginTop: 8 }}
         >

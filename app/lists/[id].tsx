@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { goBack } from "@/lib/navigation";
 import { MediaArtwork, radius, theme } from "@/design-system";
 import { Screen } from "@/components/Screen";
 import { useListItems, useLists, useRemoveFromList, useRenameList } from "@/hooks/useMedia";
@@ -33,7 +34,7 @@ export default function ListDetail() {
 
   return (
     <Screen>
-      <Pressable onPress={() => router.back()}>
+      <Pressable onPress={() => goBack(router)}>
         <Text style={styles.back}>‹ My Lists</Text>
       </Pressable>
       <View>
@@ -61,7 +62,7 @@ export default function ListDetail() {
             style={styles.row}
             onPress={() => router.push(m.kind === "movie" ? `/movie/${m.id}` : `/series/${m.id}`)}
           >
-            <MediaArtwork path={m.posterPath} color={m.artworkColor} radius={radius.sm} style={{ width: 44, height: 64 }} />
+            <MediaArtwork path={m.posterPath} size="w185" color={m.artworkColor} radius={radius.sm} style={{ width: 44, height: 64 }} />
             <Text style={styles.name}>{m.title}</Text>
             <Pressable hitSlop={10} onPress={() => removeFromList.mutate({ listId: list.id, mediaId: m.id })}>
               <Text style={styles.remove}>✕</Text>

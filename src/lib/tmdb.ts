@@ -15,7 +15,25 @@ export class TmdbError extends Error {
 /** True once a real (non-placeholder) TMDB token has been configured. */
 export const isTmdbConfigured = Boolean(ACCESS_TOKEN && !ACCESS_TOKEN.includes("REPLACE_ME"));
 
+// In-memory response cache (+ in-flight dedupe). The same title is fetched
+// by many screens — Home, Library, Favorites, History, Upcoming, Rewind each
+// call getById for it — and catalog data barely changes, so repeat requests
+// within the TTL are served instantly instead of re-hitting TMDB.
+const CACHE_TTL_MS = 10 * 60 * 1000;
+const responseCache = new Map<string, { at: number; promise: Promise<unknown> }>();
+
 export async function tmdbFetch<T>(path: string, params?: Record<string, string | number | undefined>): Promise<T> {
+  const key = path + JSON.stringify(params ?? {});
+  const hit = responseCache.get(key);
+  if (hit && Date.now() - hit.at < CACHE_TTL_MS) return hit.promise as Promise<T>;
+  const promise = tmdbFetchUncached<T>(path, params);
+  responseCache.set(key, { at: Date.now(), promise });
+  // Never cache failures: the next call retries.
+  promise.catch(() => responseCache.delete(key));
+  return promise;
+}
+
+async function tmdbFetchUncached<T>(path: string, params?: Record<string, string | number | undefined>): Promise<T> {
   if (!isTmdbConfigured) {
     throw new TmdbError(
       "TMDB access token is not configured. Set EXPO_PUBLIC_TMDB_ACCESS_TOKEN in .env to a real v4 Bearer token."

@@ -1,0 +1,37 @@
+{
+"ids": [
+119388
+],
+"missions": [
+"The Closed Door",
+"To the Kingdom of Hyrule",
+"Find Princess Zelda",
+"Regional Phenomena",
+"Tulin of Rito Village",
+"Yunobo of Goron City",
+"Sidon of the Zora",
+"Riju of Gerudo Town",
+"Crisis at Hyrule Castle",
+"Guidance from Ages Past",
+"The Dragon's Tears",
+"Find the Fifth Sage",
+"Trail of the Master Sword",
+"Destroy Ganondorf"
+],
+"boss": [
+"Colgera",
+"Marbled Gohma",
+"Mucktorok",
+"Queen Gibdo",
+"Seized Construct",
+"Master Kohga",
+"Demon King Ganondorf",
+"Demon Dragon"
+],
+"collectible": [
+"Shrines (152)",
+"Korok Seeds (1000)",
+"Lightroots (120)",
+"Dragon's Tears (Geoglyphs)"
+]
+}

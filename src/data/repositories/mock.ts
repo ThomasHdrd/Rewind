@@ -1,6 +1,6 @@
 import { mockEpisodes, mockMedia } from "../mock/media";
 import { mockActivity, mockFriends } from "../mock/social";
-import { mockChallenges, mockHistory, mockLists, mockUpcoming, mockUser } from "../mock/user";
+import { mockHistory, mockLists, mockUpcoming, mockUser } from "../mock/user";
 import { UserProfile, WatchStatus } from "@/types/media";
 import { MediaRepository, SocialRepository, TrackingRepository, UserRepository } from "./types";
 import { deriveEffectiveStatus, isAwaitingUnreleasedEpisode } from "@/domain/watchStatus";
@@ -21,6 +21,16 @@ export class MockMediaRepository implements MediaRepository {
     // enough for dev data — the real TMDB repository does exact date
     // filtering (see TmdbMediaRepository.listComingSoon).
     return mockMedia.filter((m) => m.year >= new Date().getFullYear());
+  }
+  async browseCatalog() {
+    await delay();
+    return { items: mockMedia, hasMore: false };
+  }
+  async listForYou(preferences: { genres: string[]; platforms: string[] }) {
+    await delay();
+    // Mock titles carry no platform data, so only genres are applied here.
+    if (preferences.genres.length === 0) return [];
+    return mockMedia.filter((m) => m.genres.some((g) => preferences.genres.includes(g)));
   }
   async listContinueWatching() {
     await delay();
@@ -84,6 +94,9 @@ export class MockMediaRepository implements MediaRepository {
       if (e) e.watched = watched;
     }
   }
+  async getSeriesWatchedEpisodeCount(seriesId: string) {
+    return mockEpisodes.filter((e) => e.seriesId === seriesId && e.watched).length;
+  }
 }
 
 export class MockTrackingRepository implements TrackingRepository {
@@ -95,7 +108,10 @@ export class MockTrackingRepository implements TrackingRepository {
     await delay();
     return mockHistory;
   }
-  async logWatch(_mediaId: string) {
+  async logWatch(_label: string) {
+    await delay(100);
+  }
+  async removeWatch() {
     await delay(100);
   }
 }
@@ -108,14 +124,6 @@ export class MockSocialRepository implements SocialRepository {
   async getActivityFeed() {
     await delay();
     return mockActivity;
-  }
-  async addFriend() {
-    await delay(150);
-    const names = ["Jordan", "Sam", "Priya", "Kai", "Robin"];
-    const name = names[mockFriends.length % names.length];
-    const friend = { id: `friend-${Date.now()}`, name, xp: 0 };
-    mockFriends.push(friend);
-    return friend;
   }
 }
 
@@ -140,10 +148,7 @@ export class MockUserRepository implements UserRepository {
     await delay();
     return mockLists;
   }
-  async getChallenges() {
-    await delay();
-    return mockChallenges;
-  }
+
   async updateProfile(
     patch: Partial<Pick<UserProfile, "firstName" | "bio" | "avatarColor" | "avatarIcon" | "bannerMode" | "bannerImageUri">>
   ) {

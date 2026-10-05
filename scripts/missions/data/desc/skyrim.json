@@ -1,0 +1,105 @@
+{
+"wiki": "elderscrolls.fandom.com",
+"items": {
+"main:1": {
+"page": "Unbound",
+"text": "Unbound is the first quest available in The Elder Scrolls V: Skyrim in which the Dragonborn must escape the town of Helgen when it is attacked by Alduin. The quest serves as a prologue and provides a restricted area to learn gameplay basic mechanics, after which the world will be completely accessible. I have been captured by the Empire and sentenced to death alongside the Stormcloak rebels."
+},
+"main:2": {
+"page": "Before the Storm (Skyrim)",
+"text": "Before the Storm is a quest available in The Elder Scrolls V: Skyrim in which the Dragonborn is directed to the town of Riverwood and to then Whiterun to warn the Jarl of Whiterun about the dragon attack on Helgen. This quest serves to acquaint the Dragonborn with the open world of Skyrim and further equip them for the challenges ahead. Hadvar suggested that I head to the nearby town of Riverwood."
+},
+"main:3": {
+"page": "Bleak Falls Barrow (Quest)",
+"text": "Bleak Falls Barrow is a quest available in The Elder Scrolls V: Skyrim. Farengar Secret-Fire tasks the Dragonborn to retrieve the Dragonstone inside Bleak Falls Barrow, leading to the first finding of a Word Wall. Jarl Balgruuf thinks I may be able to help Farengar, his court wizard, with something related to the dragons."
+},
+"main:4": {
+"page": "Dragon Rising",
+"text": "A dragon has been sighted at a watchtower near Whiterun. Jarl Balgruuf has sent me along with his housecarl Irileth with reinforcements. Alduin has reemerged in Skyrim, laying waste to Helgen and spreading fear throughout the land."
+},
+"main:5": {
+"page": "The Way of the Voice",
+"text": "The Way of the Voice is a quest available in The Elder Scrolls V: Skyrim in which the Dragonborn must journey to High Hrothgar to meet with The Greybeards to learn the Way of the Voice. The Greybeards have summoned me to their monastery of High Hrothgar on the slopes of the Throat of the World. They seem to have learned of the mysterious power I gained when I killed the Dragon outside Whiterun."
+},
+"main:6": {
+"page": "The Horn of Jurgen Windcaller",
+"text": "The Horn of Jurgen Windcaller is a quest available in The Elder Scrolls V: Skyrim. After completing The Way of the Voice, Arngeir sends the Dragonborn to Ustengrav, tasked with recovering the Horn of Jurgen Windcaller. Arriving to find it stolen, the Dragonborn must discover its whereabouts. Within the tomb, a word for the Dragon Shout \"Become Ethereal\" can be learned."
+},
+"main:7": {
+"page": "A Blade in the Dark",
+"text": "A Blade in the Dark is a quest available in The Elder Scrolls V: Skyrim in which the Dragonborn must slay a dragon to prove to Delphine that they are the Dragonborn."
+},
+"main:8": {
+"page": "Diplomatic Immunity",
+"text": "It seems that things are worse than even Delphine thought. Dragons aren't just coming back to life, they're being resurrected by other dragons. Delphine suspects that the Thalmor might be bringing dragons back for some sinister purpose. She's going to talk to her contacts about how we can infiltrate the Thalmor Embassy."
+},
+"main:9": {
+"page": "A Cornered Rat",
+"text": "Esbern is located in The Ratway Warrens behind a barred door with a viewing slot. Access the Ratway Warrens by traveling through several areas, including the Ratway, The Ragged Flagon, and The Ratway Vaults. The Ratway's main entrance is located on the south end and lower level of Riften. Brynjolf, if not spoken to already, will be located in town during the day and at The Bee and Barb at night."
+},
+"main:10": {
+"page": "Alduin's Wall (Quest)",
+"text": "Alduin's Wall is a quest available in The Elder Scrolls V: Skyrim in which the Dragonborn must search for the ancient Blades fortress of Sky Haven Temple with Delphine and Esbern to find Alduin's Wall which may provide the answer to defeating Alduin. After the Dragonborn and Esbern arrive at Riverwood, they meet with Delphine at the Sleeping Giant Inn."
+},
+"main:11": {
+"page": "The Throat of the World",
+"text": "The Throat of the World is a quest available in The Elder Scrolls V: Skyrim. During this quest the Greybeards teach the Dragonborn all three words of the Clear Skies shout, Lok (Sky), Vah (Spring), and Koor (Summer) in order to reach the summit of the mountain. The Dragonborn also learns a word of the Fire Breath Shout (the exact word depends on the words already known)."
+},
+"main:12": {
+"page": "Elder Knowledge",
+"text": "I met the master of the Greybeards, the dragon Paarthurnax. He told me that the ancient Nords used an Elder Scroll to cast Alduin forward in time. If I can recover that same Elder Scroll, I may be able to use it to learn the \"Dragonrend\" Shout directly from the ancient heroes. Speak with Paarthurnax and ask about the Elder Scroll."
+},
+"main:13": {
+"page": "Alduin's Bane",
+"text": "By completing the quest \"Elder Knowledge,\" the Dragonborn has obtained an Elder Scroll. The Dragonborn will need to return to Paarthurnax atop the Throat of the World and read the scroll at the Time Wound. When the Elder Scroll is read, a cinematic scene will begin."
+},
+"main:14": {
+"page": "The Fallen",
+"text": "After I defeated Alduin at the top of the Throat of the World, he fled from me. One of his dragon allies may be able to tell me where he's gone. With the help of the Jarl of Whiterun, I've trapped Odahviing in Dragonsreach. Odahviing revealed that Alduin's lair is located in the ancient temple of Skuldafn, which is only accessible by air. Odahviing has offered to take me there, in return for his freedom."
+},
+"main:15": {
+"page": "The World-Eater's Eyrie",
+"text": "Alduin's right-hand dragon Odahviing has revealed that Alduin has escaped to Sovngarde, the Nord underworld, where he feeds on the souls of the dead. His portal to Sovngarde is located in the ancient dragon temple of Skuldafn, high in the Jerall Mountains. The only way to reach it is to set Odahviing free so he can fly the Dragonborn there."
+},
+"main:16": {
+"page": "Sovngarde (Quest)",
+"text": "Sovngarde is a quest available in The Elder Scrolls V: Skyrim in which the Dragonborn must enter Sovngarde, the realm of Aetherius belonging to the Nordic god Shor, to reach Alduin who has been retreating there to consume the souls of Nord heroes and regain his strength."
+},
+"main:17": {
+"page": "Dragonslayer",
+"text": "Dragonslayer is a quest available in The Elder Scrolls V: Skyrim in which the Dragonborn must finally battle and defeat Alduin. In Sovngarde, Alduin has ensnared the land with an evil mist and consumes the souls of the lost to gather his power. With the assistance of the original Nord heroes who banished him, the Dragonborn must ensure that Alduin is destroyed and can no longer threaten the world."
+},
+"side:2": {
+"page": "College of Winterhold (Skyrim)",
+"text": "College of Winterhold is a guild of mages centered in Skyrim. It is a faction of magic-users similar to the Mages Guild of Cyrodiil and Morrowind. When the Dragonborn appears, the current Arch-Mage is Savos Aren, with Mirabelle Ervine serving as the Master Wizard. During the faction's main quest, Tolfdir replaces her as Master Wizard."
+},
+"side:3": {
+"page": "Thieves Guild (Online)",
+"text": "The Thieves Guild is a faction in The Elder Scrolls Online: Thieves Guild. In Abah's Landing, the guild is being hunted by the Iron Wheel for a high-stakes heist in Taneth that went horribly wrong. The Vestige can become their newest recruit, with tasks involving stealing from the shadows, and recovering lost treasures to restore the guild's reputation."
+},
+"side:4": {
+"page": "Dark Brotherhood (Skyrim)",
+"text": "The Dark Brotherhood is an organization of highly trained assassins who carry out assassination contracts. The Dark Brotherhood is called upon by those who wish to utilize their deadly services through a ritual called \"The Black Sacrament,\" although to join the organization, one must be contacted directly."
+},
+"side:5": {
+"page": "Civil War Quests",
+"text": "Civil War Quests are a series of quests in The Elder Scrolls V: Skyrim about the war between two main factions, the Imperial Legion and the Stormcloaks. Both sides have the same tasks, with plenty of individuals throughout the region relaying the deeds of both sides. Minor factions, for example in Whiterun between the Battle-Born and Grey-Mane families, exist throughout the empire."
+},
+"boss:1": {
+"page": "Mirmulnir",
+"text": "According to the Atlas of Dragons, a copy of which can be found in Sky Haven Temple, Mirmulnir was among one of the very few dragons that were not killed by the Blades. He was last seen in The Reach in 2E 212, and does not reappear until 4E 201. Upon learning of this threat, Jarl Balgruuf the Greater sends his Housecarl Irileth, the Dragonborn, and several Whiterun Guards."
+},
+"boss:2": {
+"page": "Sahloknir",
+"text": "Local legends claim this is the dragon slain by the Nord hero Jorg Helmbolg in the First Era. Sahloknir is encountered during the quest \"A Blade in the Dark,\" where he is resurrected by Alduin, only to be defeated by the Dragonborn shortly after."
+},
+"boss:3": {
+"page": "Odahviing (Skyrim)",
+"text": "Odahviing (Dragon Language:  Od–Ah–Viing, \"Snow–Hunter–Wing\" or \"Winged–Snow–Hunter\") was an ally of and right-hand dragon to Alduin. The Dragonborn must summon him to an encounter in Whiterun during the main quest. Odahviing was killed sometime after the Dragon War and was buried in the southeast of Skyrim near Riften. During the Dragon Crisis in 4E 201, he was revived by Alduin to act as his lieutenant."
+},
+"boss:4": {
+"page": "Alduin",
+"text": "Alduin (Dragon Language: ), sometimes referred to as the World Eater, the Twilight God, and the First Dragon, is a mighty dragon who ruled over Skyrim during the Merethic Era."
+}
+}
+}

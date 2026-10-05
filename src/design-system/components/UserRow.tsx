@@ -7,14 +7,21 @@ export function UserRow({
   name,
   subtitle,
   action,
+  avatarColor,
+  avatarIcon,
+  avatarImage,
 }: {
   name: string;
   subtitle?: string;
   action?: React.ReactNode;
+  avatarColor?: string;
+  /** Emoji glyph (see avatarIconEmoji). */
+  avatarIcon?: string;
+  avatarImage?: string;
 }) {
   return (
     <View style={styles.row}>
-      <Avatar name={name} />
+      <Avatar name={name} color={avatarColor} icon={avatarIcon} imageUrl={avatarImage} />
       <View style={{ flex: 1 }}>
         <Text style={styles.name}>{name}</Text>
         {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}

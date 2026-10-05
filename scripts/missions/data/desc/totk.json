@@ -1,0 +1,69 @@
+{
+"wiki": "zelda.fandom.com",
+"items": {
+"main:4": {
+"page": "Regional Phenomena",
+"text": "Regional Phenomena is a Main Quest in Tears of the Kingdom. Purah will task you with seeing what’s up around the allied cities in Hyrule: Rito Village, Zora’s Domain, Goron City, and Gerudo Town. For those who played Breath of the Wild, you’ll recognize these as the homes to the unique races around Hyrule, as well as the companions and Divine Beasts from the last games."
+},
+"main:5": {
+"page": "Tulin of Rito Village",
+"text": "Link ventured toward Rito Village in the Hebra region to investigate one of the disturbances in the kingdom. As he entered the region, he experienced sub-zero temperature than normal especially from the border of the Hebra Mountains. By the time he got there, he found the Rito Village in a deep, perpetual blizzard."
+},
+"main:6": {
+"page": "Yunobo of Goron City",
+"text": "Link headed to Goron City in Death Mountain to investigate one of the strange phenomenon around Hyrule Kingdom. When he arrived, he noticed a strange event: nearly every Goron seemed to have an uncannily obsession for rock hard-like food called Marbled Rock Roast. At the center, he found Bludo the Goron Elder, two Goron children, and a Goron on the ground with the questionable rock roast in their hand."
+},
+"main:7": {
+"page": "Sidon of the Zora",
+"text": "In the Lanayru Region, Link travelled to Zora's Domain to find clues. On his way from the main path, he found polluted waters and black gunk scattered all over Lanayru lands, and the path somewhat blocked by rocks. Upon reaching Zora's Domain, he found the place heavily polluted by the sludge, which appeared to be falling from the sky and causing harm and injury to the Zora. Link met Yona—Sidon's fiancée."
+},
+"main:8": {
+"page": "Riju of Gerudo Town",
+"text": "Navigating the Gerudo Desert's vision-obscuring sand shroud, Link wandered into the North Gerudo Ruins and encountered Riju, Chief of the Gerudos. Link stated he was investigating disturbances in the Gerudo Desert to find clues of Zelda's whereabouts. Riju was at the ruins practicing a lightning strike attack, an ability that she recently learned."
+},
+"main:9": {
+"page": "Crisis at Hyrule Castle",
+"text": "After Link investigated the disturbances in the four regions, he came back to Lookout Landing to report back to Purah. But everyone in the location appeared to be concern looking at Hyrule Castle. Upon reaching Purah, she delivered urgent news that she saw Princess Zelda at Hyrule Castle. But then suddenly a Blood Moon appeared, coloring the skies red."
+},
+"main:10": {
+"page": "Guidance from Ages Past",
+"text": "Behind a mysterious door on Dragonhead Island in the West Necluda Sky Archipelago, Link found a mysterious Zonai relic on a pedestal. When he activated the relic behind a Zonai gate, a door below him opened up and the relic fired a beam of light down to the surface. Link then heard a mysterious female voice, who told him to follow the light."
+},
+"main:11": {
+"page": "The Dragon's Tears",
+"text": "After Link and Impa inspected the first Geoglyph at North Hyrule Plain, Impa deducted a hidden temple somewhere in Tanagar Canyon Canyon that might be connected to all the Geoglyphs around Hyrule. She and Cado headed there together, who invited link to head there when he had the time. Once Link reached the temple, he found Cado at the entrance who informed that Impa went ahead of Link and him, into the temple."
+},
+"main:14": {
+"page": "Destroy Ganondorf",
+"text": "After reawakening the five sages and regaining the Master Sword, Link has prepared everything for the confrontation against Ganondorf, the Demon King. The whereabouts of Ganondorf were still unknown, but Purah suspected he could be in The Depths. She suggested talking to Josha to indicate his location."
+},
+"boss:1": {
+"page": "Colgera",
+"text": "Colgera is the Scourge of the Wind Temple. It is the cause of the harsh blizzard in the Hebra region, greatly affecting Rito Village. It was created by Demon King Ganondorf to stop Tulin from obtaining the Sage of Wind's Secret Stone. Colgera appears alongside a large updraft when the hatch in the center of the dungeon is opened."
+},
+"boss:2": {
+"page": "Marbled Gohma",
+"text": "The Marbled Gohma is the Boss of the Fire Temple. It is responsible for the druglike Marbled Rock that the Gorons became addicted to. It was summoned by Ganondorf. Its main body is formed of dark, reddish rocks. From there, four legs made of Marbled Rock jut out, which it uses to move around. It has a singular eye on top of its main body section."
+},
+"boss:3": {
+"page": "Mucktorok",
+"text": "In Tears of the Kingdom, Mucktorok was summoned by Ganondorf to prevent Link and Sidon from gaining control of the Sage of Water's Secret Stone. After defeating the Mucktorok, it can be found again at certain locations in The Depths, defending chests. The Mucktorok creates a sludge-shark similar to a Molduga. It then rides this creature around the arena, creating piles of sludge."
+},
+"boss:4": {
+"page": "Queen Gibdo",
+"text": "Queen Gibdo is the Boss of the Lightning Temple. She is a large, moth-like creature with pink flashing antennae, who serves as the master of all the Gibdos. She was summoned by Ganondorf to protect a Secret Stone, the source of the sand shroud and Gibdo hordes in Gerudo Desert."
+},
+"boss:5": {
+"page": "Seized Construct",
+"text": "The Seized Construct is introduced in Tears of the Kingdom as the Boss of the Spirit Temple. The Seized Construct is fought in the Spirit Temple as the last obstacle between Link, Mineru (in a robot body), and Mineru's Secret Stone. The Seized Construct is a construct robot very similar to the one Mineru inhabits, which she says is a prototype she built long ago."
+},
+"boss:6": {
+"page": "Master Kohga",
+"text": "Master Kohga is the leader of the Yiga, an opposing Clan to the Sheikah who hunt Link on a ceaseless mission. They are also known for their loyalty to Calamity Ganon. Master Kohga is a respected figure of authority, but he spends most of his time napping and loafing around. He loves Mighty Bananas the most."
+},
+"boss:8": {
+"page": "Demon Dragon",
+"text": "The Demon Dragon (TotK), also known as Dark Dragon Ganon, is introduced in Tears of the Kingdom as the third and final phase of the Final Boss battle. This dark creature is the embodiment of Ganondorf's power, as a massive dragon, but holds none of his original personality except a desire for pure destruction."
+}
+}
+}

@@ -1,0 +1,18 @@
+{
+"main:1": {
+"page": "Margit, the Fell Omen (Achievement/Trophy)",
+"text": "Acquired after defeating Margit, the Fell Omen in Stormhill by the entrance to Stormveil Castle."
+},
+"main:8": {
+"page": "Godskin Duo",
+"text": "The Godskin Duo share one health bar of around 24000 HP (NG), but also still have their own HP. If one is killed, it will either respawn automatically after ~15 seconds or the other Godskin will reanimate them. They will also still enter phase 2 if dropping close to 50% in individual HP."
+},
+"boss:5": {
+"page": "Lichdragon Fortissax",
+"text": "Fortissax is an Ancient Dragon who was once known as the \"mightiest boulderstone\", known for its use of twin red lightning stakes, and the sibling of Ancient Dragon Lansseax. During the Age of the Erdtree, the Ancient Dragons warred against the forces of Leyndell, after an assault on the royal capital by the great Ancient Dragon Gransax. Fortissax was challenged by Godwyn the Golden, who fought to the last."
+},
+"boss:7": {
+"page": "Commander Niall",
+"text": "Commander Niall, a veteran general of Castle Sol, offered his prosthesis in exchange for the lives of imprisoned knights, forming an army of no nation. A lone survivor, Niall commands the spirits of deceased knights to defend his master, who has long passed."
+}
+}

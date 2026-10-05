@@ -1,0 +1,25 @@
+{
+"wiki": "witcher.fandom.com",
+"items": {
+"collectible:1": {
+"page": "Scavenger Hunt: Griffin School Gear/Part 2",
+"text": "This section covers finding the enhanced diagrams for the gauntlets, armor, and silver sword. While you can find the diagrams by just exploring, an easy way to get all the locations marked is to buy Edwin Greloff's second map from the armorer in Midcopse, which will then reveal them all."
+},
+"collectible:2": {
+"page": "Scavenger Hunt: Cat School Gear/Part 2",
+"text": "This section covers finding the enhanced diagrams for the gauntlets, trousers, and steel sword. The easiest way to get all the markers on the map is to buy Adalbert Kermith's second map from Blackbough's blacksmith. The gauntlets diagram is found at Codgers' Quarry, near one of the Looters group."
+},
+"collectible:3": {
+"page": "Scavenger Hunt: Bear School Gear",
+"text": "This section is for finding the base (standard) gear, while the rest are divided into upgrade quests. While not needed, the easiest way to get one of the markers is buy one of Ibrahim Savi's maps from Kaer Trolde's armorer. If you don't do the map though, you can start the quest instead by finding one of the diagrams."
+},
+"collectible:4": {
+"page": "Scavenger Hunt: Wolf School Gear/Part 6",
+"text": "This section covers finding the mastercrafted diagrams for the boots, trousers, and gauntlets. The easiest way to get these marked on the map is to buy the notes on parchment from Kaer Trolde's armorer. For the gauntlets diagram, head to Kaer Nyssen, the ruined fortress overlooking Boxholm. However, be careful here if you haven't done Contract: Missing Son yet, as a powerful fiend, Morvudd, is here as well."
+},
+"collectible:5": {
+"page": "Gwent: Old Pals",
+"text": "Note: For those looking to get the Card Collector achievement, this quest must be completed. The  rewarded in this quest is unaffected by difficulty level. This quest is started by challenging and defeating Zoltan at gwent, and the earliest and easiest opportunity to do that is during the Broken Flowers main quest, when Geralt first meets him."
+}
+}
+}

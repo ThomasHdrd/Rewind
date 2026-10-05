@@ -1,0 +1,66 @@
+{
+"ids": [
+19560
+],
+"missions": [
+"The Marked Trees",
+"Path to the Mountain",
+"A Realm Beyond",
+"The Light of Alfheim",
+"Inside the Mountain",
+"A New Destination",
+"The Magic Chisel",
+"Behind the Lock",
+"The Sickness",
+"The Black Rune",
+"Return to the Summit",
+"Escape from Helheim",
+"A Path to Jötunheim",
+"Between the Realms",
+"Jötunheim in Reach",
+"Mother's Ashes",
+"The Journey Home"
+],
+"side": [
+"The Realm of Fire",
+"The Realm of Fog",
+"Hammer Fall",
+"Unfinished Business",
+"The Imprisonment of Otr",
+"The Flight of Fafnir",
+"The Fire of Reginn",
+"Prove your Valor",
+"The High Council",
+"God vs. Queen",
+"Second Hand Soul",
+"Deus Ex Malachite",
+"F�fnir's Hoard",
+"Family Business",
+"Hail to the King"
+],
+"boss": [
+"The Stranger",
+"Dragon Hræzlyr",
+"Magni and Modi",
+"Baldur",
+"Gunnr",
+"Geirdriful",
+"Kara",
+"Olrun",
+"Eir",
+"Rota",
+"Gondul",
+"Hildr",
+"Sigrun, Queen of the Valkyries"
+],
+"collectible": [
+"Odin's Ravens (51)",
+"Family Heirloom",
+"Bottoms Up",
+"Horns of Veithurgard",
+"Abandon Ship",
+"The Faces of Magic",
+"Spoils of War",
+"Lost and Found"
+]
+}

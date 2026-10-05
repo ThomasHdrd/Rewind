@@ -1,11 +1,42 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { mediaRepository, socialRepository, trackingRepository, userRepository } from "@/data/repositories";
+import { useEffect } from "react";
+import { useAuthStore } from "@/state/authStore";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CatalogPage, CatalogQuery, mediaRepository, socialRepository, trackingRepository, userRepository } from "@/data/repositories";
 import { auth } from "@/lib/firebase";
-import { getUserDoc, MediaStatusEntry, seriesIdFromEpisodeId, watchedSeriesIds } from "@/data/repositories/firestoreUser";
+import {
+  getUserDoc,
+  MediaStatusEntry,
+  seriesIdFromEpisodeId,
+  DEFAULT_SETTINGS,
+  saveUserSettings,
+  setPreferences,
+  UserPreferences,
+  UserSettings,
+  watchedSeriesIds,
+} from "@/data/repositories/firestoreUser";
+import { addComment, deleteComment, listComments, StoredComment } from "@/data/repositories/comments";
+import {
+  acceptFriendRequest,
+  clearActivity,
+  deleteFriendRequest,
+  findByUsername,
+  friendshipStatus,
+  listFriendRequests,
+  normalizeUsername,
+  removeFriend,
+  savePublicProfile,
+  sendFriendRequest,
+  subscribeToFriendFeeds,
+  subscribeToSocialChanges,
+  validateUsername,
+} from "@/data/repositories/social";
+import { fetchPlatformIds, PlatformIds } from "@/lib/streamingLinks";
+import { getGamesByIds } from "@/data/games/repository";
+import { igdbImageUrl, isGamesConfigured } from "@/lib/games";
+import { computeGameRewind, computeRewind, RewindData, rewindHasLegacyEntries, rewindMediaIds } from "@/lib/rewind";
 import { deriveEffectiveStatus } from "@/domain/watchStatus";
 import {
   ActivityItem,
-  Challenge,
   Episode,
   Friend,
   HistoryEntry,
@@ -19,11 +50,56 @@ import {
 export const useTrending = () =>
   useQuery<Media[]>({ queryKey: ["media", "trending"], queryFn: () => mediaRepository.listTrending() });
 
+/** Discover's grid: the whole TMDB catalog for a kind/genres/sort, paged. */
+export const useCatalog = (query: CatalogQuery, enabled = true) =>
+  useInfiniteQuery({
+    enabled,
+    queryKey: ["media", "catalog", query.kind, [...query.genres].sort(), [...query.platforms].sort(), query.sort],
+    queryFn: ({ pageParam }) => mediaRepository.browseCatalog(query, pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (last: CatalogPage, all) => (last.hasMore ? all.length + 1 : undefined),
+  });
+
 export const useComingSoon = (enabled: boolean) =>
   useQuery<Media[]>({
     queryKey: ["media", "coming-soon"],
     queryFn: () => mediaRepository.listComingSoon(),
     enabled,
+  });
+
+const EMPTY_PREFERENCES: UserPreferences = { genres: [], platforms: [] };
+
+// The signed-in user's onboarding answers (genres + platforms), per account.
+export const usePreferences = () =>
+  useQuery<UserPreferences>({
+    queryKey: ["preferences"],
+    queryFn: async () => {
+      const uid = auth.currentUser?.uid;
+      if (!uid) return EMPTY_PREFERENCES;
+      return (await getUserDoc(uid)).preferences ?? EMPTY_PREFERENCES;
+    },
+  });
+
+export const useSavePreferences = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (preferences: UserPreferences) => {
+      const uid = auth.currentUser?.uid;
+      if (!uid) throw new Error("No signed-in user");
+      await setPreferences(uid, preferences);
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["preferences"] });
+      qc.invalidateQueries({ queryKey: ["media", "for-you"] });
+    },
+  });
+};
+
+export const useForYou = (preferences: UserPreferences | undefined) =>
+  useQuery<Media[]>({
+    queryKey: ["media", "for-you", preferences?.genres, preferences?.platforms],
+    queryFn: () => mediaRepository.listForYou(preferences ?? EMPTY_PREFERENCES),
+    enabled: !!preferences && (preferences.genres.length > 0 || preferences.platforms.length > 0),
   });
 
 export const useContinueWatching = () =>
@@ -43,13 +119,16 @@ export const useLibrary = () =>
       const uid = auth.currentUser?.uid;
       if (!uid) return [];
       const doc = await getUserDoc(uid);
-      const ids = Object.keys(doc.mediaStatus);
+      // mediaStatus also holds per-episode ratings keyed by episode id
+      // ("tv:1429:s1e2"); only whole titles with a status belong here.
+      const ids = Object.entries(doc.mediaStatus)
+        .filter(([id, v]) => /^(movie|tv):\d+$/.test(id) && !!v.status)
+        .map(([id]) => id);
       const results = await Promise.all(ids.map((id) => mediaRepository.getById(id)));
       // Same real-progress-derived status as listContinueWatching() (see
       // deriveEffectiveStatus) so the Home "Watching" filter chip reflects
       // actual episode progress, not just the write-time status flag.
-      return results
-        .filter((m): m is Media => !!m)
+      return uniqueById(results.filter((m): m is Media => !!m))
         .map((m) => {
           const watchedEpisodeCount = Object.entries(doc.episodesWatched).filter(
             ([episodeId, watched]) => watched && seriesIdFromEpisodeId(episodeId) === m.id
@@ -66,8 +145,31 @@ export const useMediaSearch = (query: string) =>
     enabled: query.trim().length > 0,
   });
 
-export const useMediaDetail = (id: string) =>
-  useQuery<Media | undefined>({ queryKey: ["media", id], queryFn: () => mediaRepository.getById(id) });
+/** A title already sitting in any cached list (Discover, Home, Library,
+ * search…), used to paint a detail page instantly. */
+function findCachedMedia(qc: ReturnType<typeof useQueryClient>, id: string): Media | undefined {
+  for (const query of qc.getQueryCache().getAll()) {
+    const data = query.state.data as unknown;
+    if (Array.isArray(data)) {
+      const hit = data.find((m) => m && typeof m === "object" && (m as Media).id === id && (m as Media).title);
+      if (hit) return hit as Media;
+    }
+  }
+  return undefined;
+}
+
+// Opens instantly: until the full record (cast, providers, seasons…) arrives,
+// the page shows what the tapped poster's list already had (title, poster,
+// backdrop, synopsis, status). Fields only the full fetch provides stay
+// undefined meanwhile — screens treat that as "still loading".
+export const useMediaDetail = (id: string) => {
+  const qc = useQueryClient();
+  return useQuery<Media | undefined>({
+    queryKey: ["media", id],
+    queryFn: () => mediaRepository.getById(id),
+    placeholderData: () => findCachedMedia(qc, id),
+  });
+};
 
 export const useEpisodes = (seriesId: string, season?: number) =>
   useQuery<Episode[]>({
@@ -84,11 +186,22 @@ export const useRecommendations = (id: string) =>
     enabled: !!id,
   });
 
-export const useEpisodeDetail = (episodeId: string) =>
-  useQuery<Episode | undefined>({
+// Same instant-open trick as useMediaDetail: the episode is usually already
+// in a cached season list (the series page you tapped it from).
+export const useEpisodeDetail = (episodeId: string) => {
+  const qc = useQueryClient();
+  return useQuery<Episode | undefined>({
     queryKey: ["episode", episodeId],
     queryFn: () => mediaRepository.getEpisodeById(episodeId),
+    placeholderData: () => {
+      for (const [, data] of qc.getQueriesData<Episode[]>({ queryKey: ["episodes"] })) {
+        const hit = data?.find((e) => e.id === episodeId);
+        if (hit) return hit;
+      }
+      return undefined;
+    },
   });
+};
 
 export const useSetWatchStatus = () => {
   const qc = useQueryClient();
@@ -126,6 +239,30 @@ export const useSetWatchStatus = () => {
 // count never moved. This mutation actually persists it (and, via
 // setUserRating's own implementation, updates the Rewind community
 // aggregate too), with an optimistic update so the stars respond instantly.
+/** Rewind members' average after the viewer rates `rating` (0 = removes
+ * their rating) — same math as submitRating(), for an instant UI. */
+function nextRewindAggregate(
+  old: { userRating?: number; rewindRating?: number; rewindRatingCount?: number },
+  rating: number
+): { rewindRating?: number; rewindRatingCount: number } {
+  const oldRating = old.userRating ?? 0;
+  const oldCount = old.rewindRatingCount ?? 0;
+  const oldSum = (old.rewindRating ?? 0) * oldCount;
+  let sum = oldSum;
+  let count = oldCount;
+  if (rating === 0) {
+    if (oldRating > 0) {
+      sum -= oldRating;
+      count -= 1;
+    }
+  } else if (oldRating > 0) sum += rating - oldRating;
+  else {
+    sum += rating;
+    count += 1;
+  }
+  return { rewindRating: count > 0 ? Math.round((sum / count) * 10) / 10 : undefined, rewindRatingCount: Math.max(0, count) };
+}
+
 export const useSetUserRating = () => {
   const qc = useQueryClient();
   return useMutation({
@@ -136,22 +273,15 @@ export const useSetUserRating = () => {
       const previous = qc.getQueryData<Media | undefined>(["media", mediaId]);
       qc.setQueryData<Media | undefined>(["media", mediaId], (old) => {
         if (!old) return old;
-        // Mirror submitRating()'s own sum/count math client-side so the
-        // "Community" number moves the instant you rate, instead of sitting
-        // frozen until the follow-up network refetch (a full TMDB re-fetch)
-        // resolves. Re-derives from oldRating/oldCount so re-rating adjusts
-        // the sum without double-counting.
-        const oldRating = old.userRating ?? 0;
-        const oldCount = old.ratingCount ?? 0;
-        const oldSum = (old.communityRating ?? 0) * oldCount;
-        const nextSum = oldRating > 0 ? oldSum - oldRating + rating : oldSum + rating;
-        const nextCount = oldRating > 0 ? oldCount : oldCount + 1;
-        return {
-          ...old,
-          userRating: rating,
-          communityRating: Math.round((nextSum / nextCount) * 10) / 10,
-          ratingCount: nextCount,
-        };
+        // Instant: your rating, plus the Rewind members' average (kept
+        // apart from TMDB's communityRating — see tmdb.ts getById).
+        const next = nextRewindAggregate(old, rating);
+        return { ...old, userRating: rating || undefined, ...next };
+      });
+      // Episodes are shown from the episode query, not ["media", id].
+      qc.setQueryData<Episode | undefined>(["episode", mediaId], (old) => {
+        if (!old) return old;
+        return { ...old, userRating: rating || undefined, ...nextRewindAggregate(old, rating) };
       });
       return { previous, mediaId };
     },
@@ -162,6 +292,8 @@ export const useSetUserRating = () => {
       qc.invalidateQueries({ queryKey: ["media", mediaId] });
       qc.invalidateQueries({ queryKey: ["episode", mediaId] });
       qc.invalidateQueries({ queryKey: ["episodes"] });
+      // Daily "rate a title", Critic achievements and XP live on the profile.
+      qc.invalidateQueries({ queryKey: ["profile"] });
     },
   });
 };
@@ -221,6 +353,25 @@ export const useWatchedMediaIds = () =>
 // Count of watched episodes for a series across ALL seasons (not just the
 // currently-selected one) — used by the "whole-series completion" badge on
 // app/series/[id].tsx, alongside media.totalEpisodes for the denominator.
+/** Watched-episode count per season for one series ({ 1: 10, 2: 3 }). */
+export const useSeasonWatchedCounts = (seriesId: string) =>
+  useQuery<Record<number, number>>({
+    queryKey: ["seasonWatchedCounts", seriesId],
+    queryFn: async () => {
+      const uid = auth.currentUser?.uid;
+      if (!uid) return {};
+      const doc = await getUserDoc(uid);
+      const counts: Record<number, number> = {};
+      for (const [episodeId, watched] of Object.entries(doc.episodesWatched)) {
+        if (!watched || seriesIdFromEpisodeId(episodeId) !== seriesId) continue;
+        const season = Number(episodeId.match(/[:-]s(\d+)e\d+$/i)?.[1]);
+        if (season) counts[season] = (counts[season] ?? 0) + 1;
+      }
+      return counts;
+    },
+    enabled: !!seriesId,
+  });
+
 export const useSeriesWatchedEpisodeCount = (seriesId: string) =>
   useQuery<number>({
     queryKey: ["seriesWatchedEpisodeCount", seriesId],
@@ -339,14 +490,14 @@ export const useProfile = () =>
 export const useLists = () =>
   useQuery<ListModel[]>({ queryKey: ["lists"], queryFn: () => userRepository.getLists() });
 
-export const useChallenges = () =>
-  useQuery<Challenge[]>({ queryKey: ["challenges"], queryFn: () => userRepository.getChallenges() });
 
 export const useUpdateProfile = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (
-      patch: Partial<Pick<UserProfile, "firstName" | "bio" | "avatarColor" | "avatarIcon" | "bannerMode" | "bannerImageUri">>
+      patch: Partial<
+        Pick<UserProfile, "firstName" | "username" | "bio" | "avatarColor" | "avatarIcon" | "avatarImage" | "bannerMode" | "bannerImageUri">
+      >
     ) =>
       userRepository.updateProfile(patch),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["profile"] }),
@@ -381,15 +532,22 @@ export const useRemoveFromList = () => {
 // Favorited media ids from the signed-in user's Firestore doc, hydrated into
 // full Media[] via the catalog repository (batched, same pattern as
 // useTrackedGenres).
+/** Drops repeated ids (first wins) — lists render with key={id}. */
+function uniqueById<T extends { id: string }>(items: T[]): T[] {
+  const seen = new Set<string>();
+  return items.filter((m) => (seen.has(m.id) ? false : (seen.add(m.id), true)));
+}
+
 export const useFavorites = () =>
   useQuery<Media[]>({
     queryKey: ["favorites"],
     queryFn: async () => {
       const uid = auth.currentUser?.uid;
       if (!uid) return [];
-      const ids = (await getUserDoc(uid)).favorites;
+      // Set: two quick taps on the heart could store the same id twice.
+      const ids = Array.from(new Set((await getUserDoc(uid)).favorites));
       const results = await Promise.all(ids.map((id) => mediaRepository.getById(id)));
-      return results.filter((m): m is Media => !!m);
+      return uniqueById(results.filter((m): m is Media => !!m));
     },
   });
 
@@ -397,17 +555,248 @@ export const useToggleFavorite = () => {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (mediaId: string) => userRepository.toggleFavorite(mediaId),
-    onSuccess: () => {
+    // Instant heart: flip the cached favorites list first, save after.
+    onMutate: async (mediaId) => {
+      await qc.cancelQueries({ queryKey: ["favorites"] });
+      const previous = qc.getQueryData<Media[]>(["favorites"]);
+      const media = qc.getQueryData<Media | undefined>(["media", mediaId]);
+      qc.setQueryData<Media[]>(["favorites"], (old = []) =>
+        old.some((m) => m.id === mediaId) ? old.filter((m) => m.id !== mediaId) : media ? [...old, media] : old
+      );
+      return { previous };
+    },
+    onError: (_err, _id, context) => {
+      if (context) qc.setQueryData(["favorites"], context.previous);
+    },
+    onSettled: () => {
       qc.invalidateQueries({ queryKey: ["profile"] });
       qc.invalidateQueries({ queryKey: ["favorites"] });
     },
   });
 };
 
-export const useAddFriend = () => {
+// ---- Friends (see src/data/repositories/social.ts) ----
+
+const invalidateSocial = (qc: ReturnType<typeof useQueryClient>) => {
+  qc.invalidateQueries({ queryKey: ["friends"] });
+  qc.invalidateQueries({ queryKey: ["friendRequests"] });
+  qc.invalidateQueries({ queryKey: ["activity"] });
+  qc.invalidateQueries({ queryKey: ["friendshipStatus"] });
+};
+
+/** Keeps friends / requests / activity / lookup results live while mounted. */
+export const useSocialRealtime = () => {
   const qc = useQueryClient();
-  return useMutation({
-    mutationFn: () => socialRepository.addFriend(),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["friends"] }),
+  // From the auth store (not auth.currentUser) so the listeners re-subscribe
+  // when a different account signs in — and only once Firebase confirmed the
+  // session (the UI can be showing earlier from the cached-session hint,
+  // when Firestore would still reject the listeners).
+  const uid = useAuthStore((s) => (s.authConfirmed ? s.userId : null));
+  useEffect(() => {
+    if (!uid) return;
+    return subscribeToSocialChanges(uid, () => {
+      invalidateSocial(qc);
+      qc.invalidateQueries({ queryKey: ["userLookup"] });
+    });
+  }, [uid, qc]);
+
+  // Friends' activity: re-subscribed whenever the friend list changes.
+  const { data: friends = [] } = useQuery<Friend[]>({
+    queryKey: ["friends"],
+    queryFn: () => socialRepository.getFriends(),
+    enabled: !!uid,
+  });
+  const friendKey = friends
+    .map((f) => f.id)
+    .sort()
+    .join(",");
+  useEffect(() => {
+    if (!uid || !friendKey) return;
+    return subscribeToFriendFeeds(friendKey.split(","), () => qc.invalidateQueries({ queryKey: ["activity"] }));
+  }, [uid, friendKey, qc]);
+};
+
+export const useFriendRequests = () =>
+  useQuery({ queryKey: ["friendRequests"], queryFn: () => listFriendRequests() });
+
+export const useUserLookup = (username: string) => {
+  const handle = normalizeUsername(username);
+  return useQuery({
+    queryKey: ["userLookup", handle],
+    queryFn: async () => {
+      const profile = await findByUsername(handle);
+      return profile ? { profile, status: await friendshipStatus(profile.uid) } : null;
+    },
+    enabled: !validateUsername(handle),
   });
 };
+
+export const useSendFriendRequest = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (uid: string) => sendFriendRequest(uid),
+    onSuccess: () => {
+      invalidateSocial(qc);
+      qc.invalidateQueries({ queryKey: ["userLookup"] });
+    },
+  });
+};
+
+export const useRespondToRequest = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ uid, accept }: { uid: string; accept: boolean }) =>
+      accept ? acceptFriendRequest(uid) : deleteFriendRequest(uid, auth.currentUser?.uid ?? ""),
+    onSuccess: () => invalidateSocial(qc),
+  });
+};
+
+export const useCancelRequest = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (uid: string) => deleteFriendRequest(auth.currentUser?.uid ?? "", uid),
+    onSuccess: () => {
+      invalidateSocial(qc);
+      qc.invalidateQueries({ queryKey: ["userLookup"] });
+    },
+  });
+};
+
+export const useRemoveFriend = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (uid: string) => removeFriend(uid),
+    onSuccess: () => invalidateSocial(qc),
+  });
+};
+
+export const useComments = (targetId: string) =>
+  useQuery<StoredComment[]>({ queryKey: ["comments", targetId], queryFn: () => listComments(targetId) });
+
+export const useAddComment = (targetId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (text: string) => addComment(targetId, text),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["comments", targetId] }),
+  });
+};
+
+export const useDeleteComment = (targetId: string) => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (commentId: string) => deleteComment(commentId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["comments", targetId] }),
+  });
+};
+
+// Yearly "Rewind" recap. Resolves this year's history entries to real media
+// (posters, genres, runtimes): by stored media id, or — for entries logged
+// before ids were stored — by exact title against everything the user tracks.
+export const useRewind = (year: number, enabled = true) =>
+  useQuery<RewindData>({
+    queryKey: ["rewind", year],
+    enabled,
+    queryFn: async () => {
+      const uid = auth.currentUser?.uid;
+      const doc = uid ? await getUserDoc(uid) : null;
+      const history = doc?.history ?? [];
+      const ids = new Set(rewindMediaIds(history, year));
+      if (doc && rewindHasLegacyEntries(history, year)) Object.keys(doc.mediaStatus).forEach((id) => ids.add(id));
+      const fetched = await Promise.all(
+        Array.from(ids).map((id) => mediaRepository.getById(id).catch(() => undefined))
+      );
+      const byId = new Map<string, Media>();
+      const byTitle = new Map<string, Media>();
+      for (const m of fetched) {
+        if (!m) continue;
+        byId.set(m.id, m);
+        if (!byTitle.has(m.title)) byTitle.set(m.title, m);
+      }
+      const rewind = computeRewind(
+        history,
+        year,
+        (key, title) => byId.get(key) ?? byTitle.get(title),
+        (mediaId) => doc?.mediaStatus[mediaId]?.rating
+      );
+      const games = computeGameRewind(history, year);
+      if (games?.topGame && isGamesConfigured) {
+        const [top] = await getGamesByIds([games.topGame.id]).catch(() => []);
+        if (top) games.topGame = { ...games.topGame, coverUrl: igdbImageUrl(top.coverImageId) };
+      }
+      return { ...rewind, games };
+    },
+  });
+
+// History entries resolved to their media (poster, kind, where to navigate):
+// by stored media id, or — for entries logged before ids were stored — by
+// the title prefix of the label against everything the user tracks.
+export const useHistoryMedia = (history: HistoryEntry[]) => {
+  const ids = Array.from(new Set(history.map((h) => h.mediaId).filter((id): id is string => !!id))).sort();
+  const hasLegacy = history.some((h) => !h.mediaId);
+  return useQuery<{ byId: Record<string, Media>; byTitle: Record<string, Media> }>({
+    queryKey: ["historyMedia", ids, hasLegacy],
+    queryFn: async () => {
+      const uid = auth.currentUser?.uid;
+      const legacyIds =
+        hasLegacy && uid
+          ? Object.entries((await getUserDoc(uid)).mediaStatus)
+              .filter(([id, v]) => /^(movie|tv):\d+$/.test(id) && !!v.status)
+              .map(([id]) => id)
+          : [];
+      const all = Array.from(new Set([...ids, ...legacyIds]));
+      const results = await Promise.all(all.map((id) => mediaRepository.getById(id).catch(() => undefined)));
+      const byId: Record<string, Media> = {};
+      const byTitle: Record<string, Media> = {};
+      for (const m of results) {
+        if (!m) continue;
+        byId[m.id] = m;
+        byTitle[m.title.toLowerCase()] ??= m;
+      }
+      return { byId, byTitle };
+    },
+    enabled: history.length > 0,
+  });
+};
+
+// ---- Settings → Privacy / Notifications ----
+
+export const useUserSettings = () =>
+  useQuery<UserSettings>({
+    queryKey: ["settings"],
+    queryFn: async () => {
+      const uid = auth.currentUser?.uid;
+      const stored = uid ? (await getUserDoc(uid)).settings : undefined;
+      return { ...DEFAULT_SETTINGS, ...(stored ?? {}) };
+    },
+  });
+
+export const useSaveUserSettings = () => {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (patch: Partial<UserSettings>) => {
+      const uid = auth.currentUser?.uid;
+      if (!uid) throw new Error("No signed-in user");
+      await saveUserSettings(uid, patch);
+      // Applied right away where it has an effect.
+      if (patch.activityVisibility === "private") await clearActivity();
+      if (patch.discoverable !== undefined) await savePublicProfile({ discoverable: patch.discoverable });
+    },
+    // Instant toggle.
+    onMutate: async (patch) => {
+      const previous = qc.getQueryData<UserSettings>(["settings"]);
+      qc.setQueryData<UserSettings>(["settings"], (old) => ({ ...DEFAULT_SETTINGS, ...(old ?? {}), ...patch }));
+      return { previous };
+    },
+    onError: (_e, _p, ctx) => ctx && qc.setQueryData(["settings"], ctx.previous),
+  });
+};
+
+/** Platform ids (Netflix, Prime…) for a title, for direct product links. */
+export const usePlatformIds = (media: Media | undefined) =>
+  useQuery<PlatformIds>({
+    queryKey: ["platformIds", media?.id],
+    queryFn: () => fetchPlatformIds(media!.kind === "movie" ? "movie" : "tv", media!.tmdbId!),
+    enabled: !!media?.tmdbId && (media.watchProviders?.length ?? 0) > 0,
+    staleTime: 7 * 24 * 60 * 60 * 1000, // ids rarely change
+    retry: 0,
+  });

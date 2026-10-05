@@ -1,0 +1,47 @@
+{
+"ids": [
+119133
+],
+"missions": [
+"Boss: Margit, the Fell Omen",
+"Boss: Godrick the Grafted",
+"Boss: Rennala, Queen of the Full Moon",
+"Boss: Starscourge Radahn",
+"Boss: Rykard, Lord of Blasphemy",
+"Boss: Morgott, the Omen King",
+"Boss: Fire Giant",
+"Boss: Godskin Duo",
+"Boss: Maliketh, the Black Blade",
+"Boss: Sir Gideon Ofnir, the All-Knowing",
+"Boss: Godfrey, First Elden Lord",
+"Boss: Radagon of the Golden Order",
+"Boss: Elden Beast"
+],
+"side": [
+"Ranni's questline",
+"Fia's questline",
+"Millicent's questline",
+"Alexander's questline",
+"Hyetta's questline",
+"Sellen's questline",
+"Patches' questline",
+"Volcano Manor questline"
+],
+"boss": [
+"Malenia, Blade of Miquella",
+"Mohg, Lord of Blood",
+"Astel, Naturalborn of the Void",
+"Dragonlord Placidusax",
+"Lichdragon Fortissax",
+"Loretta, Knight of the Haligtree",
+"Commander Niall",
+"Regal Ancestor Spirit"
+],
+"collectible": [
+"Sacred Tears (12)",
+"Legendary Armaments (9)",
+"Legendary Talismans (8)",
+"Legendary Ashen Remains (4)",
+"Legendary Sorceries and Incantations (7)"
+]
+}

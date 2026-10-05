@@ -1,0 +1,29 @@
+{
+"ids": [
+76882
+],
+"missions": [
+"Boss: Gyoubu Masataka Oniwa",
+"Boss: Lady Butterfly",
+"Boss: Genichiro Ashina",
+"Boss: Folding Screen Monkeys",
+"Boss: Guardian Ape",
+"Boss: Corrupted Monk",
+"Boss: Headless Ape",
+"Boss: Great Shinobi Owl",
+"Boss: Divine Dragon",
+"Boss: Isshin, the Sword Saint"
+],
+"boss": [
+"Lone Shadow Longswordsman",
+"Snake Eyes Shirafuji",
+"Demon of Hatred",
+"True Corrupted Monk",
+"Owl (Father)",
+"Sakura Bull of the Palace"
+],
+"collectible": [
+"Prayer Beads (40)",
+"Gourd Seeds (9)"
+]
+}

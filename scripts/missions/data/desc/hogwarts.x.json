@@ -1,0 +1,21 @@
+{
+"wiki": "hogwartslegacy.fandom.com",
+"items": {
+"collectible:1": {
+"page": "Merlin Trials",
+"text": "Merlin Trials are a series of small spell-based puzzles spread throughout the magical open world. These Trials are designed to test the player's skills and knowledge of spells, and are scattered so frequently that it's almost impossible to take a few steps without stumbling upon them."
+},
+"collectible:2": {
+"page": "Demiguise statues",
+"text": "Demiguise statues begin to appear in Hogsmeade during the quest Welcome to Hogsmeade, and in Hogwarts the next day, but their significance does not become apparent until the player receives a request from Gladwin Moon."
+},
+"collectible:3": {
+"page": "The Daedalian Keys",
+"text": "Note: While this quest's suggested level is 2, it is recommended to do this quest at Lv14. While most of the keys can be found early on, the last three keys only become accessible after completing the Main quest, [The Caretaker's Lunar Lament], as one needs Alohomora to get into the locations they are in, and that's the level that the quest is unlocked."
+},
+"collectible:4": {
+"page": "Astronomy Class",
+"text": "If the player is not at Lv16:\nI need to progress in my studies before I can attend Astronomy class. Professor Shah's class is at the top of the Astronomy Tower, upstairs from the entrance to the Room of Requirement. I should head there now. Amit offered me his old telescope. Its somewhere in the storage area under the observation deck."
+}
+}
+}

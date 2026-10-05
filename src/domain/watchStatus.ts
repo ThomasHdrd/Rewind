@@ -10,6 +10,10 @@ import { Media, WatchStatus } from "@/types/media";
  */
 export function deriveEffectiveStatus(media: Pick<Media, "kind" | "status" | "totalEpisodes">, watchedEpisodeCount: number): WatchStatus | undefined {
   if (media.kind === "movie") return media.status;
+  // An explicit "Stop watching" (dropped) wins over episode progress: the
+  // watched episodes stay in history, but the series leaves Watching,
+  // Continue Watching and Up Next.
+  if (media.status === "dropped") return "dropped";
   // When we have a real total-episode count, trust real progress over the
   // stored status flag — the flag is write-time-only and nothing ever
   // downgrades it, so a series that was ever (even mistakenly, e.g. from an
@@ -51,4 +55,29 @@ export function isAwaitingUnreleasedEpisode(
   const parsed = new Date(airDate);
   if (isNaN(parsed.getTime())) return true;
   return parsed.getTime() > Date.now();
+}
+
+/** False for an episode (or movie) whose air/release date is still in the
+ * future — those can't be marked watched from anywhere. A missing or
+ * unparseable date counts as aired (TMDB omits dates on some old titles). */
+export function isAired(date?: string): boolean {
+  if (!date) return true;
+  const d = new Date(date);
+  return isNaN(d.getTime()) || d.getTime() <= Date.now();
+}
+
+/**
+ * The season a series page should open on: the first season the user hasn't
+ * finished (so a finished season 1 isn't shown again), or the last season
+ * once everything is watched. Unaired episodes count toward a season's
+ * total, so a season still airing stays "current".
+ */
+export function currentSeasonFor(
+  seasonsInfo: { number: number; episodeCount: number }[] | undefined,
+  watchedPerSeason: Record<number, number> | undefined
+): number | undefined {
+  if (!seasonsInfo?.length || !watchedPerSeason) return undefined;
+  const ordered = [...seasonsInfo].sort((a, b) => a.number - b.number);
+  const unfinished = ordered.find((s) => (watchedPerSeason[s.number] ?? 0) < s.episodeCount);
+  return (unfinished ?? ordered[ordered.length - 1]).number;
 }

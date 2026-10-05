@@ -1,40 +1,40 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react";
 import { useRouter } from "expo-router";
-import { Button, Chip, theme } from "@/design-system";
 import { Screen } from "@/components/Screen";
+import { PreferencesForm } from "@/components/PreferencesForm";
 import { useAuthStore } from "@/state/authStore";
-import { ALL_GENRES } from "@/lib/genres";
-import { KNOWN_PLATFORMS } from "@/lib/platforms";
+import { useToastStore } from "@/state/toastStore";
+import { useSavePreferences } from "@/hooks/useMedia";
+import { useQueryClient } from "@tanstack/react-query";
+import { mediaRepository } from "@/data/repositories";
+import { UserPreferences } from "@/data/repositories/firestoreUser";
 
 export default function Preferences() {
   const router = useRouter();
   const completeOnboarding = useAuthStore((s) => s.completeOnboarding);
-  const [genres, setGenres] = useState(new Set(["Action", "Sci-Fi", "Comedy"]));
-  const [platforms, setPlatforms] = useState(new Set<string>());
-
-  const toggle = (g: string) => {
-    setGenres((prev) => {
-      const next = new Set(prev);
-      if (next.has(g)) {
-        next.delete(g);
-      } else {
-        next.add(g);
-      }
-      return next;
+  const savePreferences = useSavePreferences();
+  const showToast = useToastStore((s) => s.show);
+  const qc = useQueryClient();
+  // Warm Discover (where this step lands) while genres are being picked.
+  useEffect(() => {
+    qc.prefetchInfiniteQuery({
+      queryKey: ["media", "catalog", "all", [], [], "trending"],
+      queryFn: ({ pageParam }) =>
+        mediaRepository.browseCatalog({ kind: "all", genres: [], platforms: [], sort: "trending" }, pageParam),
+      initialPageParam: 1,
     });
-  };
+  }, [qc]);
 
-  const togglePlatform = (p: string) => {
-    setPlatforms((prev) => {
-      const next = new Set(prev);
-      if (next.has(p)) next.delete(p);
-      else next.add(p);
-      return next;
-    });
-  };
-
-  const finish = async () => {
+  const finish = async (preferences: UserPreferences) => {
+    try {
+      // Saved on the user's own Firestore doc, so every account gets its own
+      // "For You" row on Discover. Always starts blank here (no preselection);
+      // existing answers are edited from Settings → Preferences instead.
+      await savePreferences.mutateAsync(preferences);
+    } catch {
+      showToast("Couldn't save your preferences — check your connection and try again");
+      return;
+    }
     await completeOnboarding();
     // First-time completion lands on Discover (not Home) — a brand-new user
     // has nothing followed/watched yet, so Discover is where they'd start.
@@ -44,33 +44,12 @@ export default function Preferences() {
 
   return (
     <Screen>
-      <View>
-        <Text style={styles.title}>Your favorite genres</Text>
-        <Text style={styles.subtitle}>Pick at least 3 · step 2 of 3</Text>
-      </View>
-      <View style={styles.wrap}>
-        {ALL_GENRES.map((g) => (
-          <Chip key={g} label={g} selected={genres.has(g)} onPress={() => toggle(g)} />
-        ))}
-      </View>
-      <View>
-        <Text style={styles.title}>Your platforms</Text>
-        <Text style={styles.subtitle}>To sharpen your recommendations</Text>
-      </View>
-      <View style={styles.wrap}>
-        {KNOWN_PLATFORMS.map((p) => (
-          <Chip key={p} label={p} selected={platforms.has(p)} onPress={() => togglePlatform(p)} />
-        ))}
-      </View>
-      <Button fullWidth disabled={genres.size < 3} onPress={finish}>
-        Continue
-      </Button>
+      <PreferencesForm
+        genresSubtitle="Pick at least 3 · step 2 of 2"
+        submitLabel="Continue"
+        submitting={savePreferences.isPending}
+        onSubmit={finish}
+      />
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  title: { color: theme.textPrimary, fontSize: 20, fontWeight: "700" },
-  subtitle: { color: theme.textTertiary, fontSize: 12, marginTop: 4 },
-  wrap: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-});

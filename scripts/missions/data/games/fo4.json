@@ -1,0 +1,31 @@
+{
+"ids": [
+9630
+],
+"missions": [
+"War Never Changes",
+"Out of Time",
+"Jewel of the Commonwealth",
+"Unlikely Valentine",
+"Getting a Clue",
+"Reunions",
+"Dangerous Minds",
+"The Glowing Sea",
+"Hunter/Hunted",
+"The Molecular Level",
+"Institutionalized",
+"Final faction quest: The Nuclear Option or A New Dawn"
+],
+"side": [
+"Minutemen questline",
+"Brotherhood of Steel questline",
+"Railroad questline",
+"Institute questline",
+"The Silver Shroud",
+"Cabot House"
+],
+"collectible": [
+"Bobbleheads (20)",
+"Magazines"
+]
+}

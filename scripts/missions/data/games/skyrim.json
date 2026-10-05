@@ -1,0 +1,65 @@
+{
+"ids": [
+472
+],
+"missions": [
+"Unbound",
+"Before the Storm",
+"Bleak Falls Barrow",
+"Dragon Rising",
+"The Way of the Voice",
+"The Horn of Jurgen Windcaller",
+"A Blade in the Dark",
+"Diplomatic Immunity",
+"A Cornered Rat",
+"Alduin's Wall",
+"The Throat of the World",
+"Elder Knowledge",
+"Alduin's Bane",
+"The Fallen",
+"The World-Eater's Eyrie",
+"Sovngarde",
+"Dragonslayer"
+],
+"side": [
+"Companions questline",
+"College of Winterhold questline",
+"Thieves Guild questline",
+"Dark Brotherhood questline",
+"Civil War questline",
+"Daedric quests"
+],
+"boss": [
+"Mirmulnir",
+"Sahloknir",
+"Odahviing",
+"Alduin"
+],
+"collectible": [
+"Dragon Priest Masks (10)",
+"Unusual Gems (24)",
+"Daedric Artifacts",
+"Word Walls"
+],
+"easter-egg": [
+"Silver-Blood ring (Game of Thrones)",
+"The Headless Horseman",
+"\"Seek the wumpus\" (Hunt the Wumpus)",
+"The Gildergreen (Lord of the Rings)",
+"Whiterun looks like Edoras (Lord of the Rings)",
+"\"My precious\" Hagraven (Lord of the Rings)",
+"Farengar Secret-Fire (Gandalf)",
+"Notched Pickaxe (Minecraft)",
+"Pac-Man cheese scene",
+"GLaDOS potato (Portal 2)",
+"\"Hit the one in the middle!\" (Rocky)",
+"Seven beds in Blackreach (Snow White)",
+"Temba Wide-Arm (Star Trek)",
+"Upside-down skeleton and glowing sword (Star Wars)",
+"Three Billy Goats Gruff bridge",
+"William Tell's apple",
+"M'aiq the Liar",
+"The sweetroll",
+"\"Someone stole your sweetroll\""
+]
+}

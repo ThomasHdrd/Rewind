@@ -1,10 +1,13 @@
 import React, { useMemo, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { goBack } from "@/lib/navigation";
 import { EmptyState, IconButton, Input, MediaListItem, radius, theme } from "@/design-system";
 import { Screen } from "@/components/Screen";
 import { SectionLabel } from "@/components/SectionLabel";
 import { useAddToList, useMediaSearch } from "@/hooks/useMedia";
+import { useGameSearch, useTracks } from "@/hooks/useGames";
+import { igdbImageUrl } from "@/lib/games";
 import { useToastStore } from "@/state/toastStore";
 
 const TABS = ["All", "Movies", "Series", "Anime", "TV"];
@@ -15,6 +18,13 @@ export default function Search() {
   const [query, setQuery] = useState("");
   const [tab, setTab] = useState("All");
   const { data: results = [] } = useMediaSearch(query);
+  // Games: only for accounts tracking them, and never in "add to list" mode
+  // (lists hold movies/series). Shown as their own group, after the others.
+  const tracks = useTracks();
+  const gamesEnabled = tracks.play && !addToListId && (tab === "All" || tab === "Games");
+  const { data: gameResults = [] } = useGameSearch(query, gamesEnabled);
+  const games = gamesEnabled ? gameResults : [];
+  const tabs = tracks.play && !addToListId ? [...TABS, "Games"] : TABS;
   const addToList = useAddToList();
   const showToast = useToastStore((s) => s.show);
 
@@ -28,6 +38,7 @@ export default function Search() {
   };
 
   const filtered = useMemo(() => {
+    if (tab === "Games") return [];
     if (tab === "All") return results;
     const kindMap: Record<string, string> = { Movies: "movie", Series: "series", Anime: "anime", TV: "tv" };
     return results.filter((r) => r.kind === kindMap[tab]);
@@ -42,7 +53,7 @@ export default function Search() {
   return (
     <Screen>
       <View style={styles.header}>
-        <IconButton icon="‹" size={36} onPress={() => router.back()} />
+        <IconButton icon="‹" size={36} onPress={() => goBack(router)} />
         <Text style={styles.headerTitle}>{addToListId ? "Add to List" : "Search"}</Text>
       </View>
 
@@ -53,17 +64,17 @@ export default function Search() {
         icon={<Text style={styles.searchIcon}>⌕</Text>}
       />
 
-      {query.trim().length > 0 ? <Text style={styles.count}>{filtered.length} results</Text> : null}
+      {query.trim().length > 0 ? <Text style={styles.count}>{filtered.length + games.length} results</Text> : null}
 
       <View style={{ flexDirection: "row", gap: 8 }}>
-        {TABS.map((t) => (
+        {tabs.map((t) => (
           <Pressable key={t} onPress={() => setTab(t)} style={styles.tab}>
             <Text style={{ color: tab === t ? theme.textPrimary : theme.textTertiary, fontSize: 11 }}>{t}</Text>
           </Pressable>
         ))}
       </View>
 
-      {query.trim().length === 0 ? null : filtered.length === 0 ? (
+      {query.trim().length === 0 ? null : filtered.length + games.length === 0 ? (
         <EmptyState title={`No results for "${query}"`} subtitle="Check the spelling, or explore trending titles instead." />
       ) : (
         <View>
@@ -92,6 +103,20 @@ export default function Search() {
                     meta={`${m.year} · Movie${addToListId ? " · tap to add" : ""}`}
                     artworkColor={m.artworkColor}
                     posterPath={m.posterPath}
+                  />
+                </Pressable>
+              ))}
+            </View>
+          ) : null}
+          {games.length > 0 ? (
+            <View style={{ gap: 4, marginTop: 12 }}>
+              <SectionLabel>Games</SectionLabel>
+              {games.map((g) => (
+                <Pressable key={g.id} onPress={() => router.push(`/game/${g.id}`)}>
+                  <MediaListItem
+                    title={g.title}
+                    meta={`🎮 ${g.year ?? ""}${g.platforms.length ? ` · ${g.platforms.slice(0, 3).join(", ")}` : ""}`}
+                    imageUrl={igdbImageUrl(g.coverImageId, "t_cover_small")}
                   />
                 </Pressable>
               ))}

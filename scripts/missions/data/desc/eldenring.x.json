@@ -1,0 +1,21 @@
+{
+"wiki": "eldenring.fandom.com",
+"items": {
+"collectible:2": {
+"page": "Legendary Armaments (Achievement/Trophy)",
+"text": "Acquired after obtaining all legendary armaments on a single character. These armaments are: All of these items can alternatively be acquired by having another player give them away in online play. The Achievement/Trophy does not distinguish between these methods."
+},
+"collectible:3": {
+"page": "Legendary Talismans (Achievement/Trophy)",
+"text": "Acquired after obtaining all legendary Talismans on a single character. The required ones being: All of these items can alternatively be acquired by having another player give them away in online play. The Achievement/Trophy does not distinguish between these methods."
+},
+"collectible:4": {
+"page": "Legendary Ashen Remains (Achievement/Trophy)",
+"text": "Acquired after obtaining all legendary Spirit Ashes on a single character. These ashes are: Unlike the Legendary Armaments and Legendary Talismans, this achievement/trophy cannot be obtained through online trading."
+},
+"collectible:5": {
+"page": "Legendary Sorceries and Incantations (Achievement/Trophy)",
+"text": "Acquired after obtaining all legendary Sorceries and Incantations on a single character. The required spells are: Unlike the Legendary Armaments and Legendary Talismans, this achievement/trophy cannot be obtained through online trading."
+}
+}
+}

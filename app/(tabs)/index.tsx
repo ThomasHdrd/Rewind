@@ -1,10 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   Avatar,
-  Chip,
   ContinueWatchingCard,
   EmptyState,
   MediaListItem,
@@ -26,16 +25,13 @@ import {
   useUpcoming,
 } from "@/hooks/useMedia";
 import { mediaRepository, trackingRepository } from "@/data/repositories";
-import { parseHistoryDate } from "@/lib/history";
+import { episodeHistoryLabel, historyEntryDate } from "@/lib/history";
+import { isAired } from "@/domain/watchStatus";
+import { RewindAutoOpen } from "@/components/RewindAutoOpen";
+import { ContinuePlaying } from "@/components/ContinuePlaying";
+import { useTracks } from "@/hooks/useGames";
 import { useToastStore } from "@/state/toastStore";
 import { Media } from "@/types/media";
-
-type MediaType = "series" | "movie";
-
-const TYPE_TABS: { label: string; value: MediaType }[] = [
-  { label: "Series", value: "series" },
-  { label: "Movies", value: "movie" },
-];
 
 export default function Home() {
   const router = useRouter();
@@ -43,10 +39,10 @@ export default function Home() {
   const { data: continueWatching = [], isLoading, isError, refetch } = useContinueWatching();
   const { data: profile } = useProfile();
   const { data: upcoming = [] } = useUpcoming();
+  const tracks = useTracks();
   const { data: history = [] } = useHistory();
   const setWatchStatus = useSetWatchStatus();
   const showToast = useToastStore((s) => s.show);
-  const [typeTab, setTypeTab] = useState<MediaType>("series");
 
   // Order Continue Watching by real recency: the most recent HistoryEntry
   // whose label mentions the series' title (same title-substring-match
@@ -60,7 +56,7 @@ export default function Home() {
       let latest: number | null = null;
       for (const entry of history) {
         if (!entry.label.toLowerCase().includes(titleLower)) continue;
-        const d = parseHistoryDate(entry.timeLabel);
+        const d = historyEntryDate(entry);
         if (d && (latest === null || d.getTime() > latest)) latest = d.getTime();
       }
       if (latest !== null) lastActivity.set(m.id, latest);
@@ -79,9 +75,12 @@ export default function Home() {
   const { data: progressById = {} } = useContinueWatchingProgress(sortedContinueWatching);
   const { data: nextEpisodeById = {} } = useNextEpisodes(sortedContinueWatching);
 
+  // Series only: a movie has no partial progress to resume (it's watchlist
+  // or watched), and nothing in the app sets a movie to "watching", so the
+  // old Series/Movies toggle's Movies tab was always empty.
   const typedList = useMemo(
-    () => sortedContinueWatching.filter((m) => m.kind === typeTab),
-    [sortedContinueWatching, typeTab]
+    () => sortedContinueWatching.filter((m) => m.kind !== "movie"),
+    [sortedContinueWatching]
   );
 
   const invalidateWatchedData = () => {
@@ -109,17 +108,36 @@ export default function Home() {
   const markNextWatched = async (item: Media) => {
     const nextEp = nextEpisodeById[item.id];
     if (item.kind === "series" && nextEp) {
-      await mediaRepository.toggleEpisodeWatched(nextEp.id);
-      await trackingRepository.logWatch(`${item.title} — E${nextEp.number} ${nextEp.title}`.trim());
+      if (!isAired(nextEp.airDate)) {
+        showToast("The next episode hasn't aired yet");
+        return;
+      }
+      // Instant feedback: toast + progress bump now, saves in the background.
+      showToast("Episode marked as watched");
       const progress = progressById[item.id];
-      if (progress?.totalCount && item.status !== "watched") {
-        const newWatchedCount = progress.watchedCount + 1;
-        if (newWatchedCount >= progress.totalCount) {
+      qc.setQueriesData<Record<string, { watchedCount: number; totalCount: number; percent: number }>>(
+        { queryKey: ["continueWatchingProgress"] },
+        (old) => {
+          const p = old?.[item.id];
+          if (!old || !p) return old;
+          const watchedCount = p.watchedCount + 1;
+          const percent = p.totalCount ? Math.round((watchedCount / p.totalCount) * 100) : p.percent;
+          return { ...old, [item.id]: { ...p, watchedCount, percent } };
+        }
+      );
+      try {
+        await mediaRepository.toggleEpisodeWatched(nextEp.id);
+        await trackingRepository.logWatch(episodeHistoryLabel(item.title, nextEp), {
+          mediaId: item.id,
+          episodeIds: [nextEp.id],
+        });
+        if (progress?.totalCount && item.status !== "watched" && progress.watchedCount + 1 >= progress.totalCount) {
           await mediaRepository.setWatchStatus(item.id, "watched");
         }
+      } catch {
+        showToast("Couldn't save — check your connection");
       }
       invalidateWatchedData();
-      showToast("Episode marked as watched");
     } else {
       setWatchStatus.mutate({ mediaId: item.id, status: "watched" });
       showToast("Marked as watched");
@@ -128,6 +146,7 @@ export default function Home() {
 
   return (
     <Screen onRefresh={refetch} refreshing={isLoading}>
+      <RewindAutoOpen />
       <View style={styles.header}>
         <Text style={styles.greeting}>Good evening, {profile?.firstName ?? ""}</Text>
         <Avatar
@@ -138,7 +157,7 @@ export default function Home() {
         />
       </View>
 
-      {isError ? (
+      {!tracks.watch ? null : isError ? (
         <OfflineState onRetry={() => refetch()} />
       ) : (
         <View style={{ gap: 16 }}>
@@ -184,23 +203,13 @@ export default function Home() {
 
           {!isLoading && sortedContinueWatching.length > 0 ? (
             <View style={{ gap: 12 }}>
-              <View style={styles.typeToggle}>
-                {TYPE_TABS.map((t) => (
-                  <Chip
-                    key={t.value}
-                    label={t.label}
-                    selected={typeTab === t.value}
-                    onPress={() => setTypeTab(t.value)}
-                  />
-                ))}
-              </View>
               <Text style={styles.countLabel}>
-                {typedList.length} in progress
+                {typedList.length} series in progress
               </Text>
 
               {typedList.length === 0 ? (
                 <EmptyState
-                  title={typeTab === "series" ? "No series in progress" : "No movies in progress"}
+                  title="No series in progress"
                   subtitle="Titles you're watching will show up here."
                 />
               ) : (
@@ -244,7 +253,10 @@ export default function Home() {
         </View>
       )}
 
-      {upcoming.length > 0 ? (
+      {/* Games: a separate block, below the series one. */}
+      {tracks.play ? <ContinuePlaying hideWhenEmpty={tracks.watch} /> : null}
+
+      {tracks.watch && upcoming.length > 0 ? (
         <View style={{ gap: 4 }}>
           <SectionLabel>Up Next</SectionLabel>
           {upcoming.slice(0, 3).map((u) => {
@@ -272,7 +284,6 @@ export default function Home() {
 const styles = StyleSheet.create({
   header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   greeting: { fontFamily: "ArchivoBlack_400Regular", color: theme.textPrimary, fontSize: 22 },
-  typeToggle: { flexDirection: "row", gap: 8 },
   countLabel: { color: theme.textTertiary, fontSize: 12, fontWeight: "600" },
   rowCheck: {
     width: 32,

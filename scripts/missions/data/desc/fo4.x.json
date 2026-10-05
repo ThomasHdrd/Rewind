@@ -1,0 +1,13 @@
+{
+"wiki": "fallout.fandom.com",
+"items": {
+"collectible:1": {
+"page": "Vault-Tec bobblehead",
+"text": "Vault-Tec bobblehead figures are promotional Vault-Tec items in Fallout 3, Fallout 4, Fallout 76, and Fallout: Wasteland Warfare. Although found in the game files, Vault-Tec bobbleheads do not appear in Fallout: New Vegas. Vault-Tec bobbleheads are found on the eastern side of the former United States, in the regions of the Capital Wasteland, the Commonwealth and Appalachia."
+},
+"collectible:2": {
+"page": "Fallout 4 magazines",
+"text": "Magazines grant the player character additional perks when read, or unlock certain benefits. Perk magazines replace skill books from earlier installments in the Fallout franchise, due to the merger of skills and perks. These perks can have multiple ranks, with the rank increasing each time the player character reads a copy of the magazine."
+}
+}
+}

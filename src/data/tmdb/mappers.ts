@@ -94,6 +94,26 @@ export function colorForId(id: number): string {
   return palette[id % palette.length];
 }
 
+// A typical French theatrical run is 4–8 weeks; past that a film is
+// effectively out of cinemas even if a few screens still show it.
+const THEATRICAL_RUN_DAYS = 56;
+
+function isInTheaters(m: TmdbMovie): boolean | undefined {
+  const regions = m.release_dates?.results;
+  if (!regions) return undefined; // not fetched (list results)
+  const region =
+    regions.find((r) => r.iso_3166_1 === WATCH_PROVIDER_REGION_PRIMARY) ??
+    regions.find((r) => r.iso_3166_1 === WATCH_PROVIDER_REGION_FALLBACK);
+  const theatrical = (region?.release_dates ?? [])
+    .filter((d) => d.type === 2 || d.type === 3)
+    .map((d) => new Date(d.release_date).getTime())
+    .filter((t) => !isNaN(t));
+  if (theatrical.length === 0) return false;
+  const opened = Math.min(...theatrical);
+  const now = Date.now();
+  return opened <= now && now - opened <= THEATRICAL_RUN_DAYS * 86400000;
+}
+
 export function mapTmdbMovie(m: TmdbMovie): Media {
   return {
     id: `movie:${m.id}`,
@@ -114,6 +134,7 @@ export function mapTmdbMovie(m: TmdbMovie): Media {
     cast: mapCast(m.credits),
     watchProviders: pickWatchProviders(m["watch/providers"]),
     watchProvidersLink: pickWatchProvidersLink(m["watch/providers"]),
+    inTheaters: isInTheaters(m),
   };
 }
 
@@ -130,6 +151,9 @@ export function mapTmdbTv(t: TmdbTv): Media {
     ratingCount: t.vote_count,
     seasons: t.number_of_seasons,
     totalEpisodes: t.number_of_episodes,
+    seasonsInfo: t.seasons
+      ?.filter((s) => s.season_number > 0)
+      .map((s) => ({ number: s.season_number, episodeCount: s.episode_count, overview: s.overview || undefined })),
     releaseDate: t.first_air_date,
     nextEpisodeToAir:
       t.next_episode_to_air && t.next_episode_to_air.air_date
@@ -158,6 +182,7 @@ export function mapTmdbEpisode(seriesId: string, e: TmdbEpisode): Episode {
     number: e.episode_number,
     title: e.name,
     runtimeMinutes: e.runtime ?? 0,
+    synopsis: e.overview || undefined,
     rating: e.vote_average ? Math.round((e.vote_average / 2) * 10) / 10 : undefined,
     ratingCount: e.vote_count,
     watched: false,

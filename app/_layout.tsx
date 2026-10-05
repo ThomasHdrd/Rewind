@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import * as SplashScreen from "expo-splash-screen";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { useFonts as useArchivoBlack, ArchivoBlack_400Regular } from "@expo-google-fonts/archivo-black";
 import {
   useFonts as useManrope,
@@ -15,7 +15,7 @@ import {
   Manrope_700Bold,
   Manrope_800ExtraBold,
 } from "@expo-google-fonts/manrope";
-import { queryClient } from "@/lib/queryClient";
+import { persistOptions, queryClient } from "@/lib/queryClient";
 import { useAuthStore } from "@/state/authStore";
 import { BottomNav, NavIconName, theme } from "@/design-system";
 import { ToastHost } from "@/components/ToastHost";
@@ -54,7 +54,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 function activeTabFor(segments: string[]): NavIconName | null {
   const first = segments[0] ?? "";
   if (first === "onboarding" || first === "quick-log" || first === "complete") return null;
-  if (first === "rate") return null;
+  if (first === "rate" || first === "rewind") return null;
   if (first === "(tabs)") {
     const second = segments[1];
     if (second === "discover") return "discover";
@@ -64,6 +64,8 @@ function activeTabFor(segments: string[]): NavIconName | null {
     return "home";
   }
   if (["settings", "statistics", "history", "lists", "rewards"].includes(first)) return "profile";
+  if (first === "add" || first === "profile-setup") return "friends";
+  if (first === "game") return "discover";
   // movie/series/episode detail screens, search, etc. are reached from
   // multiple tabs (Home, Discover, Search) with no single owner — default to
   // Home so the nav still shows (per "visible on every existing page")
@@ -113,7 +115,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <QueryClientProvider client={queryClient}>
+        <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
           <StatusBar style="light" />
           <AuthGate>
             <Stack
@@ -124,14 +126,16 @@ export default function RootLayout() {
             >
               <Stack.Screen name="(tabs)" />
               <Stack.Screen name="onboarding/welcome" />
+              <Stack.Screen name="onboarding/profile" />
               <Stack.Screen name="onboarding/preferences" />
               <Stack.Screen name="quick-log" options={{ presentation: "modal" }} />
               <Stack.Screen name="rate/[id]" options={{ presentation: "modal" }} />
+              <Stack.Screen name="rewind" options={{ presentation: "fullScreenModal", animation: "fade" }} />
             </Stack>
             <GlobalBottomNav />
             <ToastHost />
           </AuthGate>
-        </QueryClientProvider>
+        </PersistQueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -1,5 +1,10 @@
 import { TmdbMediaRepository } from "./tmdb";
-import { FirestoreSocialRepository, FirestoreTrackingRepository, FirestoreUserRepository } from "./firestore";
+import {
+  FirestoreSocialRepository,
+  FirestoreTrackingRepository,
+  FirestoreUserRepository,
+  setCatalogRepository,
+} from "./firestore";
 
 // Single wiring point: production screens only ever import from here.
 //
@@ -14,6 +19,7 @@ import { FirestoreSocialRepository, FirestoreTrackingRepository, FirestoreUserRe
 // as-is and can still be swapped in here for local UI development without
 // a TMDB token or a signed-in Firebase user.
 export const mediaRepository = new TmdbMediaRepository();
+setCatalogRepository(mediaRepository);
 export const trackingRepository = new FirestoreTrackingRepository();
 export const socialRepository = new FirestoreSocialRepository();
 export const userRepository = new FirestoreUserRepository();

@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { goBack } from "@/lib/navigation";
 import { LinearGradient } from "expo-linear-gradient";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
-import { Avatar, Chip, Comment, EpisodeRow, Input, MediaArtwork, PosterCard, ProgressBar, Rating, radius, theme } from "@/design-system";
+import { Avatar, Chip, EpisodeRow, MediaArtwork, PosterCard, ProgressBar, Rating, radius, theme } from "@/design-system";
 import { Screen } from "@/components/Screen";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { SectionLabel } from "@/components/SectionLabel";
 import { HScroll } from "@/components/HScroll";
+import { CommentsSection } from "@/components/CommentsSection";
+import { currentSeasonFor, isAired } from "@/domain/watchStatus";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { episodeHistoryLabel, seasonHistoryLabel } from "@/lib/history";
 import {
   useEpisodes,
   useFavorites,
   useMediaDetail,
+  usePlatformIds,
   useRecommendations,
+  useSeasonWatchedCounts,
   useSeriesWatchedEpisodeCount,
   useSetUserRating,
   useSetWatchStatus,
@@ -20,16 +28,31 @@ import {
 } from "@/hooks/useMedia";
 import { mediaRepository, trackingRepository } from "@/data/repositories";
 import { useQueryClient } from "@tanstack/react-query";
+import { Episode } from "@/types/media";
 import { useToastStore } from "@/state/toastStore";
+import { communityScore, rewindRatingFootnote } from "@/lib/statistics";
 import { tmdbImageUrl } from "@/lib/tmdb";
-import { watchProviderUrl } from "@/lib/watchProviders";
+import { watchProviderTitleUrl } from "@/lib/watchProviders";
 
 export default function SeriesDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const qc = useQueryClient();
+  const insets = useSafeAreaInsets();
   const { data: media } = useMediaDetail(id);
-  const [season, setSeason] = useState(1);
+  // Direct product-page links (Netflix/Prime/… title pages) for Where to watch.
+  const { data: platformIds } = usePlatformIds(media);
+  const { data: seasonWatchedCounts } = useSeasonWatchedCounts(id);
+  // Opens on the season in progress (first unfinished one), not always
+  // season 1; an explicit chip tap overrides it.
+  const [pickedSeason, setSeason] = useState<number | null>(null);
+  const [seasonOverviewOpen, setSeasonOverviewOpen] = useState(false);
+  // Watched toggles update the screen instantly and save in the background.
+  // Saves run one after another (not in parallel) so rapid taps can't race
+  // each other's read-modify-write of the episodes map.
+  const writeQueue = useRef<Promise<void>>(Promise.resolve());
+  const pendingWrites = useRef(0);
+  const season = pickedSeason ?? currentSeasonFor(media?.seasonsInfo, seasonWatchedCounts) ?? 1;
   const { data: episodes = [] } = useEpisodes(id, season);
   const { data: seriesWatchedCount = 0 } = useSeriesWatchedEpisodeCount(id);
   const { data: similar = [] } = useRecommendations(id);
@@ -38,31 +61,17 @@ export default function SeriesDetail() {
   const toggleFavorite = useToggleFavorite();
   const setUserRating = useSetUserRating();
   const showToast = useToastStore((s) => s.show);
-  const [comment, setComment] = useState("");
-  const [comments, setComments] = useState<{ id: string; name: string; text: string }[]>([
-    { id: "c1", name: "M. Reyes", text: "Loved the tension in the finale." },
-    { id: "c2", name: "C. Ibarra", text: "Slow start but worth it." },
-  ]);
 
-  const submitComment = () => {
-    if (!comment.trim()) return;
-    setComments((prev) => [{ id: `c-${Date.now()}`, name: "You", text: comment.trim() }, ...prev]);
-    setComment("");
-  };
-
-  if (!media) return null;
+  if (!media) return <LoadingScreen />;
   const userRating = media.userRating ?? 0;
 
   const favorited = favorites.some((m) => m.id === media.id);
 
-  const isReleased = (airDate?: string) => {
-    if (!airDate) return true;
-    const d = new Date(airDate);
-    return isNaN(d.getTime()) || d.getTime() <= Date.now();
-  };
+  const isReleased = isAired;
 
   const seasonCount = media.seasons ?? 1;
   const seasonNumbers = Array.from({ length: seasonCount }, (_, i) => i + 1);
+  const seasonOverview = media.seasonsInfo?.find((s) => s.number === season)?.overview;
 
   const watchedCount = episodes.filter((e) => e.watched).length;
   const totalCount = episodes.length;
@@ -75,8 +84,13 @@ export default function SeriesDetail() {
     qc.invalidateQueries({ queryKey: ["watchedMediaIds"] });
     qc.invalidateQueries({ queryKey: ["history"] });
     qc.invalidateQueries({ queryKey: ["seriesWatchedEpisodeCount", id] });
+    qc.invalidateQueries({ queryKey: ["seasonWatchedCounts", id] });
     qc.invalidateQueries({ queryKey: ["media", "continue-watching"] });
     qc.invalidateQueries({ queryKey: ["library"] });
+    // Up Next + Home's progress/next-episode depend on the same watched set.
+    qc.invalidateQueries({ queryKey: ["upcoming"] });
+    qc.invalidateQueries({ queryKey: ["continueWatchingProgress"] });
+    qc.invalidateQueries({ queryKey: ["nextEpisode"] });
   };
 
   // Released episodes for the current season — the denominator for "did this
@@ -85,112 +99,182 @@ export default function SeriesDetail() {
 
   // Marking watch progress should actually flip the series' own status —
   // otherwise listContinueWatching() (which filters on status === "watching")
-  // stays permanently empty no matter how many episodes get watched. Don't
-  // downgrade an already-"watched" series, and skip redundant writes when the
-  // status is already correct. When the newly-watched count reaches the
-  // series' total episode count, mark the whole series "watched" instead.
-  const updateSeriesStatusAfterWatch = async (newlyWatchedCount: number) => {
+  // stays permanently empty no matter how many episodes get watched. This
+  // runs after EVERY toggle, mark or unmark, and re-reads the real watched
+  // count straight from Firestore (not the seriesWatchedCount React Query
+  // hook, which stays stale across a burst of rapid taps — two unmarks
+  // fired before the first one's invalidation+refetch lands would both
+  // compute their "next count" off the SAME pre-burst number, under-
+  // decrementing and permanently leaving the series stuck on "watching"
+  // even after every episode was unmarked) — so it's correct regardless of
+  // how fast the user taps.
+  const syncSeriesStatusToProgress = async () => {
     if (!media || media.status === "watched") return;
-    const newTotal = seriesWatchedCount + newlyWatchedCount;
-    const isFullyWatched = !!media.totalEpisodes && newTotal >= media.totalEpisodes;
-    const nextStatus = isFullyWatched ? "watched" : "watching";
+    const newWatchedCount = await mediaRepository.getSeriesWatchedEpisodeCount(media.id);
+    const isFullyWatched = !!media.totalEpisodes && newWatchedCount >= media.totalEpisodes;
+    const nextStatus = isFullyWatched ? "watched" : newWatchedCount > 0 ? "watching" : media.status === "watching" ? null : media.status;
     if (media.status === nextStatus) return;
-    await mediaRepository.setWatchStatus(media.id, nextStatus);
-    qc.invalidateQueries({ queryKey: ["media", media.id] });
-    qc.invalidateQueries({ queryKey: ["media", "continue-watching"] });
+    await mediaRepository.setWatchStatus(media.id, nextStatus ?? null);
+    // Broad "media" prefix, not just ["media", media.id] — otherwise any
+    // poster card showing this series elsewhere (Discover, trending,
+    // search results) keeps its stale status badge cached indefinitely,
+    // since those lists are separate query keys this write never touched.
+    qc.invalidateQueries({ queryKey: ["media"] });
     qc.invalidateQueries({ queryKey: ["library"] });
   };
 
-  const toggleEpisode = async (episodeId: string) => {
+  const runInBackground = (task: () => Promise<void>) => {
+    pendingWrites.current += 1;
+    writeQueue.current = writeQueue.current
+      .then(task)
+      .catch(() => showToast("Couldn't save — check your connection"))
+      .finally(() => {
+        pendingWrites.current -= 1;
+        // Refetch once the last queued save lands (not after each one, which
+        // would briefly flip back episodes whose save is still queued).
+        if (pendingWrites.current === 0) invalidateWatchedData();
+      });
+  };
+
+  const setWatchedLocally = (ids: string[], watched: boolean) =>
+    qc.setQueryData<Episode[]>(["episodes", id, season], (old) =>
+      old?.map((e) => (ids.includes(e.id) ? { ...e, watched } : e))
+    );
+
+  const toggleEpisode = (episodeId: string) => {
     const episode = episodes.find((e) => e.id === episodeId);
-    const wasWatched = episode?.watched;
-    if (!wasWatched && episode && !isReleased(episode.airDate)) return;
-    // Captured before the writes below, so Undo can tell whether this
-    // specific tap was the one that flipped the series to "watching" (i.e.
-    // it was the series' first-ever watched episode) and revert exactly
-    // that flip — otherwise Undo only un-marks the episode while the series
-    // stays permanently stuck on "watching" with zero real progress, which
-    // then wrongly keeps showing up in Up Next forever.
-    const statusBeforeThisWatch = media?.status;
-    const wasFirstEverWatch = seriesWatchedCount === 0;
-    await mediaRepository.toggleEpisodeWatched(episodeId);
-    if (!wasWatched && episode) {
-      await trackingRepository.logWatch(`${media?.title ?? ""} — E${episode.number} ${episode.title}`.trim());
-      await updateSeriesStatusAfterWatch(1);
+    const wasWatched = !!episode?.watched;
+    if (!wasWatched && episode && !isReleased(episode.airDate)) {
+      showToast("This episode hasn't aired yet");
+      return;
     }
-    invalidateWatchedData();
+    setWatchedLocally([episodeId], !wasWatched);
+    runInBackground(async () => {
+      await mediaRepository.toggleEpisodeWatched(episodeId);
+      if (episode && media) {
+        const label = episodeHistoryLabel(media.title, episode);
+        const ref = { mediaId: media.id, episodeIds: [episodeId] };
+        if (wasWatched) await trackingRepository.removeWatch(ref, [label]);
+        else await trackingRepository.logWatch(label, ref);
+      }
+      await syncSeriesStatusToProgress();
+    });
     if (!wasWatched) {
       const nowAllWatched =
         releasedEpisodes.length > 0 && releasedEpisodes.every((e) => e.watched || e.id === episodeId);
       if (nowAllWatched) {
+        // Same as "Mark all watched": move on to the next season so coming
+        // back from the completion screen shows what's next.
+        const nextSeason = seasonNumbers.find((n) => n > season);
+        if (nextSeason) {
+          setSeason(nextSeason);
+          setSeasonOverviewOpen(false);
+        }
         router.push(`/complete/${media?.id}?kind=season&season=${season}`);
         return;
       }
       showToast("Episode marked as watched", {
         actionLabel: "Undo",
-        onAction: async () => {
-          await mediaRepository.toggleEpisodeWatched(episodeId);
-          if (wasFirstEverWatch && media) {
-            await mediaRepository.setWatchStatus(media.id, statusBeforeThisWatch ?? null);
-            qc.invalidateQueries({ queryKey: ["media", media.id] });
-          }
-          invalidateWatchedData();
+        onAction: () => {
+          setWatchedLocally([episodeId], false);
+          runInBackground(async () => {
+            await mediaRepository.toggleEpisodeWatched(episodeId);
+            if (episode && media) {
+              await trackingRepository.removeWatch({ mediaId: media.id, episodeIds: [episodeId] }, [
+                episodeHistoryLabel(media.title, episode),
+              ]);
+            }
+            await syncSeriesStatusToProgress();
+          });
         },
       });
     }
   };
 
-  const markSeasonWatched = async () => {
+  const markSeasonWatched = () => {
     const unwatched = episodes.filter((e) => !e.watched && isReleased(e.airDate));
     if (unwatched.length === 0) return;
+    const ids = unwatched.map((e) => e.id);
+    const markedSeason = season;
+    setWatchedLocally(ids, true);
     // One atomic bulk write, not N parallel toggleEpisodeWatched() calls —
     // those race (each does its own read-modify-write of the whole
-    // episodesWatched map from a stale snapshot), so most of a multi-episode
-    // change could get clobbered even though the toast reports success.
-    await mediaRepository.setEpisodesWatched(unwatched.map((e) => e.id), true);
-    await trackingRepository.logWatch(`${media?.title ?? ""} — Season ${season}`.trim());
-    await updateSeriesStatusAfterWatch(unwatched.length);
-    invalidateWatchedData();
+    // episodesWatched map from a stale snapshot).
+    runInBackground(async () => {
+      await mediaRepository.setEpisodesWatched(ids, true);
+      if (media) {
+        await trackingRepository.logWatch(seasonHistoryLabel(media.title, markedSeason), {
+          mediaId: media.id,
+          episodeIds: ids,
+        });
+      }
+      await syncSeriesStatusToProgress();
+    });
+    // Move on to the next season, so coming back from the completion screen
+    // shows what's next rather than the season just finished.
+    const nextSeason = seasonNumbers.find((s) => s > markedSeason);
+    if (nextSeason) {
+      setSeason(nextSeason);
+      setSeasonOverviewOpen(false);
+    }
     if (releasedEpisodes.length > 0) {
-      router.push(`/complete/${media?.id}?kind=season&season=${season}`);
+      router.push(`/complete/${media?.id}?kind=season&season=${markedSeason}`);
       return;
     }
-    showToast(`Season ${season} marked as watched`);
+    showToast(`Season ${markedSeason} marked as watched`);
   };
 
-  const unmarkSeasonWatched = async () => {
+  const unmarkSeasonWatched = () => {
     const watchedEpisodes = episodes.filter((e) => e.watched);
     if (watchedEpisodes.length === 0) return;
-    await mediaRepository.setEpisodesWatched(watchedEpisodes.map((e) => e.id), false);
-    invalidateWatchedData();
-    showToast(`Season ${season} marked as unwatched`);
+    const ids = watchedEpisodes.map((e) => e.id);
+    const unmarkedSeason = season;
+    setWatchedLocally(ids, false);
+    runInBackground(async () => {
+      await mediaRepository.setEpisodesWatched(ids, false);
+      if (media) {
+        await trackingRepository.removeWatch({ mediaId: media.id, episodeIds: ids }, [
+          seasonHistoryLabel(media.title, unmarkedSeason),
+          ...watchedEpisodes.map((e) => episodeHistoryLabel(media.title, e)),
+        ]);
+      }
+      await syncSeriesStatusToProgress();
+    });
+    showToast(`Season ${unmarkedSeason} marked as unwatched`);
   };
 
   return (
     <Screen scroll edges={["bottom"]} contentStyle={{ padding: 0, paddingBottom: 110, gap: 0 }}>
       <View style={styles.backdrop}>
-        <MediaArtwork path={media.backdropPath} size="original" color={media.artworkColor} style={{ width: "100%", height: "100%" }} />
+        <MediaArtwork path={media.backdropPath} size="w780" color={media.artworkColor} style={{ width: "100%", height: "100%" }} />
         <LinearGradient
           colors={["rgba(0,0,0,0.1)", "transparent", theme.bgPrimary]}
           locations={[0, 0.35, 1]}
           style={StyleSheet.absoluteFill}
         />
-        <Pressable onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={{ color: theme.textPrimary, fontSize: 16, lineHeight: 16, textAlign: "center", marginTop: -1 }}>‹</Text>
+        {/* Below the status bar (safe-area inset), smaller so they sit on the
+            backdrop instead of crowding the top edge. */}
+        <Pressable
+          onPress={() => goBack(router)}
+          style={[styles.backBtn, { top: insets.top + 10 }]}
+          accessibilityLabel="Back"
+          hitSlop={8}
+        >
+          <Ionicons name="chevron-back" size={16} color={theme.textPrimary} />
         </Pressable>
         {media.trailerKey ? (
           <Pressable
-            style={styles.trailer}
+            style={[styles.trailer, { top: insets.top + 10 }]}
             onPress={() => Linking.openURL(`https://www.youtube.com/watch?v=${media.trailerKey}`)}
           >
-            <Text style={{ color: theme.textPrimary, fontSize: 12, fontWeight: "700" }}>▶ Trailer</Text>
+            <Text style={styles.trailerLabel}>▶ Trailer</Text>
           </Pressable>
         ) : null}
       </View>
 
       <View style={styles.body}>
         <View style={styles.headerRow}>
-          <MediaArtwork path={media.posterPath} color={media.artworkColor} radius={radius.md} style={styles.poster} />
+          <MediaArtwork path={media.posterPath} size="w342" color={media.artworkColor} radius={radius.md} style={styles.poster} />
           <View style={styles.headerText}>
             <Text style={styles.title}>{media.title}</Text>
             <Text style={styles.meta}>
@@ -261,14 +345,61 @@ export default function SeriesDetail() {
           </Pressable>
         </View>
 
+        {/* Stop watching = "dropped": leaves Watching, Continue Watching and
+            Up Next; watched episodes stay in history. Resume undoes it. */}
+        {media.status === "watching" ? (
+          <Pressable
+            style={styles.dropBtn}
+            onPress={() => {
+              setWatchStatus.mutate({ mediaId: media.id, status: "dropped" });
+              showToast("Stopped watching — moved to Dropped", {
+                actionLabel: "Undo",
+                onAction: () => setWatchStatus.mutate({ mediaId: media.id, status: "watching" }),
+              });
+            }}
+          >
+            <Ionicons name="stop-circle-outline" size={16} color={theme.textTertiary} />
+            <Text style={styles.dropLabel}>Stop watching</Text>
+          </Pressable>
+        ) : media.status === "dropped" ? (
+          <View style={styles.droppedBanner}>
+            <Text style={styles.droppedText}>You stopped watching this series.</Text>
+            <Pressable
+              onPress={() => {
+                setWatchStatus.mutate({ mediaId: media.id, status: seriesWatchedCount > 0 ? "watching" : null });
+                showToast("Back in Watching");
+              }}
+              hitSlop={8}
+            >
+              <Text style={styles.resumeLabel}>Resume</Text>
+            </Pressable>
+          </View>
+        ) : null}
+
         {seasonNumbers.length > 0 ? (
           <View style={{ gap: 10 }}>
             <SectionLabel>Seasons</SectionLabel>
             <View style={{ flexDirection: "row", gap: 8, flexWrap: "wrap" }}>
               {seasonNumbers.map((s) => (
-                <Chip key={s} label={`Season ${s}`} selected={s === season} onPress={() => setSeason(s)} />
+                <Chip
+                  key={s}
+                  label={`Season ${s}`}
+                  selected={s === season}
+                  onPress={() => {
+                    setSeason(s);
+                    setSeasonOverviewOpen(false);
+                  }}
+                />
               ))}
             </View>
+            {seasonOverview ? (
+              <Pressable onPress={() => setSeasonOverviewOpen((o) => !o)}>
+                <Text style={styles.seasonOverview} numberOfLines={seasonOverviewOpen ? undefined : 3}>
+                  {seasonOverview}
+                </Text>
+                <Text style={styles.moreLabel}>{seasonOverviewOpen ? "Show less" : "Read more"}</Text>
+              </Pressable>
+            ) : null}
           </View>
         ) : null}
 
@@ -282,13 +413,15 @@ export default function SeriesDetail() {
                     <Text style={styles.unmarkAllLabel}>Unmark all</Text>
                   </Pressable>
                 ) : null}
-                {episodes.some((e) => !e.watched && isReleased(e.airDate)) ? (
-                  <Pressable onPress={markSeasonWatched}>
-                    <Text style={styles.markAllLabel}>Mark all watched</Text>
-                  </Pressable>
-                ) : null}
               </View>
             </View>
+            {/* Prominent season action (was a small text link). */}
+            {episodes.some((e) => !e.watched && isReleased(e.airDate)) ? (
+              <Pressable style={styles.markSeasonBtn} onPress={markSeasonWatched} accessibilityRole="button">
+                <Ionicons name="checkmark-done" size={18} color={theme.textInverse} />
+                <Text style={styles.markSeasonLabel}>Mark Season {season} as watched</Text>
+              </Pressable>
+            ) : null}
             {episodes.map((e) => (
               <Pressable key={e.id} onPress={() => router.push(`/episode/${e.id}`)}>
                 <EpisodeRow
@@ -370,7 +503,7 @@ export default function SeriesDetail() {
           <View style={{ gap: 10 }}>
             <SectionLabel>Where to watch</SectionLabel>
             {(media.watchProviders ?? []).map((p) => {
-              const platformUrl = watchProviderUrl(p.providerName) ?? media.watchProvidersLink;
+              const platformUrl = watchProviderTitleUrl(p.providerName, media.title, media.watchProvidersLink, platformIds, "tv");
               return (
               <Pressable
                 key={p.providerName}
@@ -410,7 +543,12 @@ export default function SeriesDetail() {
 
         <View style={styles.ratingRow}>
           <View style={styles.ratingCard}>
-            <Rating mode="community" value={media.communityRating ?? 0} count={media.ratingCount} />
+            <Rating
+              mode="community"
+              value={communityScore(media).value}
+              count={communityScore(media).count}
+              footnote={rewindRatingFootnote(media)}
+            />
           </View>
           <View style={styles.ratingCard}>
             <Rating
@@ -419,7 +557,7 @@ export default function SeriesDetail() {
               interactive
               onChange={(rating) => {
                 setUserRating.mutate({ mediaId: media.id, rating });
-                showToast("Rating saved");
+                showToast(rating ? "Rating saved" : "Rating removed");
               }}
             />
           </View>
@@ -432,13 +570,7 @@ export default function SeriesDetail() {
           </View>
         ) : null}
 
-        <View style={{ gap: 10 }}>
-          <SectionLabel>Comments</SectionLabel>
-          <Input placeholder="Add a comment..." value={comment} onChangeText={setComment} onSubmitEditing={submitComment} />
-          {comments.map((c) => (
-            <Comment key={c.id} name={c.name} text={c.text} />
-          ))}
-        </View>
+        <CommentsSection targetId={media.id} />
 
         <View style={{ gap: 10 }}>
           <SectionLabel>Similar Content</SectionLabel>
@@ -461,24 +593,25 @@ const styles = StyleSheet.create({
   backdrop: { height: 200, position: "relative" },
   backBtn: {
     position: "absolute",
-    top: 14,
     left: 14,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: "#0007",
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "#0008",
     alignItems: "center",
     justifyContent: "center",
   },
   trailer: {
     position: "absolute",
-    top: 12,
-    right: 12,
-    backgroundColor: "#000c",
+    right: 14,
+    backgroundColor: "#000a",
     borderRadius: radius.full,
-    paddingVertical: 7,
-    paddingHorizontal: 14,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
   },
+  trailerLabel: { color: theme.textPrimary, fontSize: 11, fontWeight: "700" },
+  seasonOverview: { color: theme.textSecondary, fontSize: 13, lineHeight: 20 },
+  moreLabel: { color: theme.brandPrimary, fontSize: 12, fontWeight: "700", marginTop: 4 },
   body: { padding: 20, gap: 20 },
   headerRow: { flexDirection: "row", gap: 12, marginTop: -46, alignItems: "flex-start" },
   poster: { width: 100, height: 148, borderWidth: 2, borderColor: theme.bgPrimary },
@@ -556,6 +689,32 @@ const styles = StyleSheet.create({
   markAllLabel: { color: theme.brandPrimary, fontSize: 12, fontWeight: "700" },
   unmarkAllLabel: { color: theme.textTertiary, fontSize: 12, fontWeight: "700" },
   actionRow: { flexDirection: "row", gap: 8 },
+  markSeasonBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: theme.brandPrimary,
+    borderRadius: radius.full,
+    paddingVertical: 12,
+    marginVertical: 6,
+  },
+  markSeasonLabel: { color: theme.textInverse, fontSize: 14, fontWeight: "800" },
+  dropBtn: { flexDirection: "row", alignItems: "center", gap: 6, alignSelf: "flex-start", paddingVertical: 4 },
+  dropLabel: { color: theme.textTertiary, fontSize: 13, fontWeight: "600" },
+  droppedBanner: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: theme.surfacePrimary,
+    borderWidth: 1,
+    borderColor: theme.borderDefault,
+    borderRadius: radius.md,
+    paddingVertical: 10,
+    paddingHorizontal: 14,
+  },
+  droppedText: { color: theme.textSecondary, fontSize: 13 },
+  resumeLabel: { color: theme.brandPrimary, fontSize: 13, fontWeight: "800" },
   actionBtn: {
     flex: 1,
     alignItems: "center",

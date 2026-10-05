@@ -12,8 +12,14 @@
       "resizeMode": "cover",
       "backgroundColor": "#080D16"
     },
-    "assetBundlePatterns": ["**/*"],
-    "plugins": ["expo-router", "expo-secure-store", "@react-native-google-signin/google-signin"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "@react-native-google-signin/google-signin"
+    ],
     "android": {
       "package": "com.rewind.app",
       "adaptiveIcon": {
@@ -27,11 +33,15 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static"
+      "favicon": "./assets/favicon.png",
+      "output": "single"
     },
     "extra": {
       "router": {
         "origin": false
+      },
+      "eas": {
+        "projectId": "b49af195-029b-4514-bf15-5de1aa34917d"
       }
     }
   }

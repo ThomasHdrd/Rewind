@@ -1,28 +1,35 @@
-import React, { useState } from "react";
+import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { goBack } from "@/lib/navigation";
 import { LinearGradient } from "expo-linear-gradient";
-import { Comment, Input, MediaArtwork, Rating, radius, theme } from "@/design-system";
+import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { MediaArtwork, Rating, radius, theme } from "@/design-system";
 import { Screen } from "@/components/Screen";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { SectionLabel } from "@/components/SectionLabel";
-import { useEpisodeDetail, useMediaDetail, useSeriesWatchedEpisodeCount, useSetUserRating } from "@/hooks/useMedia";
+import { CommentsSection } from "@/components/CommentsSection";
+import { isAired } from "@/domain/watchStatus";
+import { episodeHistoryLabel } from "@/lib/history";
+import { useEpisodeDetail, useMediaDetail, useSetUserRating } from "@/hooks/useMedia";
 import { mediaRepository, trackingRepository } from "@/data/repositories";
 import { useQueryClient } from "@tanstack/react-query";
+import { Episode } from "@/types/media";
 import { useToastStore } from "@/state/toastStore";
+import { communityScore } from "@/lib/statistics";
 
 export default function EpisodeDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const qc = useQueryClient();
   const { data: episode } = useEpisodeDetail(id);
   const { data: series } = useMediaDetail(episode?.seriesId ?? "");
-  const { data: seriesWatchedCount = 0 } = useSeriesWatchedEpisodeCount(episode?.seriesId ?? "");
   const setUserRating = useSetUserRating();
   const showToast = useToastStore((s) => s.show);
-  const [comment, setComment] = useState("");
-  const [comments, setComments] = useState<{ id: string; name: string; text: string }[]>([]);
 
-  if (!episode || !series) return null;
+  if (!episode || !series) return <LoadingScreen />;
   const userRating = episode.userRating ?? 0;
 
   const airDateObj = episode.airDate ? new Date(episode.airDate) : null;
@@ -36,22 +43,46 @@ export default function EpisodeDetail() {
     // Same guard as series/[id].tsx's episode-list toggle — this screen's
     // own checkmark button had no such check, so an unreleased episode could
     // still be marked watched by opening its detail page directly.
-    if (!wasWatched && airDateObj && !isNaN(airDateObj.getTime()) && airDateObj.getTime() > Date.now()) return;
-    await mediaRepository.toggleEpisodeWatched(episode.id);
-    if (!wasWatched) {
-      await trackingRepository.logWatch(`${series.title} — E${episode.number} ${episode.title}`);
-      // Same "flip the series to watching/watched" fix as series/[id].tsx —
-      // without this, listContinueWatching() (status === "watching") never
-      // returns anything even though the user has real progress.
+    if (!wasWatched && !isAired(episode.airDate)) {
+      showToast("This episode hasn't aired yet");
+      return;
+    }
+    // Instant: flip the checkmark now, save in the background (rolled back
+    // by the refetch at the end if the save fails).
+    qc.setQueryData<Episode | undefined>(["episode", id], (old) => (old ? { ...old, watched: !wasWatched } : old));
+    showToast(wasWatched ? "Marked as unwatched" : "Episode marked as watched");
+    try {
+      await mediaRepository.toggleEpisodeWatched(episode.id);
+      const label = episodeHistoryLabel(series.title, episode);
+      const ref = { mediaId: series.id, episodeIds: [episode.id] };
+      if (wasWatched) await trackingRepository.removeWatch(ref, [label]);
+      else await trackingRepository.logWatch(label, ref);
+      // Same "sync status to real progress" fix as series/[id].tsx's
+      // syncSeriesStatusToProgress — runs both ways (mark and unmark), and
+      // re-reads the real count from Firestore instead of trusting the
+      // seriesWatchedCount hook (stale across rapid taps), so unchecking
+      // here can't leave the series permanently stuck on "watching" with
+      // zero real progress.
       if (series.status !== "watched") {
-        const newTotal = seriesWatchedCount + 1;
-        const isFullyWatched = !!series.totalEpisodes && newTotal >= series.totalEpisodes;
-        const nextStatus = isFullyWatched ? "watched" : "watching";
+        const newWatchedCount = await mediaRepository.getSeriesWatchedEpisodeCount(series.id);
+        const isFullyWatched = !!series.totalEpisodes && newWatchedCount >= series.totalEpisodes;
+        const nextStatus = isFullyWatched
+          ? "watched"
+          : newWatchedCount > 0
+            ? "watching"
+            : series.status === "watching"
+              ? null
+              : series.status;
         if (series.status !== nextStatus) {
-          await mediaRepository.setWatchStatus(series.id, nextStatus);
-          qc.invalidateQueries({ queryKey: ["media", series.id] });
+          await mediaRepository.setWatchStatus(series.id, nextStatus ?? null);
+          // Broad "media" prefix — same fix as series/[id].tsx's
+          // syncSeriesStatusToProgress, so poster cards elsewhere (Discover,
+          // trending, search) don't keep a stale status badge cached.
+          qc.invalidateQueries({ queryKey: ["media"] });
         }
       }
+    } catch {
+      showToast("Couldn't save — check your connection");
     }
     qc.invalidateQueries({ queryKey: ["episode", id] });
     qc.invalidateQueries({ queryKey: ["episodes", episode.seriesId] });
@@ -61,20 +92,18 @@ export default function EpisodeDetail() {
     qc.invalidateQueries({ queryKey: ["seriesWatchedEpisodeCount", episode.seriesId] });
     qc.invalidateQueries({ queryKey: ["media", "continue-watching"] });
     qc.invalidateQueries({ queryKey: ["library"] });
+    qc.invalidateQueries({ queryKey: ["upcoming"] });
+    qc.invalidateQueries({ queryKey: ["continueWatchingProgress"] });
+    qc.invalidateQueries({ queryKey: ["nextEpisode"] });
   };
 
-  const submitComment = () => {
-    if (!comment.trim()) return;
-    setComments((prev) => [{ id: `c-${Date.now()}`, name: "You", text: comment.trim() }, ...prev]);
-    setComment("");
-  };
 
   return (
     <Screen scroll edges={["bottom"]} contentStyle={{ padding: 0, paddingBottom: 110, gap: 0 }}>
       <View style={styles.backdrop}>
         <MediaArtwork
           path={episode.stillPath ?? series.backdropPath}
-          size="original"
+          size="w780"
           color={series.artworkColor}
           style={{ width: "100%", height: "100%" }}
         />
@@ -83,14 +112,22 @@ export default function EpisodeDetail() {
           locations={[0, 0.3, 0.75, 1]}
           style={StyleSheet.absoluteFill}
         />
-        <Pressable onPress={() => router.back()} style={styles.roundBtnLeft}>
-          <Text style={{ color: theme.textPrimary, fontSize: 16, lineHeight: 16, textAlign: "center", marginTop: -1 }}>‹</Text>
+        <Pressable
+          onPress={() => goBack(router)}
+          style={[styles.roundBtnLeft, { top: insets.top + 10 }]}
+          accessibilityLabel="Back"
+          hitSlop={8}
+        >
+          <Ionicons name="chevron-back" size={16} color={theme.textPrimary} />
         </Pressable>
         <Pressable
           onPress={toggleWatched}
+          accessibilityLabel={episode.watched ? "Mark as unwatched" : "Mark as watched"}
+          hitSlop={8}
           style={[
             styles.roundBtnRight,
             {
+              top: insets.top + 10,
               backgroundColor: episode.watched ? theme.brandPrimary : "#0007",
               opacity: !episode.watched && airDateObj && airDateObj.getTime() > Date.now() ? 0.4 : 1,
             },
@@ -110,7 +147,21 @@ export default function EpisodeDetail() {
       <View style={styles.body}>
         <View style={styles.ratingRow}>
           <View style={styles.ratingCard}>
-            <Rating mode="community" value={episode.rating ?? 0} count={episode.ratingCount} />
+            <Rating
+              mode="community"
+              value={communityScore({
+                communityRating: episode.rating,
+                ratingCount: episode.ratingCount,
+                rewindRating: episode.rewindRating,
+                rewindRatingCount: episode.rewindRatingCount,
+              }).value}
+              count={communityScore({
+                communityRating: episode.rating,
+                ratingCount: episode.ratingCount,
+                rewindRating: episode.rewindRating,
+                rewindRatingCount: episode.rewindRatingCount,
+              }).count}
+            />
           </View>
           <View style={styles.ratingCard}>
             <Rating
@@ -119,31 +170,22 @@ export default function EpisodeDetail() {
               interactive
               onChange={(rating) => {
                 setUserRating.mutate({ mediaId: episode.id, rating });
-                showToast("Rating saved");
+                showToast(rating ? "Rating saved" : "Rating removed");
               }}
             />
           </View>
         </View>
 
-        {series.synopsis ? (
-          <View style={{ gap: 10 }}>
-            <SectionLabel>Synopsis</SectionLabel>
-            <Text style={styles.synopsis}>{series.synopsis}</Text>
-          </View>
-        ) : null}
-
+        {/* This episode's own overview (TMDB) — this used to show the whole
+            series' synopsis, which is already on the series page. */}
         <View style={{ gap: 10 }}>
-          <SectionLabel>Comments</SectionLabel>
-          <Input
-            placeholder="Add a comment..."
-            value={comment}
-            onChangeText={setComment}
-            onSubmitEditing={submitComment}
-          />
-          {comments.map((c) => (
-            <Comment key={c.id} name={c.name} text={c.text} />
-          ))}
+          <SectionLabel>Synopsis</SectionLabel>
+          <Text style={episode.synopsis ? styles.synopsis : styles.noSynopsis}>
+            {episode.synopsis ?? "No synopsis for this episode yet."}
+          </Text>
         </View>
+
+        <CommentsSection targetId={episode.id} />
       </View>
     </Screen>
   );
@@ -153,22 +195,20 @@ const styles = StyleSheet.create({
   backdrop: { height: 260, position: "relative" },
   roundBtnLeft: {
     position: "absolute",
-    top: 14,
     left: 14,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: "#0007",
     alignItems: "center",
     justifyContent: "center",
   },
   roundBtnRight: {
     position: "absolute",
-    top: 14,
     right: 14,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
     backgroundColor: "#0007",
     alignItems: "center",
     justifyContent: "center",
@@ -187,4 +227,5 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   synopsis: { color: theme.textSecondary, fontSize: 13, lineHeight: 21 },
+  noSynopsis: { color: theme.textTertiary, fontSize: 13, fontStyle: "italic" },
 });

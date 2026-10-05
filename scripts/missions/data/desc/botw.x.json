@@ -1,0 +1,17 @@
+{
+"wiki": "zelda.fandom.com",
+"items": {
+"collectible:2": {
+"page": "Korok Seed",
+"text": "Korok Seeds are given by Koroks when they are found throughout Hyrule. They possess a distinct smell. When Link receives his first Seed, he is asked to return it to the Korok Hestu. Korok Seeds are actually the beads used in Hestu's Maracas. When first found, Hestu asks Link to retrieve his Maracas from a group of Bokoblins nearby."
+},
+"collectible:3": {
+"page": "Captured Memories",
+"text": "When Link returns to Kakariko Village after repairing his Sheikah Slate at the Hateno Ancient Tech Lab, Impa will ask to see the repairs. She recognizes the Pictures in the Album as those taken by Zelda 100 years ago. She suggests that, if Link visits the locations depicted in the Pictures, he may be able to recover some of his Memories."
+},
+"collectible:4": {
+"page": "Hyrule Compendium",
+"text": "When Link obtains the Sheikah Slate, some of its data, including the Hyrule Compendium, is damaged. Purah is able to restore the Hyrule Compendium and other functions, but only once the furnace outside the lab has been lit with the Blue Flame from the Ancient Furnace. After this has been completed, Purah will remove the lock on the Guidance Stone and allow Link to use it."
+}
+}
+}

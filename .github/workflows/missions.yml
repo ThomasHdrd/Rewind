@@ -1,0 +1,51 @@
+# Every Monday: refresh game mission summaries from the fan wikis and, if
+# anything changed, commit it and redeploy the web app.
+# Needs repository secrets: EXPO_TOKEN (expo.dev → Access tokens),
+# EXPO_PUBLIC_TMDB_ACCESS_TOKEN, EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+# EXPO_PUBLIC_GAMES_API_URL (same values as .env).
+name: Refresh game missions
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - run: sh scripts/missions/refresh.sh
+      - id: diff
+        run: |
+          if git diff --quiet -- public/missions src/data/games/missions.ts scripts/missions/data; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.diff.outputs.changed == 'true'
+        run: |
+          npm ci
+          npx prettier --write src/data/games/missions.ts
+          git config user.name "rewind-bot"
+          git config user.email "rewind-bot@users.noreply.github.com"
+          git add public/missions src/data/games/missions.ts scripts/missions/data
+          git commit -m "Refresh game mission summaries"
+          git push
+      - if: steps.diff.outputs.changed == 'true'
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_PUBLIC_TMDB_ACCESS_TOKEN: ${{ secrets.EXPO_PUBLIC_TMDB_ACCESS_TOKEN }}
+          EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID: ${{ secrets.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID }}
+          EXPO_PUBLIC_GAMES_API_URL: ${{ secrets.EXPO_PUBLIC_GAMES_API_URL }}
+        run: |
+          npx expo export -p web
+          npx eas-cli deploy --prod --non-interactive

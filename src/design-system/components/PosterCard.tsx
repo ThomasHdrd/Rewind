@@ -10,13 +10,16 @@ export function PosterCard({
   status,
   artworkColor = "#8B4A43",
   posterPath,
+  imageUrl,
   width = 110,
   dateLabel,
 }: {
   title?: string;
-  status?: WatchStatus;
+  status?: WatchStatus | "wishlist" | "backlog" | "playing" | "completed";
   artworkColor?: string;
   posterPath?: string | null;
+  /** Full image URL (game covers from IGDB) instead of a TMDB path. */
+  imageUrl?: string;
   width?: number;
   /** Small pill badge (e.g. "Nov 12") shown in the opposite corner from the
    * watch-status badge — used by Discover's Coming Soon section. */
@@ -25,7 +28,14 @@ export function PosterCard({
   return (
     <View style={{ width, gap: 8 }}>
       <View style={[styles.poster, { width, height: width * 1.5 }]}>
-        <MediaArtwork path={posterPath} color={artworkColor} radius={radius.poster} style={{ width: "100%", height: "100%" }} />
+        <MediaArtwork
+          path={posterPath}
+          uri={imageUrl}
+          size="w342"
+          color={artworkColor}
+          radius={radius.poster}
+          style={{ width: "100%", height: "100%" }}
+        />
         {status ? (
           <View style={styles.badgeWrap}>
             <WatchStatusBadge status={status} />

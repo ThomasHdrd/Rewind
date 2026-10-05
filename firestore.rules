@@ -1,0 +1,103 @@
+rules_version = '2';
+// Source of truth for the Firestore security rules of project nowatch-2e458.
+// Not deployed automatically: paste into Firebase console → Firestore →
+// Rules → Publish (or `firebase deploy --only firestore:rules`).
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+    function me() {
+      return request.auth.uid;
+    }
+    function isFriend(uid) {
+      return exists(/databases/$(database)/documents/friendships/$(me() + '_' + uid))
+        || exists(/databases/$(database)/documents/friendships/$(uid + '_' + me()));
+    }
+
+    // Private per-user data (library, history, preferences…): owner only.
+    match /nowatchUsers/{uid} {
+      allow read, write: if signedIn() && me() == uid;
+    }
+
+    // Community rating aggregates.
+    match /mediaRatings/{mediaId} {
+      allow read, write: if signedIn();
+    }
+
+    // Shared main-mission lists for games: anyone signed in reads; the first
+    // player to publish one owns it and is the only one who can edit it.
+    match /gameMissions/{gameId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.authorUid == me()
+        && request.resource.data.titles is list
+        && request.resource.data.titles.size() <= 300;
+      allow update: if signedIn()
+        && resource.data.authorUid == me()
+        && request.resource.data.authorUid == me()
+        && request.resource.data.titles is list
+        && request.resource.data.titles.size() <= 300;
+    }
+
+    // Public comments: anyone signed in reads; you post as yourself; only the
+    // author deletes.
+    match /comments/{commentId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.uid == me()
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 1000;
+      allow delete: if signedIn() && resource.data.uid == me();
+    }
+
+    // Unique @username claims: { uid }. First come, first served; only the
+    // owner can release one.
+    match /usernames/{handle} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.resource.data.uid == me()
+        && handle.matches('^[a-z0-9_.]{3,20}$');
+      allow delete: if signedIn() && resource.data.uid == me();
+    }
+
+    // What others may see of you: name, @username, avatar, bio, XP.
+    match /publicProfiles/{uid} {
+      allow read: if signedIn();
+      allow write: if signedIn() && me() == uid;
+    }
+
+    // Pending friend request, id "<from>_<to>".
+    match /friendRequests/{id} {
+      allow read: if signedIn() && (resource.data.from == me() || resource.data.to == me());
+      allow create: if signedIn()
+        && request.resource.data.from == me()
+        && request.resource.data.to != me()
+        && id == me() + '_' + request.resource.data.to;
+      allow delete: if signedIn() && (resource.data.from == me() || resource.data.to == me());
+    }
+
+    // Accepted friendship, id "<a>_<b>" with a < b. Only the person who
+    // RECEIVED a request can create it (so nobody can force a friendship).
+    match /friendships/{id} {
+      allow read: if signedIn() && me() in resource.data.members;
+      allow create: if signedIn()
+        && request.resource.data.members.size() == 2
+        && id == request.resource.data.members[0] + '_' + request.resource.data.members[1]
+        && (
+          (request.resource.data.members[0] == me()
+            && exists(/databases/$(database)/documents/friendRequests/$(request.resource.data.members[1] + '_' + me())))
+          || (request.resource.data.members[1] == me()
+            && exists(/databases/$(database)/documents/friendRequests/$(request.resource.data.members[0] + '_' + me())))
+        );
+      allow delete: if signedIn() && me() in resource.data.members;
+    }
+
+    // Recent watches shown to friends only.
+    match /activityFeeds/{uid} {
+      allow read: if signedIn() && (me() == uid || isFriend(uid));
+      allow write: if signedIn() && me() == uid;
+    }
+  }
+}

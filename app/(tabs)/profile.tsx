@@ -3,6 +3,11 @@ import { Dimensions, Pressable, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
 import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+import { useMyGames, useTracks } from "@/hooks/useGames";
+import { igdbImageUrl } from "@/lib/games";
+import { GameStatus } from "@/data/games/types";
+import { releasedRewindYear } from "@/components/RewindAutoOpen";
 import {
   Artwork,
   Avatar,
@@ -18,30 +23,52 @@ import {
 } from "@/design-system";
 import { avatarIconEmoji } from "@/design-system/icons";
 import { Screen } from "@/components/Screen";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { SectionLabel } from "@/components/SectionLabel";
 import { HScroll } from "@/components/HScroll";
-import { useFavorites, useHistory, useLibrary, useProfile } from "@/hooks/useMedia";
-import { formatRelativeTime, parseHistoryDate } from "@/lib/history";
+import {
+  useFavorites,
+  useHistory,
+  useLibrary,
+  useProfile,
+} from "@/hooks/useMedia";
+import {
+  formatRelativeTime,
+  historyEntryDate,
+  watchEntries,
+} from "@/lib/history";
 import { WatchStatus } from "@/types/media";
 
+// Natural lifecycle order: to watch → watching → done, then the series the
+// user stopped ("Stop watching" on a series page).
 const LIBRARY_TABS: { label: string; status: WatchStatus }[] = [
-  { label: "Watched", status: "watched" },
-  { label: "Watching", status: "watching" },
   { label: "Watchlist", status: "watchlist" },
+  { label: "Watching", status: "watching" },
+  { label: "Watched", status: "watched" },
+  { label: "Dropped", status: "dropped" },
 ];
 
 // Exact 3-per-row width instead of a fixed guess — fills the available
 // width (minus Screen's own 20px side padding and the inter-item gaps)
 // so the posters are as large as possible with no leftover side margin.
+const GAME_TABS: { label: string; status: GameStatus }[] = [
+  { label: "To play", status: "backlog" },
+  { label: "Playing", status: "playing" },
+  { label: "Completed", status: "completed" },
+];
+
 const LIBRARY_GRID_COLUMNS = 3;
 const LIBRARY_GRID_GAP = 8;
 const LIBRARY_POSTER_WIDTH =
-  (Dimensions.get("window").width - 40 - LIBRARY_GRID_GAP * (LIBRARY_GRID_COLUMNS - 1)) / LIBRARY_GRID_COLUMNS;
+  (Dimensions.get("window").width -
+    40 -
+    LIBRARY_GRID_GAP * (LIBRARY_GRID_COLUMNS - 1)) /
+  LIBRARY_GRID_COLUMNS;
 
 const LIBRARY_GRID_LIMIT = 6;
 
 const MENU = [
-  { label: "Watching History", href: "/history" },
+  { label: "History", href: "/history" },
   { label: "Statistics", href: "/statistics" },
   { label: "My Lists", href: "/lists" },
   { label: "Settings", href: "/settings" },
@@ -53,8 +80,19 @@ export default function Profile() {
   const { data: favorites = [] } = useFavorites();
   const { data: history = [] } = useHistory();
   const { data: library = [], isLoading: libraryLoading } = useLibrary();
-  const [libraryTab, setLibraryTab] = useState<WatchStatus>("watched");
+  const [libraryTab, setLibraryTab] = useState<WatchStatus>("watchlist");
   const [librarySearch, setLibrarySearch] = useState("");
+  const tracks = useTracks();
+  const [libraryWorld, setLibraryWorld] = useState<"watch" | "play">("watch");
+  const showGames = tracks.play && (libraryWorld === "play" || !tracks.watch);
+  const [gameTab, setGameTab] = useState<GameStatus>("playing");
+  const { data: myGames = [] } = useMyGames(tracks.play);
+  const visibleGames = useMemo(() => {
+    const q = librarySearch.trim().toLowerCase();
+    return myGames.filter(
+      (g) => g.status === gameTab && (!q || g.title.toLowerCase().includes(q)),
+    );
+  }, [myGames, gameTab, librarySearch]);
 
   const filteredLibrary = useMemo(() => {
     let list = library.filter((m) => m.status === libraryTab);
@@ -76,8 +114,9 @@ export default function Profile() {
       let latest: number | null = null;
       for (const entry of history) {
         if (!entry.label.toLowerCase().includes(titleLower)) continue;
-        const d = parseHistoryDate(entry.timeLabel);
-        if (d && (latest === null || d.getTime() > latest)) latest = d.getTime();
+        const d = historyEntryDate(entry);
+        if (d && (latest === null || d.getTime() > latest))
+          latest = d.getTime();
       }
       if (latest !== null) lastActivity.set(m.id, latest);
     }
@@ -92,13 +131,15 @@ export default function Profile() {
     return sorted.slice(0, LIBRARY_GRID_LIMIT);
   }, [filteredLibrary, history]);
 
-  const recentHistory = history.slice(0, 5);
+  // "Recently watched": movies & series only — games have their own places.
+  const recentHistory = watchEntries(history).slice(0, 5);
+  const rewindYear = releasedRewindYear() ?? new Date().getFullYear();
   const findMediaForEntry = (label: string) => {
     const lower = label.toLowerCase();
     return library.find((m) => lower.includes(m.title.toLowerCase()));
   };
 
-  if (!profile) return null;
+  if (!profile) return <LoadingScreen variant="profile" />;
 
   const favoriteSeries = favorites.filter((m) => m.kind === "series");
   const favoriteMovies = favorites.filter((m) => m.kind === "movie");
@@ -110,21 +151,34 @@ export default function Profile() {
     <Screen scroll contentStyle={{ padding: 0, paddingBottom: 40, gap: 0 }}>
       <View style={styles.banner}>
         {bannerMode === "image" && profile.bannerImageUri ? (
-          <Image source={{ uri: profile.bannerImageUri }} style={{ width: "100%", height: "100%" }} contentFit="cover" />
+          <Image
+            source={{ uri: profile.bannerImageUri }}
+            style={{ width: "100%", height: "100%" }}
+            contentFit="cover"
+          />
         ) : bannerFavorite ? (
           <MediaArtwork
             path={bannerFavorite.backdropPath ?? bannerFavorite.posterPath}
             color={bannerFavorite.artworkColor}
-            size="original"
+            size="w780"
             style={{ width: "100%", height: "100%" }}
           />
         ) : (
-          <Artwork color={theme.surfaceSecondary} style={{ width: "100%", height: "100%" }} />
+          <Artwork
+            color={theme.surfaceSecondary}
+            style={{ width: "100%", height: "100%" }}
+          />
         )}
-        <Pressable style={[styles.iconBtn, { right: 12 }]} onPress={() => router.push("/rewards")}>
+        <Pressable
+          style={[styles.iconBtn, { right: 12 }]}
+          onPress={() => router.push("/rewards")}
+        >
           <Text style={styles.iconBtnGlyph}>🏆</Text>
         </Pressable>
-        <Pressable style={[styles.iconBtn, { right: 54 }]} onPress={() => router.push("/settings")}>
+        <Pressable
+          style={[styles.iconBtn, { right: 54 }]}
+          onPress={() => router.push("/settings")}
+        >
           <Text style={styles.iconBtnGlyph}>⚙</Text>
         </Pressable>
       </View>
@@ -140,20 +194,27 @@ export default function Profile() {
           <Text style={styles.name}>{profile.firstName}</Text>
         </View>
 
-        <Pressable style={styles.levelCard} onPress={() => router.push("/rewards")}>
+        <Pressable
+          style={styles.levelCard}
+          onPress={() => router.push("/rewards")}
+        >
           <View style={styles.levelHeader}>
             <Text style={styles.levelLabel}>
               LEVEL {profile.level} · {profile.levelName.toUpperCase()}
             </Text>
             <View style={styles.plus}>
-              <Text style={{ color: theme.textInverse, fontWeight: "800" }}>+</Text>
+              <Text style={{ color: theme.textInverse, fontWeight: "800" }}>
+                +
+              </Text>
             </View>
           </View>
           <View style={styles.levelTrack}>
             <View
               style={[
                 styles.levelFill,
-                { width: `${Math.min(100, (profile.xp / (profile.xp + profile.xpToNext)) * 100)}%` },
+                {
+                  width: `${Math.min(100, (profile.xp / (profile.xp + profile.xpToNext)) * 100)}%`,
+                },
               ]}
             />
           </View>
@@ -162,35 +223,78 @@ export default function Profile() {
           </Text>
         </Pressable>
 
-        <View style={styles.statsGrid}>
-          <View style={styles.statsGridCell}>
-            <StatisticCard value={profile.moviesCount} label="Movies" />
-          </View>
-          <View style={styles.statsGridCell}>
-            <StatisticCard value={profile.seriesCount} label="Series" />
-          </View>
-          <View style={styles.statsGridCell}>
-            <StatisticCard value={profile.episodesCount} label="Episodes" />
-          </View>
-          <View style={styles.statsGridCell}>
-            <StatisticCard value={`${profile.hoursWatched}h`} label="Hours" />
-          </View>
-        </View>
+        {/* Yearly recap entry point. In January, last year's Rewind is the
+            one people want; the rest of the year shows the current one "so far". */}
+        <Pressable onPress={() => router.push(`/rewind?year=${rewindYear}`)}>
+          <LinearGradient
+            colors={["#E85850", "#9B6BD9"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.rewindCard}
+          >
+            <View style={{ flex: 1, gap: 2 }}>
+              <Text style={styles.rewindEyebrow}>YOUR {rewindYear} REWIND</Text>
+              <Text style={styles.rewindTitle}>
+                {releasedRewindYear() !== null
+                  ? "Your year in film & TV is ready"
+                  : "Your year so far"}
+              </Text>
+            </View>
+            <Ionicons name="play-circle" size={36} color="#FFFFFF" />
+          </LinearGradient>
+        </Pressable>
+
+        {/* Watching and playing stats in two clearly separate groups (never
+            one mixed grid). Tapping a tile opens Statistics on that side. */}
+        <StatTiles
+          heading={tracks.play ? "🎬 Watching" : undefined}
+          tiles={[
+            { value: profile.moviesCount, label: "Movies" },
+            { value: profile.seriesCount, label: "Series" },
+            { value: profile.episodesCount, label: "Episodes" },
+            { value: `${profile.hoursWatched}h`, label: "Hours" },
+          ]}
+          onPress={() => router.push("/statistics")}
+        />
+        {tracks.play ? (
+          <StatTiles
+            heading="🎮 Playing"
+            tiles={[
+              { value: profile.gamesCount ?? 0, label: "Games" },
+              { value: profile.gamesCompleted ?? 0, label: "Completed" },
+              { value: `${profile.hoursPlayed ?? 0}h`, label: "Played" },
+            ]}
+            onPress={() => router.push("/statistics?section=play")}
+          />
+        ) : null}
 
         <View style={{ gap: 8 }}>
           <SectionLabel large>Favorite Series</SectionLabel>
           {favoriteSeries.length > 0 ? (
             <HScroll gap={8}>
               {favoriteSeries.map((m) => (
-                <Pressable key={m.id} onPress={() => router.push(`/series/${m.id}`)}>
-                  <PosterCard artworkColor={m.artworkColor} posterPath={m.posterPath} width={110} />
+                <Pressable
+                  key={m.id}
+                  onPress={() => router.push(`/series/${m.id}`)}
+                >
+                  <PosterCard
+                    artworkColor={m.artworkColor}
+                    posterPath={m.posterPath}
+                    width={110}
+                  />
                 </Pressable>
               ))}
             </HScroll>
           ) : (
             <EmptyState
               variant="square"
-              icon={<Ionicons name="tv-outline" size={22} color={theme.textTertiary} />}
+              icon={
+                <Ionicons
+                  name="tv-outline"
+                  size={22}
+                  color={theme.textTertiary}
+                />
+              }
               title="No favorite series yet"
               subtitle="Tap the bookmark on a series page to add it here."
             />
@@ -201,20 +305,70 @@ export default function Profile() {
           {favoriteMovies.length > 0 ? (
             <HScroll gap={8}>
               {favoriteMovies.map((m) => (
-                <Pressable key={m.id} onPress={() => router.push(`/movie/${m.id}`)}>
-                  <PosterCard artworkColor={m.artworkColor} posterPath={m.posterPath} width={110} />
+                <Pressable
+                  key={m.id}
+                  onPress={() => router.push(`/movie/${m.id}`)}
+                >
+                  <PosterCard
+                    artworkColor={m.artworkColor}
+                    posterPath={m.posterPath}
+                    width={110}
+                  />
                 </Pressable>
               ))}
             </HScroll>
           ) : (
             <EmptyState
               variant="square"
-              icon={<Ionicons name="film-outline" size={22} color={theme.textTertiary} />}
+              icon={
+                <Ionicons
+                  name="film-outline"
+                  size={22}
+                  color={theme.textTertiary}
+                />
+              }
               title="No favorite movies yet"
               subtitle="Tap the bookmark on a movie page to add it here."
             />
           )}
         </View>
+
+        {tracks.play ? (
+          <View style={{ gap: 8 }}>
+            <SectionLabel large>Favorite Games</SectionLabel>
+            {myGames.some((g) => g.favorite) ? (
+              <HScroll gap={8}>
+                {myGames
+                  .filter((g) => g.favorite)
+                  .map((g) => (
+                    <Pressable
+                      key={g.id}
+                      onPress={() => router.push(`/game/${g.id}`)}
+                    >
+                      <PosterCard
+                        title={g.title}
+                        imageUrl={igdbImageUrl(g.coverImageId)}
+                        width={110}
+                      />
+                    </Pressable>
+                  ))}
+              </HScroll>
+            ) : (
+              <EmptyState
+                variant="square"
+                icon={
+                  <Ionicons
+                    name="game-controller-outline"
+                    size={22}
+                    color={theme.textTertiary}
+                  />
+                }
+                title="No favorite games yet"
+                subtitle="Tap the heart on a game page to add it here."
+              />
+            )}
+          </View>
+        ) : null}
 
         {recentHistory.length > 0 ? (
           <View style={{ gap: 8 }}>
@@ -226,6 +380,7 @@ export default function Profile() {
                   <View key={entry.id} style={styles.historyRow}>
                     <MediaArtwork
                       path={media?.posterPath}
+                      size="w185"
                       color={media?.artworkColor}
                       radius={radius.sm}
                       style={styles.historyArtwork}
@@ -234,7 +389,9 @@ export default function Profile() {
                       <Text style={styles.historyLabel} numberOfLines={1}>
                         {entry.label}
                       </Text>
-                      <Text style={styles.historyTime}>{formatRelativeTime(entry.timeLabel)}</Text>
+                      <Text style={styles.historyTime}>
+                        {formatRelativeTime(entry)}
+                      </Text>
                     </View>
                   </View>
                 );
@@ -251,18 +408,65 @@ export default function Profile() {
             placeholder="Search my library"
             icon={<Text style={styles.searchIcon}>⌕</Text>}
           />
-          <HScroll gap={6}>
-            {LIBRARY_TABS.map((t) => (
+          {/* Games live in their own library, never mixed with films/series. */}
+          {tracks.play && tracks.watch ? (
+            <View style={{ flexDirection: "row", gap: 8 }}>
               <Chip
-                key={t.label}
-                label={t.label}
-                selected={libraryTab === t.status}
-                onPress={() => setLibraryTab(t.status)}
+                label="🎬 Movies & series"
+                selected={!showGames}
+                onPress={() => setLibraryWorld("watch")}
               />
-            ))}
+              <Chip
+                label="🎮 Games"
+                selected={showGames}
+                onPress={() => setLibraryWorld("play")}
+              />
+            </View>
+          ) : null}
+          <HScroll gap={6}>
+            {showGames
+              ? GAME_TABS.map((t) => (
+                  <Chip
+                    key={t.label}
+                    label={t.label}
+                    selected={gameTab === t.status}
+                    onPress={() => setGameTab(t.status)}
+                  />
+                ))
+              : LIBRARY_TABS.map((t) => (
+                  <Chip
+                    key={t.label}
+                    label={t.label}
+                    selected={libraryTab === t.status}
+                    onPress={() => setLibraryTab(t.status)}
+                  />
+                ))}
           </HScroll>
 
-          {libraryLoading ? (
+          {showGames ? (
+            visibleGames.length === 0 ? (
+              <EmptyState
+                title="No games here yet"
+                subtitle="Games you add from Discover → Games show up here."
+              />
+            ) : (
+              <View style={styles.libraryGrid}>
+                {visibleGames.map((g) => (
+                  <Pressable
+                    key={g.id}
+                    onPress={() => router.push(`/game/${g.id}`)}
+                  >
+                    <PosterCard
+                      title={g.title}
+                      imageUrl={igdbImageUrl(g.coverImageId)}
+                      status={g.status}
+                      width={LIBRARY_POSTER_WIDTH}
+                    />
+                  </Pressable>
+                ))}
+              </View>
+            )
+          ) : libraryLoading ? (
             <View style={{ flexDirection: "row", gap: 10 }}>
               <Skeleton width={100} height={150} radius={10} />
               <Skeleton width={100} height={150} radius={10} />
@@ -278,7 +482,11 @@ export default function Profile() {
               {recentLibrary.map((m) => (
                 <Pressable
                   key={m.id}
-                  onPress={() => router.push(m.kind === "movie" ? `/movie/${m.id}` : `/series/${m.id}`)}
+                  onPress={() =>
+                    router.push(
+                      m.kind === "movie" ? `/movie/${m.id}` : `/series/${m.id}`,
+                    )
+                  }
                 >
                   <PosterCard
                     title={m.title}
@@ -295,7 +503,11 @@ export default function Profile() {
 
         <View>
           {MENU.map((item) => (
-            <Pressable key={item.label} style={styles.menuRow} onPress={() => router.push(item.href)}>
+            <Pressable
+              key={item.label}
+              style={styles.menuRow}
+              onPress={() => router.push(item.href)}
+            >
               <Text style={styles.menuLabel}>{item.label}</Text>
               <Text style={styles.chevron}>›</Text>
             </Pressable>
@@ -322,8 +534,36 @@ const styles = StyleSheet.create({
   body: { padding: 20, gap: 20 },
   // Avatar is 64px; -32 pulls it up by exactly half its diameter so it
   // reads as intentionally straddling the banner's bottom edge.
-  headerRow: { flexDirection: "row", alignItems: "flex-end", gap: 12, marginTop: -32 },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "flex-end",
+    gap: 12,
+    marginTop: -32,
+  },
   name: { color: theme.textPrimary, fontSize: 20, fontWeight: "700" },
+  rewindCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    borderRadius: radius.md,
+    padding: 16,
+  },
+  rewindEyebrow: {
+    color: "rgba(255,255,255,0.85)",
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 1.2,
+  },
+  rewindTitle: { color: "#FFFFFF", fontSize: 18, fontWeight: "800" },
+  statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
+  statsGridCell: { width: "48%" },
+  statsGridThird: { flex: 1 },
+  tilesHeading: {
+    color: theme.textSecondary,
+    fontSize: 12,
+    fontWeight: "800",
+    letterSpacing: 0.5,
+  },
   levelCard: {
     backgroundColor: theme.surfacePrimary,
     borderWidth: 1,
@@ -332,14 +572,33 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 6,
   },
-  levelHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  levelLabel: { color: theme.textTertiary, fontSize: 11, fontWeight: "700", letterSpacing: 0.5 },
-  plus: { width: 22, height: 22, borderRadius: 11, backgroundColor: theme.brandPrimary, alignItems: "center", justifyContent: "center" },
-  levelTrack: { height: 6, borderRadius: 3, backgroundColor: theme.ratingTrack, overflow: "hidden" },
+  levelHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  levelLabel: {
+    color: theme.textTertiary,
+    fontSize: 11,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+  },
+  plus: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: theme.brandPrimary,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  levelTrack: {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: theme.ratingTrack,
+    overflow: "hidden",
+  },
   levelFill: { height: "100%", backgroundColor: theme.brandPrimary },
   levelMeta: { color: theme.textTertiary, fontSize: 11 },
-  statsGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
-  statsGridCell: { width: "48%" },
   menuRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -354,5 +613,40 @@ const styles = StyleSheet.create({
   historyLabel: { color: theme.textPrimary, fontSize: 16, fontWeight: "700" },
   historyTime: { color: theme.textTertiary, fontSize: 13 },
   searchIcon: { color: theme.textTertiary, fontSize: 14 },
-  libraryGrid: { flexDirection: "row", flexWrap: "wrap", gap: LIBRARY_GRID_GAP },
+  libraryGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: LIBRARY_GRID_GAP,
+  },
 });
+
+function StatTiles({
+  heading,
+  tiles,
+  onPress,
+}: {
+  heading?: string;
+  tiles: { value: number | string; label: string }[];
+  onPress: () => void;
+}) {
+  return (
+    <View style={{ gap: 8 }}>
+      {heading ? <Text style={styles.tilesHeading}>{heading}</Text> : null}
+      <View style={styles.statsGrid}>
+        {tiles.map((t) => (
+          <Pressable
+            key={t.label}
+            style={
+              tiles.length === 3 ? styles.statsGridThird : styles.statsGridCell
+            }
+            onPress={onPress}
+            accessibilityRole="button"
+            accessibilityLabel={`${t.value} ${t.label} — open statistics`}
+          >
+            <StatisticCard value={t.value} label={t.label} />
+          </Pressable>
+        ))}
+      </View>
+    </View>
+  );
+}

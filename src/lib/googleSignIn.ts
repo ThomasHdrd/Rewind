@@ -35,12 +35,27 @@ async function ensureConfigured() {
   configured = true;
 }
 
+/** Forgets the Google account the native SDK cached, so the next sign-in
+ * shows the account chooser instead of silently reusing the last account. */
+export async function signOutGoogle(): Promise<void> {
+  if (Platform.OS === "web" || !isConfigured()) return;
+  // configure() first: after an app restart `configured` is false again
+  // but the SDK still remembers the last account.
+  await ensureConfigured();
+  const { GoogleSignin } = await import("@react-native-google-signin/google-signin");
+  await GoogleSignin.signOut();
+}
+
 /** Runs the native Google account picker and returns a Google ID token,
  * ready to hand to Firebase's GoogleAuthProvider.credential(). */
 export async function getGoogleIdToken(): Promise<string> {
   await ensureConfigured();
   const { GoogleSignin } = await import("@react-native-google-signin/google-signin");
   await GoogleSignin.hasPlayServices();
+  // Always show the account chooser: without this the SDK silently reuses
+  // the last-used Google account (no picker at all), so there was no way to
+  // sign in with a different one.
+  if (GoogleSignin.hasPreviousSignIn()) await GoogleSignin.signOut().catch(() => null);
   const result = await GoogleSignin.signIn();
   const idToken = (result as any)?.data?.idToken ?? (result as any)?.idToken;
   if (!idToken) throw new Error("Google Sign-In did not return an ID token.");

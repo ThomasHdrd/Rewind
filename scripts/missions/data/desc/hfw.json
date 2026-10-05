@@ -1,0 +1,185 @@
+{
+"wiki": "horizon.fandom.com",
+"items": {
+"main:1": {
+"page": "Reach For The Stars",
+"text": "Reach For The Stars is the first main quest in Horizon Forbidden West. In the six months following the Battle of the Alight, Aloy has been searching for a backup of GAIA in order to repair the terraforming system. With the emergence of a poisonous Red Blight and increasingly powerful storms, the extinction of life looms ever closer."
+},
+"main:2": {
+"page": "The Point of the Lance",
+"text": "The Point of the Lance is the second main quest in Horizon Forbidden West. At the city's gates, Carja citizens welcome Aloy as the \"Savior of Meridian\" and present her with flowers. Blameless Marad arrives shortly afterwards and asks Aloy and Varl to follow him to the Alight to discuss an urgent matter."
+},
+"main:3": {
+"page": "To The Brink",
+"text": "To The Brink is the third main quest in Horizon Forbidden West. Aloy arrives at the lift providing entry into the Daunt. Karhn, the operator for the lift, initially resists bringing her down, as the valley is infested with machines and he is under strict orders not to operate the lift until he receives the all-clear from the nearby settlement Chainscrape; however, Aloy pushes through and he relents."
+},
+"main:4": {
+"page": "The Embassy",
+"text": "The Embassy is the fourth main quest in Horizon Forbidden West. After clearing the Daunt of Bristlebacks, Aloy proceeds to Barren Light to attend the Embassy. The second-in-command, Lawan, guides her to the garrison's commander, Nozar, who is waiting along with Studious Vuadis. While the Carja have signaled their readiness to begin, only two of the three Tenakth clans have raised their banners."
+},
+"main:5": {
+"page": "Death's Door",
+"text": "Death's Door is the fifth main quest in Horizon Forbidden West. Aloy follows the coordinates Sylens gave her, bringing her to a workshop built beneath a Horus. Sylens left behind a message for Aloy, revealing that he trapped HADES within the Horus's detached processing orb and interrogated it for intel. Aloy follows the trail of the orb to a Faro facility called LATOPOLIS, where she finds HADES in the orb."
+},
+"main:6": {
+"page": "The Dying Lands",
+"text": "The Dying Lands is the sixth main quest in Horizon Forbidden West. Two days after her tumultuous escape from LATOPOLIS, Aloy wakes up in a panic in Stone's Echo, a nearby Utaru outpost. She is calmed by Varl, who tracked her from Barren Light and carried her to safety. Once Aloy calms down, Varl takes her to see an Utaru Gravesinger named Zo. They find her singing to a dying Plowhorn."
+},
+"main:7": {
+"page": "The Eye of the Earth",
+"text": "The Eye of the Earth is the seventh main quest in Horizon Forbidden West. After purging HEPHAESTUS from the core of Repair-Bay TAU, Aloy and her allies venture into the facility connected to the Repair Bay. Upon seeing their presence, MINERVA locks down the facility. Aloy scouts ahead, eventually reaching the system core where MINERVA resides and convincing it to merge back with GAIA."
+},
+"main:8": {
+"page": "The Broken Sky",
+"text": "The Broken Sky is a main quest in Horizon Forbidden West. It is one of three quests that can be completed after The Eye of the Earth. Aloy follows AETHER's coordinates to the Memorial Grove, an ancient ruin turned into the Tenakth capital."
+},
+"main:9": {
+"page": "The Kulrut",
+"text": "The Kulrut is a main quest in Horizon Forbidden West. It becomes available after The Broken Sky and must be completed before Faro's Tomb. It is the second quest required for the recovery of AETHER. Aloy goes to the Memorial Grove to meet with Chief Hekarro. As per their previous agreement, he tells her to join Dekka at the north barricade to defend the Kulrut."
+},
+"main:10": {
+"page": "Cradle of Echoes",
+"text": "Cradle of Echoes is a main quest in Horizon Forbidden West. It is given by GAIA after completing the first subordinate function retrieval quest and returning to the Base. After the first subfunction is successfully merged with GAIA, she informs Aloy that she has detected a distress signal on her dedicated ELEUTHIA frequency and urges her to investigate."
+},
+"main:11": {
+"page": "The Sea of Sands",
+"text": "The Sea of Sands is a main quest in Horizon Forbidden West. It is one of three quests that can be completed after The Eye of the Earth. In search of POSEIDON, Aloy traveled to the Stillsands, the ruins of the Old World city of Las Vegas. A particular building sticks out to her that is leaking water, hinting that POSEIDON might be inside."
+},
+"main:12": {
+"page": "Seeds of the Past",
+"text": "Seeds of the Past is a main quest in Horizon Forbidden West. It is one of three quests that can be completed after The Eye of the Earth. Following the coordinates provided by GAIA, Aloy arrives at the Greenhouse, a biotech research facility formerly operated by Faro Automated Solutions. She notes the bodies of several Tenakth soldiers along the approach and becomes suspicious that someone else may be there."
+},
+"main:13": {
+"page": "Faro's Tomb",
+"text": "Faro's Tomb is the thirteenth main quest in Horizon Forbidden West. AETHER, POSEIDON, and DEMETER have all been merged back into GAIA, but HEPHAESTUS poses a unique challenge. Beta's analysis has confirmed that HEPHAESTUS has grown too large to be beamcast to GAIA or carried in Aloy's data kernel."
+},
+"main:14": {
+"page": "Gemini",
+"text": "Gemini is the fourteenth main quest in Horizon Forbidden West. Aloy has successfully retrieved Ted Faro's Omega clearance, but merging HEPHAESTUS with GAIA still entails several challenges. The merge is expected to take an estimated 35 hours, each hour increasing the risk of detection by the Zeniths. However, Beta's involvement is expected to cut that time to 4.5 hours."
+},
+"main:15": {
+"page": "All That Remains",
+"text": "All That Remains is the fifteenth main quest in Horizon Forbidden West. Aloy awakens in the basement of a mysterious building, and is brought to tears after remembering Varl's death and Beta's capture. Soon after, she is spoken to through her Focus by Tilda, who explains that Beta is in the hands of the other Zeniths but not in immediate danger."
+},
+"main:16": {
+"page": "The Wings of the Ten",
+"text": "The Wings of the Ten is the sixteenth main quest in Horizon Forbidden West. Back at the Base, Aloy's friends are mourning Varl's death while arguing about the best course of action: Kotallo and Zo insist that they must fight back, only to be reminded by Erend and Alva of how hopelessly outnumbered and outmatched they are by both Regalla's rebels and the Zeniths. Their conversation is interrupted by Aloy's return."
+},
+"main:17": {
+"page": "Singularity",
+"text": "Singularity is the seventeenth and final main quest in Horizon Forbidden West. After defeating Regalla's rebels at the Memorial Grove, Aloy returns to the Base, where Erend informs her of Sylens's arrival. She goes to confront him for betraying her at the HADES Proving Lab and warns him that further deceptions will result in his death. They are joined shortly after by Tilda."
+},
+"side:1": {
+"page": "Deep Trouble",
+"text": "Deep Trouble is a side quest in Horizon Forbidden West. Aloy can receive this quest either from Arnuf in Chainscrape or from Korvend at Crimson Narrows. In any case, the excessive demands of Ulvund have resulted in accidents at the mine. Smoke is coming from the mine as Aloy arrives: while opening up new veins, the miners accidentally hit water and the mine has flooded."
+},
+"side:2": {
+"page": "The Bristlebacks",
+"text": "The Bristlebacks is a side quest in Horizon Forbidden West. Aloy meets with Javad the Willing, the Carja magistrate overseeing the Daunt, regarding the recent Bristleback infestation. The beleaguered Javad explains that Ulvund is accusing the Carja of letting the Bristlebacks into the valley to intimidate the Oseram workers, as part of his efforts to force the passing of a concession degree."
+},
+"side:3": {
+"page": "The Twilight Path",
+"text": "The Twilight Path is a side quest in Horizon Forbidden West. While sharing a drink with Petra, Aloy learns of a group of Shadow Carja refugees calling themselves \"the Order of Twilight\", holding out at a camp west of Chainscrape."
+},
+"side:4": {
+"page": "Shadow from the Past",
+"text": "Shadow from the Past is a side quest in Horizon Forbidden West. At Barren Light, a prisoner named Conover begs for Aloy's ear. Upon examining, Aloy learns that Conover, a Carja guard, was imprisoned for murdering a fellow soldier, Laruvik. Conover insists that Laruvik was working with the Eclipse, and he only killed him in self-defense when he was caught overhearing a conversation with a fellow cultist."
+},
+"side:5": {
+"page": "Shadow in the West",
+"text": "Shadow in the West is a side quest in Horizon Forbidden West. Shadow in the West is automatically given either upon completing Shadow from the Past or by coming across Shadow's Reach and speaking with Yef. After confirming that a pocket of Eclipse cultists have gathered in the West in an attempt to rebuild their army, Aloy heads for the coordinates uncovered at their hideout in the Daunt."
+},
+"side:6": {
+"page": "The Burning Blooms",
+"text": "The Burning Blooms is a side quest in Horizon Forbidden West. During Aloy's recovery from her escape from the facility housing the GAIA kernel backup, she comes under fire of Mian's criticism of foreigners. Probing her for more information, Aloy learns that a Carja huntress with an Utaru \"Thrush\" in tow had passed through Stone's Echo. With a good idea of who the Carja huntress may be, Aloy sets off southwest."
+},
+"side:7": {
+"page": "Need to Know",
+"text": "Need to Know is a side quest in Horizon Forbidden West. After reaching the Clan Lands, Aloy meets Talanah at Camp Nowhere, an Oseram camp in the Stillsands. The camp's scout, Ragurt, explains that Amadis came through with them and has ventured deeper into Tenakth territory to reach the Rot, which Ragurt places somewhere near the Lowland Clan's capital, Thornmarsh."
+},
+"side:8": {
+"page": "The Roots That Bind",
+"text": "The Roots That Bind is a side quest in Horizon Forbidden West. After Tenakth rebels began raiding the village of Riverhymn for supplies, Nel fled to the Plainsong to seek help from The Chorus. Denied an audience however as Riverhymn was seen as lost lands no longer under the protection of Plainsong, Nel turned to Aloy for help."
+},
+"side:9": {
+"page": "Thirst for the Hunt",
+"text": "Thirst for the Hunt is a side quest in Horizon Forbidden West. Aloy arrives in the Desert Tenakth village of Arrowhand to find many of the soldiers wounded. The village's leader, Drakka, explains that they were attacked by a Thunderjaw while penning up a herd of machines. The village needs the herd's machine hearts to trade with the capital, Scalding Spear, for water, but few are in any condition to hunt."
+},
+"side:10": {
+"page": "The Wound in the Sand",
+"text": "The Wound in the Sand is a side quest in Horizon Forbidden West. At the Chaplain Jetakka's request, Aloy journeys to the Desert Clan capital of Scalding Spear. Soon upon arrival, she sees a crowd of Desert Tenakth protesting recent water rations, which is quickly dispersed by the clan's commander Yarra."
+},
+"side:11": {
+"page": "The Gate of the Vanquished",
+"text": "The Gate of the Vanquished is a side quest in Horizon Forbidden West. During this quest, Aloy decides the fate of the Desert Clan's leader. At Jetakka's request, Aloy heads to the Gate of the Vanquished to try and stop the duel between Drakka and Yarra. Unfortunately, neither side is willing to back down."
+},
+"side:12": {
+"page": "The Deluge",
+"text": "The Deluge is a side quest in Horizon Forbidden West. While wandering Scalding Spear, Aloy is stopped by a face painter apprentice asking if she has heard from Bleeding Mark, a northern desert village. Zokkah explains that they have not received their supply of ashblood, a rock he powders to use as paint for his trade, for some time."
+},
+"side:13": {
+"page": "A Tribe Apart",
+"text": "A Tribe Apart is a side quest in Horizon Forbidden West. Wandering by the fields of Plainsong, Aloy encounters a complaining older farmer harvesting roots. Approaching the farmer, Emboh, he mentions his friend Jaxx had left for Stone's Echo after hearing about a group of young Tenakth lingering near the settlement. Deciding to investigate, Aloy heads off to find Jaxx."
+},
+"side:14": {
+"page": "Signal Spike",
+"text": "Signal Spike is a side quest in Horizon Forbidden West. There is one unmissable datapoint obtained during this quest."
+},
+"side:15": {
+"page": "The Promontory (quest)",
+"text": "The Promontory is a side quest in Horizon Forbidden West. Aloy overhears an argument between two Chorus members (Fane and Kel) and a man named Bree: Bree's wife Kalae, the newest member of the Chorus, went missing after leaving to the Promontory to undertake an old initiation ritual."
+},
+"side:16": {
+"page": "A Soldier's March",
+"text": "A Soldier's March is a side quest in Horizon Forbidden West. At the Bulwark, Aloy overhears two Sky Clan teens, Litakka and Jekkah, arguing. Jekkah's brother Penttoh has left to earn his soldier's mark by partaking in a dangerous climb called the \"March of the Ten\", and has yet to return. Due to her squad duties, Jekkah is unable to check up on him, and asks Aloy to do it in her stead."
+},
+"side:17": {
+"page": "Breaking Even",
+"text": "Breaking Even is a side quest in Horizon Forbidden West. Upon arriving at Camp Nowhere, Aloy speaks with Porguf Delvesman, the expedition leader. Porguf is overjoyed to see Aloy, saying he will \"save him.\" Aloy asks what's going on, and he explains that they were on an expedition to the Forbidden West to search for excavation sites."
+},
+"side:18": {
+"page": "Blood for Blood",
+"text": "Blood for Blood is a side quest in Horizon Forbidden West. After repelling Regalla's attack on the Kulrut, Dekka approaches Aloy with a personal request. Her grandson (and only living relative) Kavvoh was part of the rebel attack but was not among the dead. She hopes to track him down and convince him to return to the tribe."
+},
+"side:19": {
+"page": "In The Fog",
+"text": "In The Fog is a side quest in Horizon Forbidden West. It all begins with Aloy talking to Fenirra in Tide's Reach, who is injured and being tended to by Revikka. Aloy asks what happened, and Fenirra explains that she was trying to stop her father, Garokkah, from leaving Tide's Reach to hunt, worried about his safety."
+},
+"side:20": {
+"page": "Drowned Hopes",
+"text": "Drowned Hopes is a side quest in Horizon Forbidden West. Upon arriving at a Carja Camp in No Man's Land, Aloy overhears two Carja scholars, Gendas and Rushavid, arguing. They explain that they have come to the Forbidden West upon after hearing of a lake filled with ancient' relics. Gendas reveals to Aloy a handheld relic he had uncovered before fleeing the dig site."
+},
+"side:21": {
+"page": "Lofty Ambitions",
+"text": "Lofty Ambitions is a side quest in Horizon Forbidden West. Revisiting the delving crew at the newly named Hidden Ember in the ruins of Las Vegas, Aloy finds Morlund tinkering with a new invention. Morlund introduces Aloy to his idea of elevated spheres, an airborne contraption inspired by the Banuk’s ritualistic spheres."
+},
+"side:22": {
+"page": "Boom or Bust",
+"text": "Boom or Bust is a side quest in Horizon Forbidden West. Coincidentally, Delah once again meets Aloy in Hidden Ember, concerned for her sister Boomer, who has gotten lost somewhere in The Stillsands due to an argument. Aloy and Delah then head out and look for tracks, finding some of Boomer’s tools and inventions."
+},
+"side:23": {
+"page": "The Second Verse",
+"text": "The Second Verse is a side quest in Horizon Forbidden West. At the base, Zo asks a favor of Aloy regarding the Land-gods. GAIA has identified a way of providing them with a reboot code that they can use to adjust the Land-Gods programming: however, they'll need to mimic HEPHAESTUS's input in order for the code to be accepted. To do so, Zo needs control cores from Grimhorns."
+},
+"side:24": {
+"page": "The Blood Choke",
+"text": "The Blood Choke is a side quest in Horizon Forbidden West. At the Lowland Tenakth capital Thornmarsh, Aloy finds the clan's commander, Atekka, attending to a sick girl named Zella. Atekka explains that the girl is the latest victim of the \"Blood Choke\", red algae growths that have sickened the clan for months."
+},
+"side:25": {
+"page": "The Valley of the Fallen",
+"text": "The Valley of the Fallen is a side quest in Horizon Forbidden West. At Fall's Edge/the Maw of the Arena, a Lowlander named Nakko asks Aloy to check on his brother, Daxx. Daxx and two others went missing after entering the Valley of the Fallen. The Valley has traditionally hosted a test of endurance for the clan, but has been closed for months on account of increased machine presence and strange lights off the coast."
+},
+"side:26": {
+"page": "What Was Lost",
+"text": "What Was Lost is a side quest in Horizon Forbidden West. Inspired by the Zeniths' usage of cybernetic implants, Kotallo wishes to build himself a new arm: GAIA predicts that the necessary data and materials can be found inside Ninmah Research Lab. Kotallo asks Aloy for her assistance, knowing she is more familiar with ancient tech."
+},
+"side:27": {
+"page": "Forbidden Legacy",
+"text": "Forbidden Legacy is a side quest in Horizon Forbidden West. While exploring recovered data from the Greenhouse, Alva has discovered that Leviathan, a defunct flood control system in the Great Delta, was developed in San Francisco."
+},
+"side:28": {
+"page": "The Way Home",
+"text": "The Way Home is a side quest in Horizon Forbidden West. In Landfall, Aloy overhears a conversation between Harriem and Kristia, two of the navigators for the fleet. Upon asking, the two reveal that the fleet's navigational ships were lost at sea, without which the Quen will be unable to make the return voyage."
+}
+}
+}

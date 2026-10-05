@@ -1,0 +1,25 @@
+{
+"wiki": "gta.fandom.com",
+"items": {
+"collectible:1": {
+"page": "Tags",
+"text": "Tags are a collectible in Grand Theft Auto: San Andreas. There are 100 Tags located all around Los Santos, which the player must find and paint a Grove Street Families tag over it using a Spray Can while on foot. A tag needs at least 29 units of Spray Can \"ammo\" to be completely sprayed over."
+},
+"collectible:2": {
+"page": "Snapshots",
+"text": "Snapshots are a collectible in Grand Theft Auto: San Andreas. There are 50 Snapshots located all around San Fierro and city limits, which the player must find and photograph using a Camera. The Camera has several spawn points in San Fierro, all located near Snapshot locations."
+},
+"collectible:3": {
+"page": "Horseshoes",
+"text": "Horseshoes are a collectible in Grand Theft Auto: San Andreas. There are 50 Horseshoes located all around Las Venturas, which the player must find and collect while on foot. Each Horseshoe collected rewards the player with $100 and 20 points of \"Luck\" in the Stats menu (which does not affect the gameplay in any way), totaling $5,000 and 1000 \"Luck\" points for collecting all Horseshoes."
+},
+"collectible:4": {
+"page": "Oysters",
+"text": "Oysters are a collectible in Grand Theft Auto: San Andreas. There are 50 Oysters located all around San Andreas, which the player must find and collect while swimming. Each Oyster collected rewards the player with $100, totaling $5,000 for collecting all Oysters alone. Collecting all 50 Oysters is a requirement for the 100% completion."
+},
+"collectible:5": {
+"page": "Unique Stunt Jumps",
+"text": "Unique Stunt Jumps (also known as Unique Jumps in 3D Universe and Stunt Jumps in GTA IV) are a feature in every Grand Theft Auto game since GTA III (with the exception of GTA Advance). All GTA games have jumps set up around their maps for \"insane\" stunting."
+}
+}
+}

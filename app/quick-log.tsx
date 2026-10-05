@@ -1,10 +1,12 @@
 import React, { useMemo, useState } from "react";
 import { View } from "react-native";
 import { useRouter } from "expo-router";
+import { goBack } from "@/lib/navigation";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { QuickLogSheet } from "@/design-system";
 import { useMediaSearch, useHistory } from "@/hooks/useMedia";
 import { trackingRepository } from "@/data/repositories";
+import { formatRelativeTime } from "@/lib/history";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function QuickLog() {
@@ -16,7 +18,7 @@ export default function QuickLog() {
   const { data: history = [] } = useHistory();
 
   const recent = useMemo(() => {
-    const source = query.trim() ? results.map((r) => ({ title: r.title, meta: r.kind })) : history.slice(0, 2).map((h) => ({ title: h.label, meta: h.timeLabel }));
+    const source = query.trim() ? results.map((r) => ({ title: r.title, meta: r.kind })) : history.slice(0, 2).map((h) => ({ title: h.label, meta: formatRelativeTime(h) }));
     return source.map((r) => ({ ...r, logged: false }));
   }, [query, results, history]);
 
@@ -25,7 +27,7 @@ export default function QuickLog() {
     if (!item) return;
     await trackingRepository.logWatch(item.title);
     qc.invalidateQueries({ queryKey: ["history"] });
-    router.back();
+    goBack(router);
   };
 
   return (

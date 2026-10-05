@@ -4,6 +4,8 @@ import { useRouter } from "expo-router";
 import { Chip, EmptyState, MediaArtwork, radius, theme } from "@/design-system";
 import { Screen } from "@/components/Screen";
 import { useUpcoming } from "@/hooks/useMedia";
+import { useMyGames, useTracks } from "@/hooks/useGames";
+import { igdbImageUrl } from "@/lib/games";
 import { UpcomingEpisode } from "@/types/media";
 
 const WEEKDAY_LABELS = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
@@ -77,17 +79,29 @@ function DateGroups({
           </Text>
           {items.map((u) => {
             const isMovie = u.kind === "movie";
+            const isGame = u.kind === "game";
             return (
               <Pressable
                 key={u.id}
                 style={styles.card}
-                onPress={() => router.push(isMovie ? `/movie/${u.id}` : `/series/${u.id}`)}
+                onPress={() =>
+                  router.push(isGame ? `/game/${u.id}` : isMovie ? `/movie/${u.id}` : `/series/${u.id}`)
+                }
               >
-                <MediaArtwork path={u.posterPath} color={u.artworkColor} radius={radius.sm} style={{ width: 48, height: 68 }} />
+                <MediaArtwork
+                  path={u.posterPath}
+                  uri={u.imageUrl}
+                  size="w185"
+                  color={u.artworkColor}
+                  radius={radius.sm}
+                  style={{ width: 48, height: 68 }}
+                />
                 <View>
                   <Text style={styles.cardTitle}>{u.seriesTitle}</Text>
                   <Text style={styles.cardMeta}>
-                    {isMovie
+                    {isGame
+                      ? "🎮 Game release"
+                      : isMovie
                       ? "Movie release"
                       : `S${String(u.season).padStart(2, "0")}E${String(u.episode).padStart(2, "0")}`}
                   </Text>
@@ -103,7 +117,30 @@ function DateGroups({
 
 export default function Upcoming() {
   const router = useRouter();
-  const { data: upcoming = [] } = useUpcoming();
+  const { data: watchUpcoming = [] } = useUpcoming();
+  // Followed games with a future release join the same calendar (🎮).
+  const tracks = useTracks();
+  const [kindFilter, setKindFilter] = useState<"all" | "watch" | "play">("all");
+  const { data: myGames = [] } = useMyGames(tracks.play);
+  const upcoming = useMemo(() => {
+    const today = new Date().toISOString().slice(0, 10);
+    const games: UpcomingEpisode[] = myGames
+      .filter((g) => g.releaseDate && g.releaseDate > today && g.status)
+      .map((g) => ({
+        id: g.id,
+        seriesTitle: g.title,
+        kind: "game",
+        airDate: g.releaseDate!,
+        artworkColor: theme.surfaceSecondary,
+        imageUrl: igdbImageUrl(g.coverImageId, "t_cover_small"),
+      }));
+    // "Both" accounts can narrow the shared calendar to one world.
+    const showWatch = tracks.watch && kindFilter !== "play";
+    const showPlay = kindFilter !== "watch";
+    return [...(showWatch ? watchUpcoming : []), ...(showPlay ? games : [])].sort((a, b) =>
+      a.airDate.localeCompare(b.airDate)
+    );
+  }, [watchUpcoming, myGames, tracks.watch, kindFilter]);
   const [viewMode, setViewMode] = useState<"list" | "month">("list");
   const today = useMemo(() => new Date(), []);
   const [monthCursor, setMonthCursor] = useState({ year: today.getFullYear(), month: today.getMonth() });
@@ -152,11 +189,23 @@ export default function Upcoming() {
   const goNextMonth = () =>
     setMonthCursor((c) => (c.month === 11 ? { year: c.year + 1, month: 0 } : { year: c.year, month: c.month + 1 }));
 
+  // The old subtitle printed the total count as "N episodes in the next 7
+  // days", counting movie releases and anything months away.
+  const weekAhead = Date.now() + 7 * 86400000;
+  const thisWeek = upcoming.filter((u) => {
+    const t = new Date(u.airDate).getTime();
+    return !isNaN(t) && t <= weekAhead;
+  }).length;
+  const subtitle =
+    upcoming.length === 0
+      ? "Nothing scheduled yet"
+      : `${thisWeek} in the next 7 days · ${upcoming.length} coming up`;
+
   return (
     <Screen>
       <View>
         <Text style={styles.title}>Upcoming</Text>
-        <Text style={styles.subtitle}>{upcoming.length} episodes in the next 7 days</Text>
+        <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
 
       <View style={styles.toggleRow}>
@@ -164,19 +213,26 @@ export default function Upcoming() {
         <Chip label="Month" selected={viewMode === "month"} onPress={() => setViewMode("month")} />
       </View>
 
+      {tracks.play && tracks.watch ? (
+        <View style={styles.toggleRow}>
+          <Chip label="All" selected={kindFilter === "all"} onPress={() => setKindFilter("all")} />
+          <Chip label="🎬 Episodes & movies" selected={kindFilter === "watch"} onPress={() => setKindFilter("watch")} />
+          <Chip label="🎮 Games" selected={kindFilter === "play"} onPress={() => setKindFilter("play")} />
+        </View>
+      ) : null}
+
       {viewMode === "list" ? (
         <>
           <View style={styles.dayStrip}>
             {weekDates.map((d) => {
               const active = selectedDate ? sameDay(d, selectedDate) : sameDay(d, today);
               return (
-                <Pressable
-                  key={d.toISOString()}
-                  style={[styles.day, active && styles.dayActive]}
-                  onPress={() => toggleSelectedDate(d)}
-                >
-                  <Text style={[styles.dayLabel, active && styles.dayLabelActive]}>{WEEKDAY_LABELS[d.getDay()]}</Text>
-                  <Text style={[styles.dayNum, active && styles.dayLabelActive]}>{d.getDate()}</Text>
+                <Pressable key={d.toISOString()} style={styles.day} onPress={() => toggleSelectedDate(d)}>
+                  <Text style={[styles.dayLabel, active && styles.dayLabelSelected]}>{WEEKDAY_LABELS[d.getDay()]}</Text>
+                  {/* Selected day: red circle (was a red rounded square). */}
+                  <View style={[styles.dayCircle, active && styles.dayActive]}>
+                    <Text style={[styles.dayNum, active && styles.dayLabelActive]}>{d.getDate()}</Text>
+                  </View>
                 </Pressable>
               );
             })}
@@ -256,9 +312,13 @@ const styles = StyleSheet.create({
   title: { fontFamily: "ArchivoBlack_400Regular", color: theme.textPrimary, fontSize: 20 },
   subtitle: { color: theme.textTertiary, fontSize: 12, marginTop: 2 },
   toggleRow: { flexDirection: "row", gap: 8 },
-  dayStrip: { flexDirection: "row", gap: 8 },
-  day: { width: 44, alignItems: "center", paddingVertical: 8, borderRadius: radius.md },
+  // Seven equal columns so the whole week fits any phone width (fixed 44px
+  // cells used to overflow and cut off Saturday on narrow screens).
+  dayStrip: { flexDirection: "row" },
+  day: { flex: 1, alignItems: "center", gap: 4, paddingVertical: 4 },
+  dayCircle: { width: 36, height: 36, borderRadius: 18, alignItems: "center", justifyContent: "center" },
   dayActive: { backgroundColor: theme.brandPrimary },
+  dayLabelSelected: { color: theme.brandPrimary, fontWeight: "700" },
   dayLabel: { fontSize: 10, color: theme.textSecondary },
   dayNum: { fontSize: 15, fontWeight: "700", color: theme.textSecondary },
   dayLabelActive: { color: theme.textInverse },

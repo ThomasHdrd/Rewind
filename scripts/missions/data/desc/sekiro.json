@@ -1,0 +1,65 @@
+{
+"wiki": "sekiro.fandom.com",
+"items": {
+"main:1": {
+"page": "Gyoubu Masataka Oniwa",
+"text": "Defeating him is the only way to access Ashina Castle, where Kuro is waiting for Wolf to rescue him. Oniwa was once the infamous leader of a group of bandits, but he was eventually defeated by Isshin Ashina, who, impressed with Masataka's show of strength, accepted him in his service as an Ashina Warrior."
+},
+"main:2": {
+"page": "Lady Butterfly",
+"text": "Lady Butterfly (まぼろしお蝶, Phantom Butterfly) is an optional Boss divided in two phases with one Deathblow Counter each. Defeating her is necessary to complete the Hirata Estate Memory of the Young Lord's Bell Charm. Since childhood, Lady Butterfly trained in her illusion techniques in Usui's forest of mist and mystifications, to the far north of Ashina."
+},
+"main:3": {
+"page": "Genichiro Ashina",
+"text": "Genichiro Ashina (葦名弦一郎, Ashina Genichiro), also known as The Commander is a character and mandatory boss in which the player is meant to lose. Adopted by the Ashina after the death of his peasant mother, Genichiro is the current leader of the Ashina Clan."
+},
+"main:4": {
+"page": "Folding Screen Monkeys",
+"text": "The Folding Screen Monkeys are a group of elusive monkeys located in the Illusive Hall of Senpou Temple. They have befriended the Divine Child of Rejuvenation. There are four notable locations in the area, each of which has a purpose in catching the monkeys. Besides the four monkeys that need to be captured, many other monkeys appear that will attack as Wolf approaches them."
+},
+"main:5": {
+"page": "Guardian Ape",
+"text": "The Guardian Ape (獅子猿, Lion Tamarin) is a mandatory Boss with one Deathblow Counter in each phase. He's found deep within the Sunken Valley. In a shallow pond overlooked by a giant statue, this lonely and immortal beast protects the Lotus of the Palace. As the flower's aroma attracts female apes, he carefully tends to it, hoping to offer it his new mate."
+},
+"main:6": {
+"page": "Corrupted Monk",
+"text": "The Corrupted Monk (破戒僧, Depraved Monk) is a mandatory Boss with one Deathblow counter. She's an illusion that guards the entrance of the Wedding Cave Door, where the Shelter Stone is enshrined. As an illusion, she's vulnerable to Snap Seeds which will deplete a large portion of her Vitality bar and damage her Posture too, staggering her in the process. Only three will have effect on her though."
+},
+"main:7": {
+"page": "Headless Ape",
+"text": "The Headless Ape (首無し獅子猿, Headless Lion Ape) is an optional Boss with two Vitality bars. He's found in Ashina Depths, after the Guardian Ape of the Sunken Valley is defeated. Since the use of Prosthetics and Spirit Emblem consuming Combat Arts help immensely, it's advisable to use the Ceremonial Tanto before the fight starts to have as many Emblems available as possible."
+},
+"main:8": {
+"page": "Great Shinobi - Owl",
+"text": "Great Shinobi - Owl (大忍び　梟) is met again atop the Ashina Castle roof, attempting to convince Kuro to join him. Kuro refuses, understanding that he too has been seduced by the Dragon's Heritage. When Wolf confronts his foster father, Owl will inform him that he faked his own death and now seeks the power of the Divine Heir's blood, ordering his son to respect the Iron Code and abandon his master."
+},
+"main:9": {
+"page": "Divine Dragon",
+"text": "The Old Dragons of the Tree (白木の翁たち) are mandatory Bosses that share one Deathblow counter. They are ancient and sickly creatures worshipping the Divine Sakura Dragon. They play their flutes to appease their deity and they fight to defend him using the old magic of the Everblossom, summoning roots and spitting poison. They are old and extremely weak but are great in number. These enemies are weak and easy to kill."
+},
+"main:10": {
+"page": "Isshin, the Sword Saint",
+"text": "Wolf meets Genichiro for the last time in the Silvergrass Field where they first fought. Upon defeat, Genichiro uses the black Mortal Blade to summon a younger version of Isshin Ashina from the beyond. Genichiro has completely abandoned his lightning attacks in favor of the newly found Black Mortal Blade and a more nuanced Floating Passage at the end of any combo."
+},
+"boss:1": {
+"page": "Lone Shadow Longswordsman",
+"text": "Lone Shadow Longswordsman (孤影衆　太刀足, Lone Shadow Tachi Leg) is a Mini-Boss that can be found during the second visit to Ashina Castle in the well of Ashina Reservoir, where Wolf was first seen in the prologue. As the Eight Prayer Necklace states, the Lone Shadows are the seventeen sons of Matsuna Oribe and the most trusted agents of the Interior Ministry."
+},
+"boss:2": {
+"page": "Snake Eyes Shirafuji",
+"text": "Snake Eyes Shirafuji is a Mini-Boss located in the Sunken Valley. She shares the same model and moveset with Snake Eyes Shirahagi. Snake Eyes Shirafuji relies on combos. She uses a two-hit and a three-hit combo most often. First, sneak up on Snake Eyes Shirafuji for a free Deathblow. Begin at the Sunken Valley Sculptor’s Idol. Grapple onto the nearest branch, then again to the next-nearest branch."
+},
+"boss:3": {
+"page": "Demon of Hatred",
+"text": "The Demon of Hatred (怨嗟の鬼, Oni of Deeply-held Resentment) is an optional Boss with three Deathblow counters found at the Ashina Castle Gate, when the final invasion of the Central Forces hits Ashina. He's the vessel for the flames of hatred of a man who failed to become Shura. The one-armed demon prowls the battlefield, consumed by flames of deepest resentment."
+},
+"boss:5": {
+"page": "Owl (Father)",
+"text": "After Wolf defeats Lady Butterfly, he was assassinated by Owl for his own selfish goals of obtaining the Dragon's Blood. Being younger, Owl is exceedingly stronger and faster and still possesses his magical abilities. He calls forth an ethereal Owl Spirit, aiding him in battle with additional spectacular moves while hovering around."
+},
+"boss:6": {
+"page": "Sakura Bull of the Palace",
+"text": "The Sakura Bull of the Palace is a Mini-Boss in Sekiro: Shadows Die Twice. It is located in the Fountainhead Palace. The Bull can be dropped onto from the roofs above, performing a Deathblow on it, halving its health for the rest of the fight. It is greatly vulnerable to Shinobi Firecrackers, just like other beasts. Try staying at its read end as it attempts to turn to attack."
+}
+}
+}

@@ -1,0 +1,13 @@
+{
+"wiki": "sekiro.fandom.com",
+"items": {
+"collectible:1": {
+"page": "Prayer Bead",
+"text": "Four Prayer Beads can be converted at any Sculptor's Idol by selecting to \"Enhance Physical Attributes\" into a Prayer Bead Necklace, which increases maximum Vitality and Posture. Each Prayer Necklace sheds light on the story of one or more characters in its description."
+},
+"collectible:2": {
+"page": "Gourd Seed",
+"text": "Given to Emma to upgrade the Healing Gourd's capacity and healing effects."
+}
+}
+}

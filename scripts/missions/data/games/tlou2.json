@@ -1,0 +1,36 @@
+{
+"ids": [
+26192,
+277143
+],
+"missions": [
+"Jackson",
+"Seattle Day 1 (Ellie)",
+"Seattle Day 2 (Ellie)",
+"Seattle Day 3 (Ellie)",
+"The Park",
+"Seattle Day 1 (Abby)",
+"Seattle Day 2 (Abby)",
+"Seattle Day 3 (Abby)",
+"The Farm",
+"Santa Barbara",
+"The Farm (Epilogue)"
+],
+"boss": [
+"The Rat King",
+"Abby vs. Ellie (theater)"
+],
+"collectible": [
+"Trading Cards",
+"Coins",
+"Artifacts",
+"Journal Entries",
+"Safes",
+"Workbenches"
+],
+"easter-egg": [
+"Uncharted artifact",
+"Strange relics",
+"Naughty Dog staff cats"
+]
+}

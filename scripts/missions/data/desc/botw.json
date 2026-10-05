@@ -1,0 +1,69 @@
+{
+"wiki": "zelda.fandom.com",
+"items": {
+"main:1": {
+"page": "The Isolated Plateau",
+"text": "After Link descends the Great Plateau Tower, the Old Man glides in on his Paraglider to talk with him. Seeing the Tower, he notes that the two of them have an enigma in front of them. When Link activated the Great Plateau Tower, it emerged from the ground along with the rest of the Sheikah Towers. The Old Man likens it to a long-dormant power suddenly awakening."
+},
+"main:2": {
+"page": "Seek Out Impa",
+"text": "Link receives this Main Quest from King Rhoam after being informed of the events 100 years ago. King Rhoam instructs Link to meet with Impa in Kakariko Village, as he can learn about his journey from her. He tells Link to use the Map on the Sheikah Slate for the exact location of Kakariko Village. He also gives Link directions, saying to go past the Dueling Peaks and to follow the road north."
+},
+"main:3": {
+"page": "Locked Mementos",
+"text": "While examining the Sheikah Slate, Impa realizes that it is incomplete. As the device is supposed to guide Link, she tasks him with finding someone at the Hateno Ancient Tech Lab in Hateno Village to help fix it. When Link asks about Hateno Village, the Map opens to reveal a marker, which Impa tells him is the Village. It is a small town that avoided serious damage during the Great Calamity."
+},
+"main:4": {
+"page": "Divine Beast",
+"text": "10,000 years ago, the Sheikah built Ruta the elephant, Rudania the salamander, Medoh the eagle, and Naboris the camel to combat the anticipated revival of Calamity Ganon. Piloted by four Champions from across the land, they paved the way for victory against Ganon."
+},
+"main:5": {
+"page": "Divine Beast Vah Rudania (Quest)",
+"text": "In Goron City, Link is able to speak to the Boss of the Gorons, Bludo, who is cursing Divine Beast Vah Rudania. When Link asks what the problem is, Bludo explains that the Divine Beast has been worsening the eruptions from Death Mountain with its rampage. He points it out to Link, revealing that it was supposed to protect the Gorons 100 years ago."
+},
+"main:6": {
+"page": "Divine Beast Vah Medoh (Quest)",
+"text": "When Link first enters Rito Village, he is greeted by the sight of Divine Beast Vah Medoh flying up above. At the top of the Village, he will find Kaneli's House, where the elder resides. Kaneli starts to welcome Link to the village, but he quickly takes notice of the Sheikah Slate he carries. He introduces himself and asks Link if the item he has is truly a Sheikah Slate."
+},
+"main:7": {
+"page": "Divine Beast Vah Naboris",
+"text": "Naboris was created over 10,000 years ago by the Sheikah, along with the other three Divine Beasts and Guardians, to combat Calamity Ganon. Four Champions were picked to pilot the Divine Beasts, who launched a full-scale attack on Ganon, headed by a princess and a hero wielding the Master Sword."
+},
+"main:8": {
+"page": "Captured Memories",
+"text": "When Link returns to Kakariko Village after repairing his Sheikah Slate at the Hateno Ancient Tech Lab, Impa will ask to see the repairs. She recognizes the Pictures in the Album as those taken by Zelda 100 years ago. She suggests that, if Link visits the locations depicted in the Pictures, he may be able to recover some of his Memories."
+},
+"main:9": {
+"page": "The Hero's Sword",
+"text": "After traversing the Lost Woods, Link will arrive in the Korok Forest. There he will find a pedestal, upon which rests the Master Sword. If he attempts to pull the sword, he will hear the voice of Zelda saying he is the final hope of Hyrule, overlaid with flashbacks from several Recovered Memories. Link draws back from the Master Sword, which awakens The Great Deku Tree."
+},
+"main:10": {
+"page": "Destroy Ganon",
+"text": "Link receives this Main Quest from King Rhoam after learning of the events 100 years ago. Though he is ashamed that he could not save his own kingdom, King Rhoam asks that Link save Zelda and do whatever it takes to annihilate Calamity Ganon. The Quest begins alongside \"Seek Out Impa\" once King Rhoam fades away. At any time, Link can choose to infiltrate Hyrule Castle."
+},
+"boss:1": {
+"page": "Waterblight Ganon",
+"text": "Waterblight Ganon is one of the four Blight Ganons, phantoms of Calamity Ganon that took control of the Divine Beasts and responsible for the death of the Zora champion Mipha. He can be found either in Divine Beast Vah Ruta after trying to activate the main terminal, or in Hyrule Castle if Link has not freed Ruta. Like the other Blight Ganons, Waterblight Ganon's weak point is his eye and horns."
+},
+"boss:2": {
+"page": "Fireblight Ganon",
+"text": "In Breath of the Wild, Fireblight Ganon is one of the four Blight Ganons, phantoms of Calamity Ganon that took control of the Divine Beasts. It is found either inside the Divine Beast Vah Rudania or in the center of Hyrule Castle if it is not already defeated. Fireblight Ganon is responsible for the demise of Daruk. It is particularly weak to Ice attacks."
+},
+"boss:3": {
+"page": "Windblight Ganon",
+"text": "Windblight Ganon is one of the four Blight Ganons, phantoms of Calamity Ganon that took control of the Divine Beasts. It is found either atop the Divine Beast Vah Medoh or in the center of Hyrule Castle if it is not already defeated. Windblight Ganon is responsible for the death of Revali. Link requires protection from the cold to resist the cold damage during his fight against Windblight Ganon."
+},
+"boss:4": {
+"page": "Thunderblight Ganon",
+"text": "Thunderblight Ganon is one of the four Blight Ganons, phantoms of Calamity Ganon that took control of the Divine Beasts. It is found either inside the Divine Beast Vah Naboris or in the center of Hyrule Castle if it is not already defeated. It is responsible for bringing Urbosa to her demise."
+},
+"boss:5": {
+"page": "Calamity Ganon",
+"text": "Calamity Ganon is known as a primal evil that has appeared throughout Hyrule's history. Ten thousand years before the events of Breath of the Wild, he appeared to ravage the world, in an event known as the Great Calamity. In preparation for this, the Sheikah built a massive army of mechanical weapons called Guardians to aid the unnamed hero and princess."
+},
+"boss:6": {
+"page": "Dark Beast Ganon",
+"text": "Dark Beast Ganon is the massive boar-like form taken by Ganondorf during the battle at Hyrule Castle and serves as the penultimate boss. He attacks with overwhelming brute strength, but his recklessness leaves him vulnerable. Link uses the Master Sword to exploit the glowing wound left by the Sages, ultimately bringing the evil beast down before the confrontation shifts to Hyrule Field and the final battle."
+}
+}
+}

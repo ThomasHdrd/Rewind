@@ -10,6 +10,7 @@ export function MediaListItem({
   progress,
   artworkColor = "#3D5A6C",
   posterPath,
+  imageUrl,
   action,
 }: {
   title: string;
@@ -17,11 +18,13 @@ export function MediaListItem({
   progress?: number;
   artworkColor?: string;
   posterPath?: string | null;
+  /** Full image URL (game covers) instead of a TMDB path. */
+  imageUrl?: string;
   action?: React.ReactNode;
 }) {
   return (
     <View style={styles.row}>
-      <MediaArtwork path={posterPath} color={artworkColor} radius={radius.sm} style={styles.artwork} />
+      <MediaArtwork path={posterPath} uri={imageUrl} size="w185" color={artworkColor} radius={radius.sm} style={styles.artwork} />
       <View style={{ flex: 1, gap: 4 }}>
         <Text style={styles.title}>{title}</Text>
         {meta ? <Text style={styles.meta}>{meta}</Text> : null}

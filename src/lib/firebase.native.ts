@@ -10,7 +10,6 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 // Plain getAuth() doesn't persist sessions in React Native (no
 // window.localStorage), hence initializeAuth + this persistence adapter.
 import { initializeAuth, getReactNativePersistence, getAuth, type Auth } from "firebase/auth";
-import "@/types/firebase-rn";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFirestore } from "firebase/firestore";
 import { FIREBASE_CONFIG } from "./firebaseConfig";

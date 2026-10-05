@@ -1,0 +1,66 @@
+{
+"main:10": {
+"page": "A Princess in Distress",
+"text": "Once accepted, the pellar will send Geralt on his way with a bell that Princess is attracted to when rung. Follow the marker into the wooded area behind the pellar's house and, as you reach the center of the yellow area, wolves may appear and attack. Once taken care of, look for the goat's tracks or use Witcher Senses to hear the goat's bleating."
+},
+"main:18": {
+"page": "Pyres of Novigrad",
+"text": "Head to Hierarch Square where you'll be treated to a cutscene that introduces Caleb Menge, the commander of the Temple Guard and leader of the witch hunters, as he proceeds to burn Felicia Cori and the doppler Chappelle at the stake. Afterwards, head south from the square and through the wooden doors into a courtyard to find a couple looters at what was once Triss' home."
+},
+"main:19": {
+"page": "Novigrad Dreaming",
+"text": "Triss Merigold tells Geralt to meet Corinne Tilly, an oneiromancer who might be able to help him locate Ciri. Head to the house where, before you can enter, the new owner, Rudolf de Jonkheer, will greet you. You can ask him more about the house but ultimately he'll let you go in seeing as you're a witcher and might help with whatever is haunting the house."
+},
+"main:20": {
+"page": "Broken Flowers",
+"text": "After learning that Ciri had contacted Dandelion while she was in Novigrad, Geralt sets out to find the bard at a brothel he had inherited, the Rosemary and Thyme. Head to the Rosemary and Thyme where you will find two vagrants getting kicked out by Zoltan. After a friendly greeting, four more vagrants arrive, so help him deal with them."
+},
+"main:34": {
+"page": "A Mysterious Passenger",
+"text": "In order to pick this up, one must have completed The Calm Before the Storm before Ciri's Story: Out of the Shadows. The latter happens after telling Phillip Strenger about his wife during Family Matters, but it has a separate conversation option to trigger it."
+},
+"main:39": {
+"page": "There's No Place Like Home",
+"text": "After reaching the Lyria city outskirts and entering the city, this quest will start. Speak to Villem and then the two of you will go to the Council of Peers to discuss matters. Villem tells you he has made a alliance with Nilfgaard and Meve, by the order of Caldwell, is thrown into a cell."
+},
+"main:43": {
+"page": "Brothers In Arms: Skellige",
+"text": "The only one who can join immediately is Ermion, who agrees to help without any convincing. For the rest, you have to start by completing Possession and The Lord of Undvik, which makes Crach available since in doing so Geralt helped his children. He can't actually help with recruits, but will give the Winter's Blade sword instead. Cerys or Hjalmar are ..."
+},
+"main:48": {
+"page": "Blacksmith (Bald Mountain)",
+"text": "He doesn't sell anything interesting, having the inventory and pricing of generic Velen blacksmiths, but can be useful for repairs and getting rid of excess gear, as Bald Mountain is part of a long sequence of main quests during which fast traveling is disabled and gameplay is restricted to story-relevant areas."
+},
+"main:57": {
+"page": "The Sunstone",
+"text": "It is started immediately after your party's ship arrives in Skellige. You'll first need to find Ermion and ask him for a lead on where to look for the Sunstone. However, this plays out differently depending on who became the ruler of Skellige. If either Cerys or Hjalmar became the ruler, then you'll first need to ask Crach where to find Ermion."
+},
+"main:58": {
+"page": "Veni Vidi Vigo",
+"text": "It is started immediately after your party's ship arrives in Skellige. Geralt must speak to Emhyr about freeing Fringilla Vigo, so that she can aid him in his upcoming battle with the Wild Hunt. Emhyr is aboard his flagship, surrounded by his fleet near Undvik. Your goal is to reach the anchor of the flagship and climb aboard."
+},
+"side:12": {
+"page": "Contract: Muire D'yaeblen",
+"text": "Talk to Bjorg and he'll tell you they have a drowner problem, however what he describes isn't typical of drowners. He'll then point you to 2 others you can talk to to learn more: his assistant Rurik, and a widow, Tove. The assistant (labeled as Boatwright's Apprentice) is right behind where Bjorg was standing and will tell you how his cousin was pulled off the cliffs and into the sea by something."
+},
+"side:20": {
+"page": "Contract: The Apiarian Phantom",
+"text": "If you do one of the first two options, talk to the halfling at his home and after a short conversation he'll mention they're being plagued by something called the apiarian phantom. Nobody has seen the beast, but one of the farmhands was killed by what appeared to be frostbite and even had frost in his hair."
+},
+"side:22": {
+"page": "Contract: The Creature from Oxenfurt Forest",
+"text": "If you found the notice, head out to the impromptu camp east-southeast of the Herbalist's Hut to find Hans. He'll tell you how he and his group of men decided to try and take out a beast in the area to help the locals but it was clear they were outmatched as 2 of his men just disappeared, never to be seen again, thus his notice. You can haggle with him if you wish, then he'll give a location further east-southeast."
+},
+"side:28": {
+"page": "Contract: The White Lady",
+"text": "Note that no matter how you start it, you'll essentially do the same objectives, just in a different order. The most straightforward way is finding the notice, which will have you talk to Helma nearby. She'll tell you about 4 men who got drunk and thought giving the White Lady a \"plowing\" would get the monster to stop, but obviously didn't work."
+},
+"side:31": {
+"page": "Andrzej Sapkowski's The Witcher: The Last Wish–The Complete Collection",
+"text": "Andrzej Sapkowski's The Witcher: The Last Wish–The Complete Collection is a book published by Dark Horse Comics that features the comic adaptations of the short stories from The Last Wish and one never before published adaptation of The Voice of Reason. It will be released on December 15, 2026."
+},
+"boss:5": {
+"page": "Eredin Bréacc Glas",
+"text": "Eredin Bréacc Glas, also dubbed Sparrowhawk by the unicorns, was an Aen Elle elf and commander of an elven cavalry known as the Wild Hunt. As its leader, he was known to most as the King of the Wild Hunt. Eredin was a high ranking general in his world until he killed the king and became his successor. Despite being a notable strong soldier who was also skilled in magic, not much was known about his younger years."
+}
+}

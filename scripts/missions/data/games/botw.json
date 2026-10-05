@@ -1,0 +1,31 @@
+{
+"ids": [
+7346
+],
+"missions": [
+"The Isolated Plateau",
+"Seek Out Impa",
+"Locked Mementos",
+"Divine Beast Vah Ruta",
+"Divine Beast Vah Rudania",
+"Divine Beast Vah Medoh",
+"Divine Beast Vah Naboris",
+"Captured Memories",
+"The Hero's Sword",
+"Destroy Ganon"
+],
+"boss": [
+"Waterblight Ganon",
+"Fireblight Ganon",
+"Windblight Ganon",
+"Thunderblight Ganon",
+"Calamity Ganon",
+"Dark Beast Ganon"
+],
+"collectible": [
+"Shrines (120)",
+"Korok Seeds (900)",
+"Captured Memories (18)",
+"Hyrule Compendium"
+]
+}

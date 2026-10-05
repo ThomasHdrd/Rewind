@@ -1,32 +1,42 @@
-import React, { useMemo, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { ChallengeProgress, Chip, StreakBadge, theme } from "@/design-system";
+import { Avatar, ChallengeProgress, Chip, StreakBadge, theme } from "@/design-system";
+import { avatarIconEmoji } from "@/design-system/icons";
 import { Screen } from "@/components/Screen";
 import { ScreenHeader } from "@/components/ScreenHeader";
 import { SectionLabel } from "@/components/SectionLabel";
-import { useChallenges, useFriends, useProfile } from "@/hooks/useMedia";
-import { computeAchievements } from "@/lib/rewards";
+import { useFriends, useProfile } from "@/hooks/useMedia";
 
-const TABS = ["Rewards", "Ranking", "Friends"] as const;
+// "Friends" used to be a third tab listing the same people as Ranking, just
+// unsorted — removed; the Friends tab of the app is where friends live.
+const TABS = ["Rewards", "Ranking"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function Rewards() {
   const [tab, setTab] = useState<Tab>("Rewards");
   const { data: profile } = useProfile();
-  const { data: challenges = [] } = useChallenges();
   const { data: friends = [] } = useFriends();
-
-  const achievements = useMemo(
-    () => (profile ? computeAchievements(friends.length, profile.episodesCount) : []),
-    [friends.length, profile]
-  );
 
   if (!profile) return null;
 
-  const leaderboard = [...friends, { id: "you", name: `You — ${profile.firstName}`, xp: profile.xp }].sort(
-    (a, b) => b.xp - a.xp
-  );
+  const allAchievements = (profile.achievementGroups ?? []).flatMap((g) => g.items);
+  const unlocked = allAchievements.filter((a) => a.achieved).length;
+  const achievementTotal = allAchievements.length;
+
+  const leaderboard = [
+    ...friends.map((f) => ({ ...f, isYou: false })),
+    {
+      id: "you",
+      name: profile.firstName || "You",
+      username: profile.username,
+      xp: profile.xp,
+      avatarColor: profile.avatarColor,
+      avatarIcon: profile.avatarIcon,
+      avatarImage: profile.avatarImage,
+      isYou: true,
+    },
+  ].sort((a, b) => b.xp - a.xp);
 
   return (
     <Screen>
@@ -70,44 +80,42 @@ export default function Rewards() {
             />
           </View>
 
-          <View style={{ gap: 4 }}>
-            <SectionLabel>Weekly Challenges</SectionLabel>
-            {challenges.length === 0 ? (
-              <Text style={styles.emptyHint}>Watch something this week to start a challenge.</Text>
-            ) : (
-              challenges.map((c) => (
-                <ChallengeProgress
-                  key={c.id}
-                  icon={<Ionicons name="gift-outline" size={16} color={theme.brandPrimary} />}
-                  label={c.label}
-                  current={c.current}
-                  total={c.total}
-                  xpReward={c.xpReward}
-                />
-              ))
-            )}
-          </View>
+          <ChallengeList
+            title="Daily Challenges"
+            hint="Resets every day at midnight."
+            items={profile.dailyChallenges ?? []}
+            icon="sunny-outline"
+          />
+          <ChallengeList
+            title="Weekly Challenges"
+            hint="Resets every Monday at midnight."
+            items={profile.weeklyChallenges ?? []}
+            icon="gift-outline"
+          />
 
           <View style={{ gap: 4 }}>
             <SectionLabel>Achievements</SectionLabel>
-            <Text style={styles.emptyHint}>One-time milestones — earned once, never reset.</Text>
-            {achievements.map((a) => (
-              <ChallengeProgress
-                key={a.id}
-                icon={
-                  <Ionicons
-                    name={a.achieved ? "trophy" : "trophy-outline"}
-                    size={16}
-                    color={theme.brandPrimary}
-                  />
-                }
-                label={a.label}
-                current={a.achieved ? 1 : 0}
-                total={1}
-                xpReward={a.xpReward}
-              />
-            ))}
+            <Text style={styles.emptyHint}>
+              One-time milestones — earned once, never reset. {unlocked}/{achievementTotal} unlocked.
+            </Text>
           </View>
+          {(profile.achievementGroups ?? []).map((group) => (
+            <View key={group.category} style={{ gap: 2 }}>
+              <Text style={styles.groupLabel}>{group.category}</Text>
+              {group.items.map((a) => (
+                <ChallengeProgress
+                  key={a.id}
+                  icon={
+                    <Ionicons name={a.achieved ? "trophy" : "trophy-outline"} size={16} color={theme.brandPrimary} />
+                  }
+                  label={a.label}
+                  current={a.current}
+                  total={a.total}
+                  xpReward={a.xpReward}
+                />
+              ))}
+            </View>
+          ))}
         </>
       ) : tab === "Ranking" ? (
         <View style={{ gap: 4 }}>
@@ -118,15 +126,27 @@ export default function Rewards() {
             </Text>
           ) : null}
           {leaderboard.map((f, i) => {
-            const isYou = f.id === "you";
+            const isYou = f.isYou;
             const medal = i === 0 ? "🥇" : i === 1 ? "🥈" : i === 2 ? "🥉" : null;
             return (
               <View key={f.id} style={[styles.rankRow, isYou && styles.rankRowYou]}>
                 <Text style={[styles.rankIndex, isYou && { color: theme.brandPrimary }]}>
                   {medal ?? i + 1}
                 </Text>
-                <View style={styles.rankAvatar} />
-                <Text style={[styles.rankName, isYou && { fontWeight: "700" }]}>{f.name}</Text>
+                <Avatar
+                  name={f.name}
+                  size={36}
+                  color={f.avatarColor}
+                  icon={avatarIconEmoji(f.avatarIcon)}
+                  imageUrl={f.avatarImage}
+                />
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.rankName, isYou && { fontWeight: "700" }]}>
+                    {f.name}
+                    {isYou ? " (you)" : ""}
+                  </Text>
+                  {f.username ? <Text style={styles.rankHandle}>@{f.username}</Text> : null}
+                </View>
                 <Text style={[styles.rankXp, isYou && { color: theme.brandPrimary, fontWeight: "700" }]}>
                   {f.xp.toLocaleString()} XP
                 </Text>
@@ -134,32 +154,21 @@ export default function Rewards() {
             );
           })}
         </View>
-      ) : (
-        <View style={{ gap: 4 }}>
-          <SectionLabel>Friends</SectionLabel>
-          {friends.length === 0 ? (
-            <Text style={styles.emptyHint}>You haven't added any friends yet.</Text>
-          ) : null}
-          {[{ id: "you", name: `You — ${profile.firstName}`, xp: profile.xp }, ...friends].map((f) => {
-            const isYou = f.id === "you";
-            return (
-              <View key={f.id} style={[styles.rankRow, isYou && styles.rankRowYou]}>
-                <View style={styles.rankAvatar} />
-                <Text style={[styles.rankName, isYou && { fontWeight: "700" }]}>{f.name}</Text>
-                <Text style={[styles.rankXp, isYou && { color: theme.brandPrimary, fontWeight: "700" }]}>
-                  {f.xp.toLocaleString()} XP
-                </Text>
-              </View>
-            );
-          })}
-        </View>
-      )}
+      ) : null}
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
   emptyHint: { color: theme.textTertiary, fontSize: 12 },
+  groupLabel: {
+    color: theme.textSecondary,
+    fontSize: 11,
+    fontWeight: "800",
+    letterSpacing: 0.8,
+    textTransform: "uppercase",
+    marginTop: 6,
+  },
   toggleRow: { flexDirection: "row", gap: 8 },
   levelCard: {
     backgroundColor: theme.surfacePrimary,
@@ -176,7 +185,42 @@ const styles = StyleSheet.create({
   rankRow: { flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: theme.divider },
   rankRowYou: { backgroundColor: theme.brandPrimarySubtle, borderRadius: 8, paddingHorizontal: 8 },
   rankIndex: { color: theme.textTertiary, fontSize: 14, fontWeight: "800", width: 18 },
-  rankAvatar: { width: 36, height: 36, borderRadius: 18, backgroundColor: theme.surfaceSecondary },
-  rankName: { flex: 1, color: theme.textPrimary, fontSize: 14, fontWeight: "600" },
+  rankName: { color: theme.textPrimary, fontSize: 14, fontWeight: "600" },
+  rankHandle: { color: theme.textTertiary, fontSize: 11 },
   rankXp: { color: theme.textSecondary, fontSize: 13 },
 });
+
+function ChallengeList({
+  title,
+  hint,
+  items,
+  icon,
+}: {
+  title: string;
+  hint: string;
+  items: { id: string; label: string; current: number; total: number; xpReward: number }[];
+  icon: React.ComponentProps<typeof Ionicons>["name"];
+}) {
+  return (
+    <View style={{ gap: 4 }}>
+      <SectionLabel>{title}</SectionLabel>
+      <Text style={styles.emptyHint}>{hint}</Text>
+      {items.map((c) => (
+        <ChallengeProgress
+          key={c.id}
+          icon={
+            <Ionicons
+              name={c.current >= c.total ? "checkmark-circle" : icon}
+              size={16}
+              color={theme.brandPrimary}
+            />
+          }
+          label={c.label}
+          current={c.current}
+          total={c.total}
+          xpReward={c.xpReward}
+        />
+      ))}
+    </View>
+  );
+}

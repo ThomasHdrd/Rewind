@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useRouter } from "expo-router";
+import { goBack } from "@/lib/navigation";
 import * as ImagePicker from "expo-image-picker";
 import { Avatar, Button, Chip, Input, color, theme } from "@/design-system";
 import { AVATAR_ICONS, avatarIconEmoji } from "@/design-system/icons";
 import { Screen } from "@/components/Screen";
 import { useProfile, useUpdateProfile } from "@/hooks/useMedia";
+import { pickAvatarPhoto } from "@/lib/avatarPhoto";
+import { useToastStore } from "@/state/toastStore";
 
 const COLORS = [color.coral500, color.gold500, color.green500, color.blue500, color.purple500];
 
@@ -13,7 +16,22 @@ export default function EditProfile() {
   const router = useRouter();
   const { data: profile } = useProfile();
   const updateProfile = useUpdateProfile();
-  const [avatarMode, setAvatarMode] = useState<"Initials" | "Icon">(profile?.avatarIcon ? "Icon" : "Initials");
+  const showToast = useToastStore((s) => s.show);
+  const [avatarMode, setAvatarMode] = useState<"Initials" | "Icon" | "Photo">(
+    profile?.avatarImage ? "Photo" : profile?.avatarIcon ? "Icon" : "Initials"
+  );
+  const [avatarImage, setAvatarImage] = useState<string | undefined>(profile?.avatarImage);
+  const pickPhoto = async () => {
+    try {
+      const photo = await pickAvatarPhoto();
+      if (photo) {
+        setAvatarImage(photo);
+        setAvatarMode("Photo");
+      }
+    } catch (err: any) {
+      showToast(err?.message === "permission" ? "Allow photo access to pick a profile picture" : "Couldn't load that photo");
+    }
+  };
   const [avatarColor, setAvatarColor] = useState<string>(profile?.avatarColor ?? color.blue500);
   const [avatarIcon, setAvatarIcon] = useState<string | undefined>(profile?.avatarIcon);
   const [firstName, setFirstName] = useState(profile?.firstName ?? "");
@@ -37,7 +55,7 @@ export default function EditProfile() {
 
   return (
     <Screen>
-      <Pressable onPress={() => router.back()}>
+      <Pressable onPress={() => goBack(router)}>
         <Text style={styles.close}>✕ Edit Profile</Text>
       </Pressable>
 
@@ -47,13 +65,25 @@ export default function EditProfile() {
           size={80}
           color={avatarColor}
           icon={avatarMode === "Icon" ? avatarIconEmoji(avatarIcon) : undefined}
+          imageUrl={avatarMode === "Photo" ? avatarImage : undefined}
         />
+        {profile?.username ? <Text style={styles.username}>@{profile.username}</Text> : null}
       </View>
 
       <View style={styles.centerRow}>
         <Chip label="Initials" selected={avatarMode === "Initials"} onPress={() => setAvatarMode("Initials")} />
         <Chip label="Icon" selected={avatarMode === "Icon"} onPress={() => setAvatarMode("Icon")} />
+        <Chip
+          label="Photo"
+          selected={avatarMode === "Photo"}
+          onPress={() => (avatarImage ? setAvatarMode("Photo") : pickPhoto())}
+        />
       </View>
+      {avatarMode === "Photo" ? (
+        <Pressable onPress={pickPhoto} style={{ alignSelf: "center" }}>
+          <Text style={styles.photoLink}>Choose another photo</Text>
+        </Pressable>
+      ) : null}
 
       {avatarMode === "Icon" ? (
         <View>
@@ -126,10 +156,11 @@ export default function EditProfile() {
             bio,
             avatarColor,
             avatarIcon: avatarMode === "Icon" ? avatarIcon : undefined,
+            avatarImage: avatarMode === "Photo" ? avatarImage : undefined,
             bannerMode,
             bannerImageUri: bannerMode === "image" ? bannerImageUri : undefined,
           });
-          router.back();
+          goBack(router);
         }}
       >
         Save
@@ -140,6 +171,8 @@ export default function EditProfile() {
 
 const styles = StyleSheet.create({
   close: { color: theme.textTertiary, fontSize: 16 },
+  username: { color: theme.textTertiary, fontSize: 13, marginTop: 8 },
+  photoLink: { color: theme.brandPrimary, fontSize: 13, fontWeight: "700" },
   centerRow: { flexDirection: "row", gap: 8, justifyContent: "center" },
   label: { color: theme.textTertiary, fontSize: 10, letterSpacing: 0.7, fontWeight: "700", marginBottom: 8, textTransform: "uppercase" },
   colorRow: { flexDirection: "row", gap: 8 },

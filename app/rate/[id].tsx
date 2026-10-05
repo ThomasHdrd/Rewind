@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { goBack } from "@/lib/navigation";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { BottomSheet, Button, Chip, Input, MediaArtwork, radius, theme } from "@/design-system";
 import { useMediaDetail, useSetWatchStatus } from "@/hooks/useMedia";
-import { mediaRepository } from "@/data/repositories";
+import { mediaRepository, trackingRepository } from "@/data/repositories";
 import { useQueryClient } from "@tanstack/react-query";
 
 const REACTIONS = ["Loved it", "It was fine", "Disappointed"];
@@ -22,20 +23,36 @@ export default function PostWatchRating() {
 
   if (!media) return null;
 
+  // Marking watched from here must also log the watch — otherwise the movie
+  // never reached history, so weekly "2 movies" challenges didn't count it.
+  const markWatched = () => {
+    const alreadyWatched = media.status === "watched";
+    setWatchStatus.mutate({ mediaId: media.id, status: "watched" });
+    if (!alreadyWatched && media.kind === "movie") {
+      trackingRepository
+        .logWatch(media.title, { mediaId: media.id })
+        .finally(() => {
+          qc.invalidateQueries({ queryKey: ["history"] });
+          qc.invalidateQueries({ queryKey: ["profile"] });
+        });
+    }
+  };
+
   const save = async () => {
     if (rating > 0) await mediaRepository.setUserRating(media.id, rating);
-    setWatchStatus.mutate({ mediaId: media.id, status: "watched" });
+    markWatched();
     qc.invalidateQueries({ queryKey: ["media"] });
-    router.back();
+    qc.invalidateQueries({ queryKey: ["profile"] });
+    goBack(router);
   };
 
   // "Skip" explicitly saves the watched status without touching the rating
   // at all — distinct from tapping Save with no stars selected, which the
   // old flow made indistinguishable from "rated 0".
   const skip = () => {
-    setWatchStatus.mutate({ mediaId: media.id, status: "watched" });
+    markWatched();
     qc.invalidateQueries({ queryKey: ["media"] });
-    router.back();
+    goBack(router);
   };
 
   return (
@@ -43,7 +60,7 @@ export default function PostWatchRating() {
       <View style={{ paddingBottom: insets.bottom }}>
         <BottomSheet>
           <View style={styles.header}>
-            <MediaArtwork path={media.posterPath} color={media.artworkColor} radius={radius.sm} style={styles.artwork} />
+            <MediaArtwork path={media.posterPath} size="w185" color={media.artworkColor} radius={radius.sm} style={styles.artwork} />
             <View>
               <Text style={styles.title}>{media.title}</Text>
               <Text style={styles.subtitle}>Marked as watched</Text>

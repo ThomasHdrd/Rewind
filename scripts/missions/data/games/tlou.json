@@ -1,0 +1,51 @@
+{
+"ids": [
+1009,
+6036
+],
+"missions": [
+"Hometown",
+"The Quarantine Zone",
+"The Outskirts",
+"Bill's Town",
+"Pittsburgh",
+"The Suburbs",
+"Tommy's Dam",
+"The University",
+"Lakeside Resort",
+"Bus Depot",
+"The Firefly Lab",
+"Jackson"
+],
+"boss": [
+"Bloater (Pittsburgh hotel)",
+"David"
+],
+"collectible": [
+"Artifacts",
+"Firefly Pendants",
+"Comics",
+"Training Manuals"
+],
+"easter-egg": [
+"Photo of Naughty Dog team",
+"Dawn of the Wolf",
+"console",
+"Uncharted 13: A Lush Movie",
+"The Walking Dead house",
+"Uncharted theme song",
+"Jack Sullivinsky",
+"JAK Company poster",
+"Nathan Drake, Jak and Daxter plush toys",
+"Naughty Dog mousepad",
+"O'Sullivan's Irish Pub",
+"Java Jak",
+"Infected inside, do not open",
+"Faithful Dog",
+"Uncharted 2 phurba",
+"NDI sticker",
+"Eye chart",
+"Uncharted Nathan Drake costume",
+"Raja's Arcade"
+]
+}

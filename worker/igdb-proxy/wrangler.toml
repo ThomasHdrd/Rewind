@@ -1,0 +1,5 @@
+name = "rewind-igdb"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+# Secrets (set with `npx wrangler secret put <NAME>`, never committed):
+#   IGDB_CLIENT_ID, IGDB_CLIENT_SECRET
