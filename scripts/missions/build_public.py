@@ -26,7 +26,10 @@ for f in sorted(glob.glob("games/*.json")):
         core=re.sub(r"^(Boss|Contract): ","",title).lower()
         page=v["page"]; text=re.sub(r"^←.*?→\s*","",v["text"]).strip(); text=re.sub(r"^Note:[^.]*\.\s*","",text)
         if ("/" in page and "/" not in title) or "questline" in title.lower(): continue
-        if not page.lower().replace("contract: ","").startswith(core[:6]): continue
+        # The page must be the item's own ("Chapter 1: Forsaken City" for
+        # "Forsaken City" is fine; a whole-game "storyline" page is not).
+        pl=page.lower().replace("contract: ","")
+        if not (pl.startswith(core[:6]) or core in pl) or "storyline" in pl: continue
         if len(text)>=60: out[key]={"page":page,"text":text}
     xf=f"desc/{k}.x.json"
     if os.path.exists(xf):

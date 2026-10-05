@@ -1,0 +1,57 @@
+{
+"wiki": "doom.fandom.com",
+"items": {
+"main:1": {
+"page": "The UAC",
+"text": "The UAC is the first level of DOOM, and the player's first introduction to the UAC, Samuel Hayden, Olivia Pierce, demons, and the Doom Slayer. The mission that has you going through this level is called, \"Rip and Tear\"."
+},
+"main:2": {
+"page": "Resource Operations",
+"text": "Resource Operations is the second level of DOOM, with the mission involving this map called \"Know Your Enemy.\" The Resource Operations facility has been overrun by demons, who are standing in the way of finding out the full extent of Hell's invasion. You set out to restore power to the facility and its satellite dish and kill as many demons as you can along the way."
+},
+"main:3": {
+"page": "Foundry",
+"text": "The Foundry is the third level of DOOM, the mission involving it is called \"Meltdown.\" With the cause of the demonic invasion now discovered, you head to the UAC Foundry, which is not only overrun with demons, but is on the verge of a disastrous meltdown."
+},
+"main:4": {
+"page": "Argent Facility",
+"text": "Argent Facility is the fourth level of DOOM. The mission involving this map is called \"Beginning of the End.\" There are five secrets, four Elite Guards, two Field Drones, and one Argent Cell located in this level. Rune Trials are introduced in this level. If the Rocket Launcher wasn't acquired in the previous level, it will be in this level."
+},
+"main:5": {
+"page": "Argent Energy Tower",
+"text": "Argent Energy Tower is the fifth level of DOOM. The mission involving this map is called \"Argent Tower.\" There are seven secrets, three Elite Guards, one Field Drone, two Argent Cells, and two Rune Trials located in this level. Thrust boots are acquired in this level, allowing the player to perform a double jump. A secret Gauss Cannon can be found on this level. Argent Energy Tower introduces Revenants and Mancubi."
+},
+"main:6": {
+"page": "Kadingir Sanctum",
+"text": "Kadingir Sanctum is the sixth level of DOOM. The mission involving this map, fittingly named \"Into the Fire,\" is the first mission in the game that takes place in Hell. After being sucked through the Hell portal opened by Olivia Pierce via the Argent Accumulator atop the Argent Tower, your main objective is to fight your way through Hell in order to get back to Mars."
+},
+"main:7": {
+"page": "Argent Facility (Destroyed)",
+"text": "Argent Facility (Destroyed) is the seventh level of DOOM. The mission involving this map is called \"Hell on Mars.\" After returning from Hell, you find the Argent Tower destroyed and Hell having taken over Mars. Samuel Hayden, however, is feeling optimistic at seeing your return."
+},
+"main:8": {
+"page": "Advanced Research Complex",
+"text": "Advanced Research Complex is the eighth level of DOOM. The mission involving this map is \"A Brighter Tomorrow.\" There are ten secrets, three Elite Guards, one Field Drone, two Argent Cells, and two Rune Trials located in this level. The BFG 9000 is acquired in this level. Cyber Mancubi are encountered in this level. Construction of the Advanced Research Complex was completed in MTC 2136."
+},
+"main:9": {
+"page": "Lazarus Labs",
+"text": "Lazarus Labs is the ninth level of DOOM, with the mission involving the map called simply \"Lazarus.\" Penetrating into the heart of the initial demonic invasion of Mars, your mission is simple: find the Argent Accumulator so that you can get back to Hell and reclaim the Crucible."
+},
+"main:10": {
+"page": "Titan's Realm",
+"text": "Titan's Realm is the tenth level of DOOM. There are six secrets, two Elite Guards, one Field Drone, and one Argent Cell located in this level. Rune Trials are absent from this level onward. It is also the second Hell level. The mission name is the same as the level name. Spectres are debuted in this level."
+},
+"main:11": {
+"page": "The Necropolis",
+"text": "The Necropolis is the eleventh level of DOOM, with the mission name \"The Crucible\". Having passed through the Titan's Realm, your mission is to find and reclaim the Demonic Crucible from the forces of Hell. During this mission, you will acquire your final Argent Energy Cell and encounter your final Field Drone. There are three secrets, two Elite Guards, one field drone, and one argent cell located in this level."
+},
+"main:12": {
+"page": "VEGA Central Processing",
+"text": "VEGA Central Processing is the twelfth level of DOOM, with the mission name \"I AM VEGA.\" There are five secrets, and the last three Elite Guards are located in this level. Field Drones and Argent Cells are absent from this level onwards. The internal operating temperatures of VEGA's plasma based neural net are high - extremely high."
+},
+"main:13": {
+"page": "Argent D'Nur (level)",
+"text": "Argent D'Nur is the thirteenth and final level of DOOM. The Well is the mission name. There are five secrets in the level. Battling the Spider Mastermind as the final boss. While some intelligence has been directly retrieved from Argent D'Nur, most of the details we have regarding this location have been extrapolated from decoded tablets and scriptures."
+}
+}
+}

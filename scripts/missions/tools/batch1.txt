@@ -1,0 +1,51 @@
+u1|Uncharted: Drake's Fortune|uncharted.fandom.com|Category:Chapters in Drake's Fortune
+u2|Uncharted 2: Among Thieves|uncharted.fandom.com|Category:Chapters in Among Thieves
+u3|Uncharted 3: Drake's Deception|uncharted.fandom.com|Category:Chapters in Drake's Deception
+ull|Uncharted: The Lost Legacy|uncharted.fandom.com|Category:Chapters in The Lost Legacy
+halo2|Halo 2|halo.fandom.com|Category:Halo 2 Campaign
+halo3|Halo 3|halo.fandom.com|Category:Halo 3 Campaign
+haloreach|Halo: Reach|halo.fandom.com|Category:Halo: Reach Campaign
+halo4|Halo 4|halo.fandom.com|Category:Halo 4 Campaign Levels
+odst|Halo 3: ODST|halo.fandom.com|Category:Halo 3: ODST Campaign
+cod4|Call of Duty 4: Modern Warfare|callofduty.fandom.com|Category:Call of Duty 4: Modern Warfare Single Player Levels
+codbo|Call of Duty: Black Ops|callofduty.fandom.com|Category:Call of Duty: Black Ops Single Player Levels
+codmw3|Call of Duty: Modern Warfare 3|callofduty.fandom.com|Category:Call of Duty: Modern Warfare 3 Single Player Levels
+codwaw|Call of Duty: World at War|callofduty.fandom.com|Category:Call of Duty: World at War Single Player Levels
+codbo2|Call of Duty: Black Ops II|callofduty.fandom.com|Category:Call of Duty: Black Ops II Single Player Levels
+ds1|Dead Space|deadspace.fandom.com|Category:Dead Space Chapters
+ds2|Dead Space 2|deadspace.fandom.com|Category:Dead Space 2 Chapters
+ds3|Dead Space 3|deadspace.fandom.com|Category:Dead Space 3 Chapters
+gears1|Gears of War|gearsofwar.fandom.com|Category:Gears of War walkthrough
+gears3|Gears of War 3|gearsofwar.fandom.com|Category:Gears of War 3 walkthrough
+fc3|Far Cry 3|farcry.fandom.com|Category:Far Cry 3 missions
+fc5|Far Cry 5|farcry.fandom.com|Category:Far Cry 5 story missions
+doom16|Doom|doom.fandom.com|Category:Doom (2016) levels
+doometernal|Doom Eternal|doom.fandom.com|Category:Doom Eternal levels
+wolfno|Wolfenstein: The New Order|wolfenstein.fandom.com|Category:Wolfenstein: The New Order Chapters
+tf2|Titanfall 2|titanfall.fandom.com|Category:Titanfall 2 Campaign Missions
+dish1|Dishonored|dishonored.fandom.com|Category:Dishonored Missions
+dish2|Dishonored 2|dishonored.fandom.com|Category:Dishonored 2 Missions
+apt1|A Plague Tale: Innocence|aplaguetale.fandom.com|Category:A Plague Tale: Innocence chapters
+apt2|A Plague Tale: Requiem|aplaguetale.fandom.com|Category:A Plague Tale: Requiem chapters
+lis1|Life is Strange|life-is-strange.fandom.com|Category:Episodes (Life is Strange)
+lis2|Life is Strange 2|life-is-strange.fandom.com|Category:Episodes (Life is Strange 2)
+lisbts|Life is Strange: Before the Storm|life-is-strange.fandom.com|Category:Episodes (Before the Storm)
+untildawn|Until Dawn|untildawn.fandom.com|Category:Game Chapters
+ff7r|Final Fantasy VII Remake|finalfantasy.fandom.com|Category:Chapters in Final Fantasy VII Remake
+ff7reb|Final Fantasy VII Rebirth|finalfantasy.fandom.com|Category:Chapters in Final Fantasy VII Rebirth
+control|Control|control.fandom.com|Category:Control story missions
+mafia2|Mafia II|mafiagame.fandom.com|Category:Missions in Mafia II
+mafia3|Mafia III|mafiagame.fandom.com|Category:Missions in Mafia III
+wd1|Watch Dogs|watchdogs.fandom.com|Category:Missions in Watch Dogs
+wd2|Watch Dogs 2|watchdogs.fandom.com|Category:Story Missions in Watch Dogs 2
+rcra|Ratchet & Clank: Rift Apart|ratchetandclank.fandom.com|Category:Missions in Rift Apart
+oblivion|The Elder Scrolls IV: Oblivion|elderscrolls.fandom.com|Category:Oblivion: Main Quests
+dai|Dragon Age: Inquisition|dragonage.fandom.com|Category:Dragon Age: Inquisition main quests
+starfield|Starfield|starfield.fandom.com|Category:Main Missions
+smmm|Marvel's Spider-Man: Miles Morales|marvelsspiderman.fandom.com|Category:Missions in Miles Morales
+sottr|Shadow of the Tomb Raider|tombraider.fandom.com|Category:Shadow of the Tomb Raider Levels
+heavyrain|Heavy Rain|heavyrain.fandom.com|Category:Chapters
+fo3|Fallout 3|fallout.fandom.com|Category:Fallout 3 main quests
+fonv|Fallout: New Vegas|fallout.fandom.com|Category:Fallout: New Vegas main quests
+hlchap|Half-Life|half-life.fandom.com|Category:Chapters
+ds|Death Stranding|deathstranding.fandom.com|Category:Episodes

@@ -28,7 +28,10 @@ def summarize(paras):
     cut=text[:420]; i=max(cut.rfind(". "),cut.rfind("! "),cut.rfind("? "))
     return cut[:i+1] if i>150 else cut.rsplit(" ",1)[0]+"…"
 LOOSE=False
-def resolve(title):
+def resolve(title,hint=None):
+    if hint:
+        page,paras=paragraphs(hint)
+        if paras: return {"page":page,"text":summarize(paras)}
     t=re.sub(r"^(Boss|Treasure): ","",title)
     t=re.sub(r"\s*\((\d+|Geoglyphs|The Last One|[A-Z][a-z]+ [a-z]+)\)$","",t).strip()
     if re.match(r"^(Final choice|Finale|Lifepath|Final mission|Final faction quest)",title): return None
@@ -48,10 +51,10 @@ LOOSE=any(c in ("collectible","easter-egg") for c in cats)
 jobs=[]
 for cat in cats:
     for n,title in enumerate(g.get("missions" if cat=="main" else cat,[]) or []):
-        jobs.append((f"{cat}:{n+1}",title))
+        jobs.append((f"{cat}:{n+1}",title,(g.get("pages") or [None]*9999)[n] if cat=="main" else None))
 res={}
 with ThreadPoolExecutor(6) as ex:
-    for (k,title),r in zip(jobs,ex.map(lambda j:resolve(j[1]),jobs)):
+    for (k,title,_),r in zip(jobs,ex.map(lambda j:resolve(j[1],j[2]),jobs)):
         if r: res[k]=r
 json.dump({"wiki":domain,"items":res},open(f"desc/{OUT}.json","w",encoding="utf-8"),ensure_ascii=False,indent=0)
 print(key,f"{len(res)}/{len(jobs)} described")
