@@ -8,6 +8,14 @@
 "collectible:3": {
 "page": "Cyberpunk 2077 Weapons",
 "text": "Weapons are prevalent and varied throughout Night City, ranging from firearms to melee and cyberware. They are divided into the following subcategories: Weapons effectiveness is based on a tier system. The higher the tier, the more effective and expensive the weapons are. Tiers are tied to player level."
+},
+"easter-egg:3": {
+"page": "Cyberpunk 2020",
+"text": "Cyberpunk 2.0.2.0., later subtitled, The Classic Roleplaying Game of the Dark Future, is the second edition of the popular pen and paper RPG series Cyberpunk. The Game was designed by Mike Pondsmith and was an updated version of the original Cyberpunk 2013 rule set. The Second edition was titled 2020 to reflect the updated setting of the year 2020."
+},
+"easter-egg:6": {
+"page": "Doom Doom",
+"text": "This DR5 Nova, painted with a Maelstrom decal, is the signature weapon of Dum Dum. Doom Doom has an iconic modifier which allows it to fire 3 explosive rounds per shot. It gains 300% increased dismemberment chance at the cost of increased weapon spread and recoil."
 }
 }
 }
