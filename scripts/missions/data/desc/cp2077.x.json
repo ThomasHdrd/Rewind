@@ -3,7 +3,7 @@
 "items": {
 "collectible:1": {
 "page": "Cyberpunk 2077 Tarot Cards",
-"text": "Tarot cards are a mechanic in Cyberpunk 2077 and Phantom Liberty. They were also added in the Night City Tarot DLC for Cyberpunk RED. There are a total 22 tarot cards in Cyberpunk 2077, plus 4 additional in Phantom Liberty. They first appear in Act 2 after V's mind becomes entangled with Johnny Silverhand's engram. In Cyberpunk 2077, 20 of the 22 Major Arcanum tarot cards are linked to the quest Fool on the Hill."
+"text": "Tarot cards are a mechanic in Cyberpunk 2077 and Phantom Liberty. They were also added in the Night City Tarot DLC for Cyberpunk RED. There are a total 34 tarot cards in Cyberpunk 2077, plus an additional 4 in Phantom Liberty. They first appear in Act 2 after V's mind becomes entangled with Johnny Silverhand's engram. In Cyberpunk 2077, 20 Major Arcanum tarot cards are linked to the quest Fool on the Hill."
 },
 "collectible:3": {
 "page": "Cyberpunk 2077 Weapons",
@@ -20,6 +20,10 @@
 "easter-egg:9": {
 "page": "Mike Pondsmith",
 "text": "Mike is best known for his work for the publisher R. Talsorian Games, where he developed a majority of the company's role-playing game lines since the company's founding in 1982. Pondsmith is credited as an author of several RPG lines, including Mekton (1984), Teenagers from Outer Space (1987), Cyberpunk: The Roleplaying Game of the Dark Future (1988) and Castle Falkenstein (1994)."
+},
+"easter-egg:11": {
+"page": "System Collapse",
+"text": "A Tier 4 ultimate quickhack that cripples the enemy's nervous system, knocking them out without making a sound. Reducing trace progress reduces the RAM cost of System Collapse by 12. This effect can stack up to two times and lasts indefinitely until used. The Tier 5 variant reduces trace progress by 20% after neutralizing an enemy with System Collapse."
 }
 }
 }
