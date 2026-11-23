@@ -1,4 +1,21 @@
 {
 "wiki": "thelastofus.fandom.com",
-"items": {}
+"items": {
+"collectible:1": {
+"page": "Trading card",
+"text": "Trading cards are a category of collectibles found in The Last of Us Part II and are only collected by Ellie. They appear as trading cards of a fictional collectible card game known as Society of Champions. The trading cards are a part of the same fictional franchise as the Savage Starlight comics found in The Last of Us, as a card can be found featuring the comic's protagonist, Dr. Daniela Star."
+},
+"collectible:4": {
+"page": "Ellie's journal",
+"text": "Ellie's journal is an artifact that is found during the \"Jackson\" chapter in The Last of Us Part II. It is an old journal owned by Ellie. Here she draws and writes her thoughts throughout the game. Ellie's journal can be found in her house on a desk close to her jacket. It is automatically picked up when she leaves to go on patrol with Dina."
+},
+"easter-egg:2": {
+"page": "Strange relic",
+"text": "Strange relic is an artifact that is found during the chapter \"Seattle Day 1 (Abby)\" in The Last of Us Part II. The artifact is a reference to the Precursor Orbs from Naughty Dog's Jak and Daxter series. Picking up the artifact grants the \"Relic of the Sages\" bronze trophy."
+},
+"easter-egg:3": {
+"page": "Naughty Dog",
+"text": "Naughty Dog is an American video game developer based in Santa Monica, California. They are known for video game series such as Crash Bandicoot, Jak and Daxter, Uncharted, and The Last of Us. Founded by Andy Gavin and Jason Rubin in 1984 as an independent developer called \"JAM Software\", the studio developed Math Jam and Ski Crazed for the Apple II, and Dream Zone for the Apple IIGS."
+}
+}
 }

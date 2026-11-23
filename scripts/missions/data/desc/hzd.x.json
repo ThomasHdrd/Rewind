@@ -1,4 +1,9 @@
 {
 "wiki": "horizon.fandom.com",
-"items": {}
+"items": {
+"easter-egg:1": {
+"page": "Decima",
+"text": "The Decima engine is a proprietary game engine developed primarily by Guerrilla Games. The engine is compatible with 4K resolution and high-dynamic-range imaging used for games on the PlayStation 4, PlayStation 5 and Microsoft Windows. The engine is used in Horizon Zero Dawn and Horizon Forbidden West. Initially, the game engine did not have a name when it was used to power Killzone: Shadow Fall."
+}
+}
 }

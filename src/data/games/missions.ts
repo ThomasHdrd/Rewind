@@ -3237,7 +3237,7 @@ export function bundledMissions(igdbId: number): MissionLists | undefined {
 }
 
 /** Changes whenever public/missions changes, so apps refetch summaries at once. */
-export const MISSION_INFO_VERSION = "3124729f54";
+export const MISSION_INFO_VERSION = "9195024ee2";
 
 /** The shipped game's key — also names its descriptions file (public/missions/<key>.json). */
 export function bundledKey(igdbId: number): string | undefined {

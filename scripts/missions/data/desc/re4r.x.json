@@ -1,4 +1,17 @@
 {
 "wiki": "residentevil.fandom.com",
-"items": {}
+"items": {
+"collectible:1": {
+"page": "Clockwork Castellan",
+"text": "Destroying the first gives the player the \"Revolt Against the Revolting\" awards; destroying all gives the \"Revolution Wind-up\" award. There are a total of 16 scattered across the game. These wind-up dolls are similar to the other collectibles found in RE Engine games of the series where they make a sound once players are close enough."
+},
+"collectible:2": {
+"page": "Operative Treasures (Survival Unit)",
+"text": "The Operative Profile is a menu in Resident Evil Survival Unit that serves as a part of how players improve their combat power in customization of Operative Treasures and Jewel Enhancement of those treasures, inspired by how the Treasure items in prior games, such as Resident Evil 4 (2005) function. Players are only able to access Operative Treasures upon reaching Mansion Lv. 22."
+},
+"collectible:3": {
+"page": "Blue Medallion",
+"text": "The Blue Medallions are part of optional task within the main game. The player first gets this assignment by seeing the About the Blue Medallions file pinned up on a tree in the farm, right below a blue medallion. When the player reaches the Merchant, he asks the character if they have seen the Blue Medallions and informs that if ten are shot, he'll give you a specialized handgun."
+}
+}
 }

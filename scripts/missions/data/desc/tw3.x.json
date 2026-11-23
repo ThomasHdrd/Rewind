@@ -1,4 +1,41 @@
 {
 "wiki": "witcher.fandom.com",
-"items": {}
+"items": {
+"collectible:1": {
+"page": "Griffin School Gear",
+"text": "Griffin School Gear is a medium armor set of witcher gear inspired by the witchers of the School of the Griffin. The set includes chest armor, steel and silver swords, gauntlets, boots, and trousers, all of which are upgradeable. It's one of the Scavenger Hunt quests in The Witcher 3: Wild Hunt, and all legendary gear are stronger versions of base game gear in New Game +."
+},
+"collectible:2": {
+"page": "Cat School Gear",
+"text": "Cat or Feline School Gear is a witcher armor and swords set inspired by the School of the Cat for witchers and is one of the Scavenger Hunts in The Witcher 3: Wild Hunt. The set includes chest armor, steel and silver swords, crossbow, gauntlets, boots, and trousers, all of which are upgradeable except the crossbow. Also, there is not a New Game + version of the crossbow."
+},
+"collectible:3": {
+"page": "Bear School Gear",
+"text": "Bear or Ursine School Gear is a witcher armor and swords set inspired by the Bear School for witchers and is also one of the Scavenger Hunts quests in The Witcher 3: Wild Hunt. The set includes chest armor, steel and silver swords, a crossbow, gauntlets, boots, and trousers, all of which are upgradeable except the crossbow. Also, there is not a New Game + version of the crossbow."
+},
+"collectible:4": {
+"page": "Forgotten Wolf School Gear",
+"text": "Forgotten Wolf School Gear is a new set of Wolf School gear introduced to The Witcher 3: Wild Hunt with the next-gen update, Patch 4.0, alongside the quest In the Eternal Fire's Shadow. Unlike past school gear, this set only has 3 levels for both New Game and New Game +: standard, mastercrafted, and grandmaster."
+},
+"collectible:5": {
+"page": "Collect 'Em All",
+"text": "Note: completing this quest will unlock the achievement Card Collector. To complete it, you must collect every single card of each type; a total of 120 cards, from the 199 available cards. The other 79 cards are duplicates (for example, there are three Ghoul cards you can find, but you only need one for this quest objective)."
+},
+"easter-egg:1": {
+"page": "Knife",
+"text": "After entering The Painted World, this is found at the cellar scene. However, it's not part of the memory and can later be sold off or dismantled."
+},
+"easter-egg:2": {
+"page": "Silver",
+"text": "Silver holds a special place among metals in the witcher universe. In particular, weapons and other items made of silver repel almost all magical beasts as they have a sensitivity to the metal. It is mined in Kovir and Poviss and is the basis for many currencies."
+},
+"easter-egg:4": {
+"page": "Letter of apology",
+"text": "It is found on a skeleton at the old signal tower along with a sword, Pang of Conscience."
+},
+"easter-egg:15": {
+"page": "Notice board (Plegmund's Bridge)",
+"text": "This notice board is located at Plegmund's Bridge in the Blood and Wine expansion and gives access to several quests."
+}
+}
 }

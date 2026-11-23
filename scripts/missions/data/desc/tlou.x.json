@@ -1,4 +1,37 @@
 {
 "wiki": "thelastofus.fandom.com",
-"items": {}
+"items": {
+"collectible:2": {
+"page": "Firefly pendant",
+"text": "Firefly pendants are one of the four categories of collectibles that can be found scattered throughout the single-player campaign in The Last of Us. They belong to members of a militia group called the Fireflies. There are a total of 31 Firefly Pendants. Each pendant has a name printed on it, signifying that the person wearing it is (or was) a member. As such, they serve the same purpose as dog tags."
+},
+"collectible:4": {
+"page": "Training manual",
+"text": "Training manuals are one of the four categories of collectibles that can be found in The Last of Us and The Last of Us Part II. In Part I, there is a total of twelve manuals to collect, and they allow Joel to craft more powerful items. In Part II, they are collected by both Abby and Ellie, and unlock their supplement trees which the player can then upgrade. Training manuals help improve crafts."
+},
+"easter-egg:1": {
+"page": "Naughty Dog",
+"text": "Naughty Dog is an American video game developer based in Santa Monica, California. They are known for video game series such as Crash Bandicoot, Jak and Daxter, Uncharted, and The Last of Us. Founded by Andy Gavin and Jason Rubin in 1984 as an independent developer called \"JAM Software\", the studio developed Math Jam and Ski Crazed for the Apple II, and Dream Zone for the Apple IIGS."
+},
+"easter-egg:5": {
+"page": "Joel's house",
+"text": "After arriving in Jackson, Joel and Ellie took up residence in a house at the end of Rancher Street, not far from Jackson Cemetery. Joel lived in the main house while Ellie lived a converted garage out back. Since Joel's death and Ellie moving to the farm the house is now vacant. After Joel's death and burial, Ellie and Dina visited the house to collect supplies for their journey to Seattle."
+},
+"easter-egg:7": {
+"page": "Jack Sullivinsky",
+"text": "Jack Sullkinsky is a character mentioned in The Last of Us Part I. He was a security guard who owned the hotel keycard found at the Hotel Grand in Pittsburgh. Jack worked at the Hotel Grand prior to the outbreak of the CBI. After Joel was separated from Ellie in the Hotel, he obtained Jack's keycard and used it to escape the hotel basement, which was flooded with infected."
+},
+"easter-egg:10": {
+"page": "Naughty Dog",
+"text": "Naughty Dog is an American video game developer based in Santa Monica, California. They are known for video game series such as Crash Bandicoot, Jak and Daxter, Uncharted, and The Last of Us. Founded by Andy Gavin and Jason Rubin in 1984 as an independent developer called \"JAM Software\", the studio developed Math Jam and Ski Crazed for the Apple II, and Dream Zone for the Apple IIGS."
+},
+"easter-egg:13": {
+"page": "Infected",
+"text": "The infected are humans who have been infected by the Cordyceps brain infection and subsequently mutated into horrific new forms. The resulting creatures are aggressive, and will attack any uninfected human and animals on sight. The infected are one of the main enemy types in The Last of Us, Left Behind, and The Last of Us Part II, the other being non-infected human enemies."
+},
+"easter-egg:19": {
+"page": "Raja's Arcade (HBO series)",
+"text": "Raja's Arcade was a gaming arcade and location in HBO's The Last of Us. The arcade was located in the Liberty Gardens mall in Boston and was thriving in use prior to the Cordyceps brain infection outbreak. It contained multiple games within it, notably Mortal Kombat II. By 2023, it was abandoned with the military shutting off the power in the area to use for their own means elsewhere."
+}
+}
 }

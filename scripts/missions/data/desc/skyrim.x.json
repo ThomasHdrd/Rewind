@@ -1,4 +1,57 @@
 {
 "wiki": "elderscrolls.fandom.com",
-"items": {}
+"items": {
+"collectible:1": {
+"page": "Dragon Priest Mask (Legends)",
+"text": "Dragon Priest Mask is an item card in The Elder Scrolls: Legends that is a part of the Heroes of Skyrim expansion."
+},
+"collectible:3": {
+"page": "Daedric Artifacts (Skyrim)",
+"text": "Of the seventeen Daedric Princes, sixteen have an artifact attributed to them in The Elder Scrolls V: Skyrim. Before these artifacts can be obtained, however, specific tasks called Daedric quests must be performed. Three of these Daedric quests involve the reward being a choice between two artifacts, those quests being the \"The Black Star,\" \"Ill Met by Moonlight,\" and \"A Daedra's Best Friend.\""
+},
+"collectible:4": {
+"page": "Word Wall (Legends)",
+"text": "Word Wall is a creature card in The Elder Scrolls: Legends that is a part of the Heroes of Skyrim expansion. Word Wall can be purchased as part of the Paarthurnax's Roar deck or purchased alone for 50 soul gems. To gain the full effects from this card's power, Word Wall should be used in a deck with many shouts and played when the player has a shout in their hand."
+},
+"easter-egg:1": {
+"page": "Silver-Blood Family Ring",
+"text": "The Silver-Blood Family Ring is one of the two possible rewards for completing No One Escapes Cidhna Mine. It is gifted to the Dragonborn by Thonar Silver-Blood if Forsworn leader Madanach is killed."
+},
+"easter-egg:2": {
+"page": "Headless Horseman",
+"text": "He will spawn randomly anywhere in the world between 10 PM and 4 AM. He will occasionally stop and let himself be examined and then continue riding. The Horseman performs no actions, and cannot be harmed. The Headless Horseman is also not connected to any quests. If he is followed, he will normally go to Hamvir's Rest."
+},
+"easter-egg:4": {
+"page": "Gildergreen",
+"text": "Born from the branches of the Eldergleam Tree, the Gildergreen is a tree that stands in the center of Whiterun, near the Temple of Kynareth. Followers of Kynareth revere the plant for its relation to the Eldergleam. The tree was struck by lightning and badly burnt."
+},
+"easter-egg:5": {
+"page": "Whiterun (Skyrim)",
+"text": "Whiterun (Dragon Language:  Ahrol-Se-Dovah: \"Hill-Of-Dragon\") is the capital city of Whiterun Hold, in the center of Skyrim. In Whiterun, Nords live in the 'traditional' manner: their lives are simple, harsh, and rooted in ancient ideas."
+},
+"easter-egg:7": {
+"page": "Farengar Secret-Fire",
+"text": "https://elderscrolls.fandom.com/wiki/File:Farengar.ogg Farengar Secret-Fire, commonly referred to throughout the game as Farengar, serves as the court wizard for Jarl Balgruuf the Greater at Dragonsreach in Whiterun where he conducts studies regarding magic and dragons. In general, Farengar is friendly enough to the Dragonborn; cooperative without quirks, though sometimes more than a little condescending."
+},
+"easter-egg:8": {
+"page": "Notched Pickaxe",
+"text": "The Notched Pickaxe is a unique pickaxe found in The Elder Scrolls V: Skyrim. Its appearance is identical to a regular pickaxe, but it possesses a unique enchantment. It can be found at the very top of the Throat of the World."
+},
+"easter-egg:10": {
+"page": "Potato (Skyrim)",
+"text": "The Potato is a common food item that can be found throughout Skyrim. It has very little use on its own, but is vital for many cooked meals. Potatoes can also be sold at most farms, but do not give much profit. When eaten, it restores only 1 Health point. The potato is an ingredient in cooking the following: The following characters will buy potatoes for 1  each:"
+},
+"easter-egg:13": {
+"page": "Temba Wide-Arm",
+"text": "Temba is a candidate for marriage if the Dragonborn possesses an Amulet of Mara, and has completed her quest. Temba asks the Dragonborn to kill 10 bears and bring her their pelts."
+},
+"easter-egg:17": {
+"page": "M'aiq the Liar",
+"text": "https://elderscrolls.fandom.com/wiki/File:Maiq_SK_3.ogg M'aiq the Liar is a recurring source of misinformation in the Elder Scrolls series, featured in Morrowind, Oblivion, Skyrim, and Online. He was introduced by the game designers as an easter egg to provide commentaries about the Elder Scrolls series."
+},
+"easter-egg:18": {
+"page": "The Sweetroll Killer",
+"text": "A flier indicates that an Imperial named Reman Mevavius seeks someone for an urgent and dangerous job in the Gold Coast. After completing \"A Cordial Collaboration,\" you will find a note near the stables asking brave adventurers to meet a man called Reman Meravius in the inn for a dangerous mission. Head to The Eight Blessings and speak with the man."
+}
+}
 }

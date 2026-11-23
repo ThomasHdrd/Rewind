@@ -1,1 +1,22 @@
-{}
+{
+"main:1": {
+"page": "The Main Event",
+"text": "The scene opens with Peter Parker asleep on his bed, awoken by the buzzing of his cell phone. The camera pans to show a glimpse of his apartment, including photos with Aunt May, Uncle Ben, Mary Jane Watson, and Harry Osborn, newspapers from the Daily Bugle, schematics for suit improvements, and even comic books. It is also apparent Peter is behind on his rent."
+},
+"side:18": {
+"page": "Hardy's Stolen Art",
+"text": "There are ten different art pieces scattered around the map: one in Central Park, two in Greenwich, three in Hell's Kitchen, two in Midtown, and two in Upper East Side. You'll be using locator to find stolen paintings. NYPD's Detective Mackey of the Greenwich precinct asks Spider-Man to track down paintings that were stolen by Walter Hardy when he still operated as the \"Black Cat\"."
+},
+"side:22": {
+"page": "Crime Scene Recordings",
+"text": "Each recording will result in a reward of 50 XP upon being found. After acquiring all nine recordings—three in Financial District, two in Chinatown, two in Greenwich, and two in Midtown—the side mission Scales of Justice is unlocked, which awards 1500 XP upon completion."
+},
+"boss:1": {
+"page": "Wilson Fisk",
+"text": "Fisk was a major adversary of Spider-Man for eight years until the vigilante defeated him and ensured he was arrested. Upon arrest, Fisk warned that his arrest would create a power vacuum in the criminal underworld that other rival gangs would fight to fill. His warning consequently happened. While behind bars, Fisk had his men try to secure his release."
+},
+"boss:2": {
+"page": "Herman Schultz",
+"text": "In the game, Shocker appears as a boss battle when he was hired by Martin Li to rob a bank for the Inner Demons. In Marvel's Spider-Man 2, he was mentioned as one of the supervillains sought out by Kraven the Hunter. Herman was born in New York City around the year 1976."
+}
+}

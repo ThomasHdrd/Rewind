@@ -1,4 +1,13 @@
 {
 "wiki": "marvelsspiderman.fandom.com",
-"items": {}
+"items": {
+"collectible:2": {
+"page": "Landmarks",
+"text": "To take a photograph, get close to the marked landmark location and press  to activate the camera. While facing the landmark, use  to zoom in the camera, and move the camera until the lens in the field-of-view turns green, then use  to capture the image. Landmarks are scattered over the many districts and are pinpointed on the map."
+},
+"collectible:3": {
+"page": "Black Cat Stakeouts",
+"text": "Black Cat is back in town and she's leaving mysterious clues for Spider-Man to find in various locations across the city. Each stakeout location has a camera installed on a rooftop, tasking players with finding a little Black Cat doll hidden somewhere within sight of the location, and snapping a picture of it."
+}
+}
 }

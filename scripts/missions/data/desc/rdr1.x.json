@@ -1,4 +1,13 @@
 {
 "wiki": "reddead.fandom.com",
-"items": {}
+"items": {
+"easter-egg:1": {
+"page": "Cowboy Of No Name",
+"text": "Cowboy Of No Name is a deceased character in Red Dead Redemption. No background about this man is known. This grave seems to be a simple odd Easter Egg."
+},
+"easter-egg:3": {
+"page": "Grady Underwood",
+"text": "Grady Underwood is a minor character featured in Red Dead Redemption. Nothing is known of Grady's background. However, it is revealed in the mission \"On Shaky's Ground\" that he and Vernon Cherry run with a gang of criminals with ties to Eddie Savoy and his smuggling interests. Grady has a relative, Clinton Underwood, buried in the Blackwater public cemetery."
+}
+}
 }
